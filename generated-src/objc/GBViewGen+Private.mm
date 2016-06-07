@@ -5,6 +5,7 @@
 #import "GBViewGen.h"
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
+#import "GBArgbColor+Private.h"
 #import "GBViewConstraint+Private.h"
 #import "GBViewEventHandler+Private.h"
 #import "GBViewFrame+Private.h"
@@ -55,6 +56,25 @@ public:
             [Handle::get() setVisiable:(::djinni::Bool::fromCpp(c_v))];
         }
     }
+    ::gearsbox::ViewType getType() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getType];
+            return ::djinni::Enum<::gearsbox::ViewType, GBViewType>::toCpp(r);
+        }
+    }
+    void setBoardColor(const ::gearsbox::ArgbColor & c_color) override
+    {
+        @autoreleasepool {
+            [Handle::get() setBoardColor:(::djinni_generated::ArgbColor::fromCpp(c_color))];
+        }
+    }
+    void setBoardWidth(float c_width) override
+    {
+        @autoreleasepool {
+            [Handle::get() setBoardWidth:(::djinni::F32::fromCpp(c_width))];
+        }
+    }
     std::shared_ptr<::gearsbox::ViewGen> getSubView(const std::string & c_id) override
     {
         @autoreleasepool {
@@ -62,11 +82,10 @@ public:
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }
-    std::shared_ptr<::gearsbox::ViewGen> addSubView(const std::string & c_id, ::gearsbox::ViewType c_type) override
+    std::shared_ptr<::gearsbox::ViewGen> addSubView(const std::string & c_id) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() addSubView:(::djinni::String::fromCpp(c_id))
-                                          type:(::djinni::Enum<::gearsbox::ViewType, GBViewType>::fromCpp(c_type))];
+            auto r = [Handle::get() addSubView:(::djinni::String::fromCpp(c_id))];
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }

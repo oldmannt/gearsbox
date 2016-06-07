@@ -10,6 +10,7 @@ namespace gearsbox {
 
 class ViewEventHandler;
 enum class ViewType;
+struct ArgbColor;
 struct ViewConstraint;
 struct ViewFrame;
 
@@ -27,9 +28,15 @@ public:
 
     virtual void setVisiable(bool v) = 0;
 
+    virtual ViewType getType() = 0;
+
+    virtual void setBoardColor(const ArgbColor & color) = 0;
+
+    virtual void setBoardWidth(float width) = 0;
+
     virtual std::shared_ptr<ViewGen> getSubView(const std::string & id) = 0;
 
-    virtual std::shared_ptr<ViewGen> addSubView(const std::string & id, ViewType type) = 0;
+    virtual std::shared_ptr<ViewGen> addSubView(const std::string & id) = 0;
 
     virtual bool removeSubView(const std::string & id) = 0;
 

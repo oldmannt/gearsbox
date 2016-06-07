@@ -1,3 +1,16 @@
+argb_color = record{
+	const noColor:argb_color = {a=0,r=0,g=0,b=0};
+	const redColor:argb_color = {a=1,r=1,g=0,b=0};
+	const greenColor:argb_color = {a=1,r=0,g=1,b=0};
+	const blueColor:argb_color = {a=1,r=0,g=0,b=1};
+	const blackColor:argb_color = {a=1,r=0,g=0,b=0};
+	const whiteColor:argb_color = {a=1,r=1,g=1,b=1};
+	a:f32;
+	r:f32;
+	g:f32;
+	b:f32;
+}
+
 view_frame = record{
 	x:f32;
 	y:f32;
@@ -24,8 +37,8 @@ view_type = enum {
 	btn;
 }
 
-view_constraint = record{
-	const parent:string = "parent";
+view_constraint = record +c{
+	const self:string = "self";
 	type:constraint_type;
 	type_to:constraint_type;
 	view_from:string;
@@ -34,25 +47,42 @@ view_constraint = record{
 	offset:f32;
 }
 
-view_boarder = enum{
+text_boarder = enum{
 	None;
 	Line;
 	Bezel;
 	RoundedRect;
 }
 
-view_conf = record{
-	id:string;
-	frame:view_frame;
-	boardder:
-	text:string
-	constraints:list<view_constraint>
-	subviews:map<view_conf>
+text_align = enum {
+	None;
+	Left;
+	Center;
+	Right;
 }
 
-ui_conf = interface +c {
-	getConstraint(name:string):view_constraint
-	getViewConf(id:string):view_conf
+view_conf = record +c{
+	const noframe:view_frame = {x=-1,y=-1,w=-1,h=-1};
+	const nogbcolor:argb_color = {a=-1,r=0,g=0,b=0};
+
+	id:string;
+	type:view_type;
+	frame:view_frame;
+	bgcolor:argb_color;
+	fontsize:i32;
+	textalign:text_align;
+	textboarder:text_boarder;
+	text:string;
+	constraints:list<view_constraint>;
+	subviews:map<string, view_conf>;
+}
+
+ui_conf_gen = interface +c {
+	static instance():ui_conf_gen;
+	initialize(cfg:string):bool;
+	load(cfg:string):bool;
+	const getConstraints(name:string):list<view_constraint>;
+	const getViewConf(nmae:string):view_conf;
 }
 
 view_event = enum {
@@ -78,9 +108,12 @@ view_gen = interface +j +o {
 	getFrame():view_frame;
 	setBackgroundColor(a:f32,r:f32,g:f32,b:f32);
 	setVisiable(v:bool);
+	getType():view_type;
+	setBoardColor(color:argb_color);
+	setBoardWidth(width:f32);
 
 	getSubView(id:string):view_gen;
-	addSubView(id:string, type:view_type):view_gen;
+	addSubView(id:string):view_gen;
 	removeSubView(id:string):bool;
 	removeAllSubView();
 	addConstraint(constraint:view_constraint);
@@ -89,12 +122,29 @@ view_gen = interface +j +o {
 }
 
 view_factory_gen = interface +j +o{
-	createView(id:string, type:view_type):view_gen;
+	createView(id:string):view_gen;
 }
 
-ui_injecter_gen = interface +c{
-	static instance():ui_injecter_gen;
+ui_manager_gen = interface +c{
+	static instance():ui_manager_gen;
+	initialize(param:string, factory:view_factory_gen):bool;
 	inject(id:string, view:view_gen);
 	getView(id:string):view_gen;
 	removeView(id:string);
+}
+
+typer_convertor = interface +j +o {
+	convertUIColor(color:argb_color);
+	convertUIRect(rect:view_frame);
+	convertUIConstraintType(type:constraint_type);
+	convertUITextBoarder(type:text_boarder);
+	convertUITextAlign(type:text_align);
+}
+
+ui_value_checker_gen = interface +c {
+	static instance():ui_value_checker_gen;
+	isValidColor(value:argb_color):bool;
+	isValidFrame(value:view_frame):bool;
+	isValidTextBoarder(value:text_boarder):bool;
+	isValidTextAlign(value:text_align):bool;
 }

@@ -14,9 +14,15 @@ public abstract class ViewGen {
 
     public abstract void setVisiable(boolean v);
 
+    public abstract ViewType getType();
+
+    public abstract void setBoardColor(ArgbColor color);
+
+    public abstract void setBoardWidth(float width);
+
     public abstract ViewGen getSubView(String id);
 
-    public abstract ViewGen addSubView(String id, ViewType type);
+    public abstract ViewGen addSubView(String id);
 
     public abstract boolean removeSubView(String id);
 

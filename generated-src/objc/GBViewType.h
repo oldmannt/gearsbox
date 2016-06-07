@@ -5,8 +5,8 @@
 
 typedef NS_ENUM(NSInteger, GBViewType)
 {
-    GBViewTypeVIEWBASE,
-    GBViewTypeVIEWLABEL,
-    GBViewTypeVIEWINPUT,
-    GBViewTypeVIEWBTN,
+    GBViewTypeBase,
+    GBViewTypeLabel,
+    GBViewTypeInput,
+    GBViewTypeBtn,
 };

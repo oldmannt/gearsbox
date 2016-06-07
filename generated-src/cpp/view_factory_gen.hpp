@@ -9,13 +9,12 @@
 namespace gearsbox {
 
 class ViewGen;
-enum class ViewType;
 
 class ViewFactoryGen {
 public:
     virtual ~ViewFactoryGen() {}
 
-    virtual std::shared_ptr<ViewGen> createView(const std::string & id, ViewType type) = 0;
+    virtual std::shared_ptr<ViewGen> createView(const std::string & id) = 0;
 };
 
 }  // namespace gearsbox

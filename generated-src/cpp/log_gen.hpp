@@ -36,6 +36,10 @@ public:
     virtual bool initialize(int32_t output, const std::string & param) = 0;
 
     virtual void log(int32_t output, int32_t lev, const std::string & msg) = 0;
+
+    virtual void logerrf(const std::string & msg) = 0;
+
+    virtual void loginfo(const std::string & msg) = 0;
 };
 
 }  // namespace gearsbox

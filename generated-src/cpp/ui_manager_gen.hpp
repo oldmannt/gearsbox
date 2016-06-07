@@ -8,13 +8,16 @@
 
 namespace gearsbox {
 
+class ViewFactoryGen;
 class ViewGen;
 
-class UiInjecterGen {
+class UiManagerGen {
 public:
-    virtual ~UiInjecterGen() {}
+    virtual ~UiManagerGen() {}
 
-    static std::shared_ptr<UiInjecterGen> instance();
+    static std::shared_ptr<UiManagerGen> instance();
+
+    virtual bool initialize(const std::string & param, const std::shared_ptr<ViewFactoryGen> & factory) = 0;
 
     virtual void inject(const std::string & id, const std::shared_ptr<ViewGen> & view) = 0;
 

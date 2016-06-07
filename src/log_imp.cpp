@@ -24,3 +24,10 @@ void LogImp::log(int32_t output, int32_t lev, const std::string &msg){
     g_logouts(output, lev, msg.c_str());
 }
 
+void LogImp::logerrf(const std::string & msg){
+    g_logouts(LOG_CONSOLE|LOG_FILE, LOG_ERROR ,msg.c_str());
+}
+
+void LogImp::loginfo(const std::string & msg){
+    g_logouts(LOG_CONSOLE, LOG_INFO, msg.c_str());
+}

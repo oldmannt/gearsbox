@@ -8,10 +8,9 @@
 namespace gearsbox {
 
 enum class ViewEvent : int {
-    EVENT_NONE,
-    EVENT_TAP,
-    EVENT_TEXT_CHANGED,
-    EVENT_BTN,
+    NONE,
+    TAP,
+    TEXTCHANGE,
 };
 
 }  // namespace gearsbox

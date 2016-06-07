@@ -28,6 +28,10 @@ public abstract class LogGen {
 
     public abstract void log(int output, int lev, String msg);
 
+    public abstract void logerrf(String msg);
+
+    public abstract void loginfo(String msg);
+
     public static native LogGen instance();
 
     private static final class CppProxy extends LogGen
@@ -68,5 +72,21 @@ public abstract class LogGen {
             native_log(this.nativeRef, output, lev, msg);
         }
         private native void native_log(long _nativeRef, int output, int lev, String msg);
+
+        @Override
+        public void logerrf(String msg)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_logerrf(this.nativeRef, msg);
+        }
+        private native void native_logerrf(long _nativeRef, String msg);
+
+        @Override
+        public void loginfo(String msg)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_loginfo(this.nativeRef, msg);
+        }
+        private native void native_loginfo(long _nativeRef, String msg);
     }
 }

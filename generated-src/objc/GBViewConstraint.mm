@@ -4,7 +4,7 @@
 #import "GBViewConstraint.h"
 
 
-NSString * __nonnull const GBViewConstraintParent = @"parent";
+NSString * __nonnull const GBViewConstraintSelf = @"self";
 
 @implementation GBViewConstraint
 

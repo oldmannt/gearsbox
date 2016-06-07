@@ -16,6 +16,8 @@ namespace gearsbox {
         
         virtual bool initialize(int32_t output, const std::string & param);
         virtual void log(int32_t output, int32_t lev, const std::string & msg);
+        virtual void logerrf(const std::string & msg);
+        virtual void loginfo(const std::string & msg);
     };
 }
 #endif /* gearbox_log_imp_hpp */

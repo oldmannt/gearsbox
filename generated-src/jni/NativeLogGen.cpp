@@ -51,4 +51,22 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_LogGen_00024CppProxy_native_1log(
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_LogGen_00024CppProxy_native_1logerrf(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jstring j_msg)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::LogGen>(nativeRef);
+        ref->logerrf(::djinni::String::toCpp(jniEnv, j_msg));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_LogGen_00024CppProxy_native_1loginfo(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jstring j_msg)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::LogGen>(nativeRef);
+        ref->loginfo(::djinni::String::toCpp(jniEnv, j_msg));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
 }  // namespace djinni_generated

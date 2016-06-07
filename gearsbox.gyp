@@ -20,17 +20,22 @@
         "./generated-src/cpp",
         "./src",
         "./interface",
+        './src/ui',
       ],
       'all_dependent_settings': {
         'include_dirs': [
           './generated-src/objc',
           './generated-src/cpp',
           "./interface",
+          './src/ui',
         ]
       },
       "defines": [
         'ZF_LOG_USE_NSLOG',
       ],
+      'cflags!': [
+              '-Werror',
+            ],
     },
     {
       "target_name": "gearsbox_jni",
@@ -53,14 +58,19 @@
         "generated-src/cpp",
         "src",
         "./interface",
+        './src/ui',
       ],
       "defines": [
         'ZF_LOG_USE_ANDROID_LOG',
       ],
+      'cflags!': [
+              '-Werror',
+            ],
       'all_dependent_settings': {
         'include_dirs': [
           "./interface",
           './generated-src/cpp',
+          './src/ui',
         ]
       },
     },

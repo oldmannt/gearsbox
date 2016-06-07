@@ -5,7 +5,7 @@ package dyno.fun.gearsbox;
 
 public final class ViewConstraint {
 
-    public static final String PARENT = "parent";
+    public static final String SELF = "self";
 
 
     /*package*/ final ConstraintType mType;

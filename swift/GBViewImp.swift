@@ -13,14 +13,22 @@ public
 class GBViewImp: GBViewGen {
     private var m_id: String!
     private var m_view: UIView!
-    private var m_controller:UIViewController!
+    private var m_controller:UIViewController?
     private var m_subView:[String:GBViewImp] = [:]
     private var m_handler:GBViewEventHandler?
+    private var m_viewFactory:GBViewFactoryImp!
     
-    public init(id: String, view: UIView, controller:UIViewController){
+    public init(id: String, view: UIView){
         m_id = id
         m_view = view
-        m_controller = controller
+        m_viewFactory = GBViewFactoryImp()
+    }
+    
+    public init(id: String, view: UIView, constroller:UIViewController){
+        m_id = id
+        m_view = view
+        m_viewFactory = GBViewFactoryImp()
+        m_controller = constroller
     }
     
     @objc public func getId() -> String{
@@ -46,6 +54,26 @@ class GBViewImp: GBViewGen {
         m_view.backgroundColor = UIColor(colorLiteralRed: r, green: g, blue: b, alpha: a)
     }
     
+    @objc public func getType() -> GBViewType{
+        if m_view is UILabel {
+            return GBViewType.Label
+        }
+        else if m_view is UITextField{
+            return GBViewType.Input
+        }
+        else{
+            return GBViewType.Base
+        }
+    }
+    
+    @objc public func setBoardColor(color: GBArgbColor){
+        m_view.layer.borderColor = GBTyperConvertor.convertUIColor(color)
+    }
+    
+    @objc public func setBoardWidth(width: Float){
+        m_view.layer.borderWidth = CGFloat(width)
+    }
+    
     @objc public func setVisiable(v: Bool){
         m_view.hidden = !v
     }
@@ -56,32 +84,33 @@ class GBViewImp: GBViewGen {
                 return view_gen
             }
         }
-        GBLogGen.instance()?.log(GBLogGenLOGFILE|GBLogGenLOGCONSOLE, lev: GBLogGenLOGERROR,
-                                 msg: "get sub view nil \(#file) \(#function) \(#line) ")
+        GBLogGen.instance()?.logerrf("get sub view nil \(#file) \(#function) \(#line) ")
         return nil
     }
     
-    @objc public func addSubView(id: String, type: GBViewType) -> GBViewGen?{
+    @objc public func addSubView(id: String) -> GBViewGen?{
         if m_subView[id] != nil {
-            GBLogGen.instance()?.log(GBLogGenLOGFILE|GBLogGenLOGCONSOLE, lev: GBLogGenLOGERROR,
-                                     msg: "addView failed aready exist id: \(id) \(#file) \(#function) \(#line) ")
+            GBLogGen.instance()?.logerrf("addView failed aready exist id: \(id) \(#file) \(#function) \(#line) ")
             return nil;
         }
         
         if id == m_id {
-            GBLogGen.instance()?.log(GBLogGenLOGFILE|GBLogGenLOGCONSOLE, lev: GBLogGenLOGERROR,
-                                     msg: "addView failed this parent id: \(id) \(#file) \(#function) \(#line) ")
+            GBLogGen.instance()?.logerrf("addView failed this parent id: \(id) \(#file) \(#function) \(#line) ")
             return nil;
         }
-        let view:UIView? = createView(type)
+        let view:UIView? = createView(id)
         if nil == view {
-            GBLogGen.instance()?.log(GBLogGenLOGFILE|GBLogGenLOGCONSOLE, lev: GBLogGenLOGERROR,
-                                     msg: "addView failed type: \(type) \(#file) \(#function) \(#line) ")
+            GBLogGen.instance()?.logerrf("addView failed id: \(id) \(#file) \(#function) \(#line) ")
             return nil
         }
         
         m_view.addSubview(view!)
-        let view_gen:GBViewImp = GBViewImp(id: id, view:view!,controller: m_controller)
+        let view_gen:GBViewImp? = m_viewFactory.createView(id) as? GBViewImp;
+        if (nil == view_gen){
+            return nil
+        }
+        
+        view_gen?.setUIViewController(m_controller!);
         m_subView[id] = view_gen
         return view_gen
     }
@@ -91,19 +120,6 @@ class GBViewImp: GBViewGen {
             return false
         }
         m_subView.removeValueForKey(id)
-        return true
-    }
-    
-    private func removeSubViewImp(id:String) -> Bool{
-        let view_gen:GBViewImp? = m_subView[id]
-        if view_gen == nil{
-            GBLogGen.instance()?.log(GBLogGenLOGFILE|GBLogGenLOGCONSOLE, lev: GBLogGenLOGERROR,
-                                     msg: "nothing to remove \(#file) \(#function) \(#line) ")
-            return false
-        }
-        
-        view_gen?.getUIView().removeFromSuperview()
-        GBUiInjecterGen.instance()?.removeView(id)
         return true
     }
     
@@ -119,13 +135,12 @@ class GBViewImp: GBViewGen {
         print("constraint: viewFrome:\(constraint.viewFrom) viewTo:\(constraint.viewTo) type:\(typestr[constraint.type.rawValue]) typeTo:\(typestr[constraint.typeTo.rawValue]) multiplier:\(constraint.multiplier) offset:\(constraint.offset)")
         let view:GBViewImp? = m_subView[constraint.viewFrom]
         if view == nil{
-            GBLogGen.instance()?.log(GBLogGenLOGFILE|GBLogGenLOGCONSOLE, lev: GBLogGenLOGERROR,
-                                     msg: "viewFrome nil \(#file) \(#function) \(#line) ")
+            GBLogGen.instance()?.logerrf("viewFrome nil \(#file) \(#function) \(#line) ")
             return
         }
         
         var toview:GBViewImp?
-        if GBViewConstraintParent == constraint.viewTo{
+        if GBViewConstraintSelf == constraint.viewTo{
             toview = self
         }else{
             toview = m_subView[constraint.viewTo]
@@ -133,21 +148,20 @@ class GBViewImp: GBViewGen {
         
         let multi:CGFloat = CGFloat(constraint.multiplier)
         let offset:CGFloat = CGFloat(constraint.offset)
-        let attr:NSLayoutAttribute? = transLayoutAttr(constraint.type)
-        var toattr:NSLayoutAttribute? = transLayoutAttr(constraint.typeTo)
+        let attr:NSLayoutAttribute = GBTyperConvertor.convertUIConstraintType(constraint.type)
+        var toattr:NSLayoutAttribute = GBTyperConvertor.convertUIConstraintType(constraint.typeTo)
         if nil == toview{
             toattr = NSLayoutAttribute.NotAnAttribute
         }
         
         if attr == NSLayoutAttribute.NotAnAttribute {
-            GBLogGen.instance()?.log(GBLogGenLOGFILE|GBLogGenLOGCONSOLE, lev: GBLogGenLOGERROR,
-                                     msg: "GBConstraintType err type:\(constraint.type) toype:\(constraint.typeTo)\(#file) \(#function) \(#line) ")
+            GBLogGen.instance()?.logerrf("GBConstraintType err type:\(constraint.type) toype:\(constraint.typeTo)\(#file) \(#function) \(#line) ")
             return
         }
         
         view!.getUIView().translatesAutoresizingMaskIntoConstraints = false
-        m_view.addConstraint(NSLayoutConstraint(item: view!.getUIView(), attribute: attr!, relatedBy: .Equal,
-            toItem: toview!.getUIView(), attribute: toattr!, multiplier: multi, constant: offset))
+        m_view.addConstraint(NSLayoutConstraint(item: view!.getUIView(), attribute: attr, relatedBy: .Equal,
+            toItem: toview!.getUIView(), attribute: toattr, multiplier: multi, constant: offset))
 
     }
     
@@ -167,7 +181,7 @@ class GBViewImp: GBViewGen {
             return
         }
         let point:CGPoint = sender.locationInView(sender.view)
-        let param:GBViewEventParam = GBViewEventParam(x: Float(point.x), y: Float(point.y),type: GBViewEvent.EVENTTAP, text: "")
+        let param:GBViewEventParam = GBViewEventParam(x: Float(point.x), y: Float(point.y),type: GBViewEvent.Tap, text: "")
         
         m_handler!.handle(param, view: self)
     }
@@ -177,61 +191,54 @@ class GBViewImp: GBViewGen {
             return
         }
         
-        let param:GBViewEventParam = GBViewEventParam(x: 0,y: 0,type: GBViewEvent.EVENTTEXTCHANGED, text: sender.text!)
+        let param:GBViewEventParam = GBViewEventParam(x: 0,y: 0,type: GBViewEvent.TextChange, text: sender.text!)
         m_handler!.handle(param, view: self)
     }
-    
     
     internal func getUIView() -> UIView{
         return m_view
     }
     
-    private func transLayoutAttr(type:GBConstraintType) -> NSLayoutAttribute?{
-        var attr:NSLayoutAttribute = NSLayoutAttribute.NotAnAttribute
-        
-        switch type {
-        case GBConstraintType.Leading:
-            attr = NSLayoutAttribute.Leading
-            break
-        case GBConstraintType.Trailing:
-            attr = NSLayoutAttribute.Trailing
-            break
-        case GBConstraintType.Top:
-            attr = NSLayoutAttribute.Top
-            break
-        case GBConstraintType.Bottom:
-            attr = NSLayoutAttribute.Bottom
-            break
-        case GBConstraintType.Width:
-            attr = NSLayoutAttribute.Width
-            break
-        case GBConstraintType.Height:
-            attr = NSLayoutAttribute.Height
-            break
-        case GBConstraintType.CenterX:
-            attr = NSLayoutAttribute.CenterX
-            break
-        case GBConstraintType.CenterY:
-            attr = NSLayoutAttribute.CenterY
-            break
-        default: break
-        }
-        return attr
+    internal func setUIViewController(controller:UIViewController){
+        m_controller = controller
     }
     
-    private func createView(type:GBViewType) -> UIView?{
-        switch type {
-        case GBViewType.VIEWBASE:
+    private func removeSubViewImp(id:String) -> Bool{
+        let view_gen:GBViewImp? = m_subView[id]
+        if view_gen == nil{
+            GBLogGen.instance()?.logerrf("nothing to remove \(#file) \(#function) \(#line) ")
+            return false
+        }
+        
+        view_gen?.getUIView().removeFromSuperview()
+        GBUiManagerGen.instance()?.removeView(id)
+        return true
+    }
+    
+    private func createView(id:String) -> UIView?{
+        let view_conf:GBViewConf? = GBUiConfGen.instance()?.getViewConf(id)
+        if nil == view_conf {
+            GBLogGen.instance()?.logerrf("can't find ViewConf id:\(id) \(#file) \(#function) \(#line) ")
+            return nil
+        }
+        
+        switch view_conf!.type {
+        case GBViewType.Base:
             return UIView()
-        case GBViewType.VIEWLABEL:
+        case GBViewType.Label:
             return UILabel()
-        case GBViewType.VIEWINPUT:
+        case GBViewType.Input:
             let view:UITextField = UITextField()
             view.placeholder="  Enter here"
             view.borderStyle = UITextBorderStyle.RoundedRect
-           return view
+
+            return view
         default: break
         }
+        
+        GBLogGen.instance()?.logerrf("unsupported type id:\(id) type:\(view_conf!.type) \(#file) \(#function) \(#line) ")
         return nil
     }
+    
+    
 }

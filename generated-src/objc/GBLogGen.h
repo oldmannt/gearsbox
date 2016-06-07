@@ -25,4 +25,8 @@ extern int32_t const GBLogGenLOGFATAL;
         lev:(int32_t)lev
         msg:(nonnull NSString *)msg;
 
+- (void)logerrf:(nonnull NSString *)msg;
+
+- (void)loginfo:(nonnull NSString *)msg;
+
 @end

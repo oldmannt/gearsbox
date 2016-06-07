@@ -23,6 +23,8 @@ log_gen = interface +c {
     static instance(): log_gen;
     initialize(output:i32,param:string): bool;
     log(output:i32, lev:i32, msg:string);
+    logerrf(msg:string);
+    loginfo(msg:string);
 }
 
 async_loop_gen = interface +c {

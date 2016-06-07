@@ -5,7 +5,7 @@
 //  Created by dyno on 5/27/16.
 //
 //
-
+/*
 #include "UiConfigReader.hpp"
 #include "ILog.h"
 
@@ -122,3 +122,4 @@ ViewType ViewReader::readViewType(const std::string& conf){
     else
         return ViewType::VIEW_BASE;
 }
+*/

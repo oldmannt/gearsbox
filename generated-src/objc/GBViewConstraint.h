@@ -32,4 +32,4 @@
 
 @end
 
-extern NSString * __nonnull const GBViewConstraintParent;
+extern NSString * __nonnull const GBViewConstraintSelf;

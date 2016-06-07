@@ -8,10 +8,10 @@
 namespace gearsbox {
 
 enum class ViewType : int {
-    VIEW_BASE,
-    VIEW_LABEL,
-    VIEW_INPUT,
-    VIEW_BTN,
+    BASE,
+    LABEL,
+    INPUT,
+    BTN,
 };
 
 }  // namespace gearsbox

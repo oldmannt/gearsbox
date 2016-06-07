@@ -4,9 +4,8 @@
 package dyno.fun.gearsbox;
 
 public enum ViewEvent {
-    EVENT_NONE,
-    EVENT_TAP,
-    EVENT_TEXT_CHANGED,
-    EVENT_BTN,
+    NONE,
+    TAP,
+    TEXTCHANGE,
     ;
 }

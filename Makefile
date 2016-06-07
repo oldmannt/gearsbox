@@ -1,4 +1,7 @@
-djinni:gearsbox.djinni ui.djinni
+proto:
+	
+
+djinni:gearsbox.djinni ui.djinni run_djinni.sh
 	-rm -rf generated-src
 	sh ./run_djinni.sh
 

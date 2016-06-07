@@ -5,8 +5,7 @@
 
 typedef NS_ENUM(NSInteger, GBViewEvent)
 {
-    GBViewEventEVENTNONE,
-    GBViewEventEVENTTAP,
-    GBViewEventEVENTTEXTCHANGED,
-    GBViewEventEVENTBTN,
+    GBViewEventNone,
+    GBViewEventTap,
+    GBViewEventTextChange,
 };

@@ -5,16 +5,18 @@ package dyno.fun.gearsbox;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class UiInjecterGen {
+public abstract class UiManagerGen {
+    public abstract boolean initialize(String param, ViewFactoryGen factory);
+
     public abstract void inject(String id, ViewGen view);
 
     public abstract ViewGen getView(String id);
 
     public abstract void removeView(String id);
 
-    public static native UiInjecterGen instance();
+    public static native UiManagerGen instance();
 
-    private static final class CppProxy extends UiInjecterGen
+    private static final class CppProxy extends UiManagerGen
     {
         private final long nativeRef;
         private final AtomicBoolean destroyed = new AtomicBoolean(false);
@@ -36,6 +38,14 @@ public abstract class UiInjecterGen {
             destroy();
             super.finalize();
         }
+
+        @Override
+        public boolean initialize(String param, ViewFactoryGen factory)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_initialize(this.nativeRef, param, factory);
+        }
+        private native boolean native_initialize(long _nativeRef, String param, ViewFactoryGen factory);
 
         @Override
         public void inject(String id, ViewGen view)

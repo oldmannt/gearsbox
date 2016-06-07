@@ -17,11 +17,10 @@ class ViewFactoryGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    std::shared_ptr<::gearsbox::ViewGen> createView(const std::string & c_id, ::gearsbox::ViewType c_type) override
+    std::shared_ptr<::gearsbox::ViewGen> createView(const std::string & c_id) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() createView:(::djinni::String::fromCpp(c_id))
-                                          type:(::djinni::Enum<::gearsbox::ViewType, GBViewType>::fromCpp(c_type))];
+            auto r = [Handle::get() createView:(::djinni::String::fromCpp(c_id))];
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }

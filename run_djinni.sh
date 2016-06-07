@@ -2,6 +2,7 @@
 
 base_dir=$(cd "`dirname "0"`" && pwd)
 cpp_out="$base_dir/generated-src/cpp"
+cpp_extended="$base_dir/src/ui/"
 jni_out="$base_dir/generated-src/jni"
 objc_out="$base_dir/generated-src/objc"
 java_out="$base_dir/generated-src/java/dyno/fun/gearsbox"
@@ -18,6 +19,8 @@ deps/djinni/src/run \
    \
    --cpp-out $cpp_out \
    --cpp-namespace $namespace \
+   --cpp-optional-template "std::experimental::optional" \
+   --cpp-optional-header "<experimental/optional>" \
    \
    --jni-out $jni_out \
    --ident-jni-class NativeFooBar \

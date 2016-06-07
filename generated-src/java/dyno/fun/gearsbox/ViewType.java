@@ -4,9 +4,9 @@
 package dyno.fun.gearsbox;
 
 public enum ViewType {
-    VIEW_BASE,
-    VIEW_LABEL,
-    VIEW_INPUT,
-    VIEW_BTN,
+    BASE,
+    LABEL,
+    INPUT,
+    BTN,
     ;
 }

@@ -6,6 +6,7 @@ the third party codes and utilities used in projects
 3. zf_log  
 4. jsoncpp  
 5. sqlit3  
+6. protobuf
 
 ###interface for c++   
 1. IHttpRequest.h  
@@ -28,6 +29,10 @@ update the submodule of gearsbox
 	cd gearsbox
 	git submodule init
 	git submodule update
+2. protobuf as ui config
+	create .proto file, genrate protco c++ and python code, used pyton to write binary like config, read by c++.  
+	gearsbox use protobuf as ui config, let me think about that may be make a probability to build ui by server.
+	current version is protobuf-3.0.0-beta-3, compiler and tester code were detele
 
 2. create client.djinni, client.gyp, run_djinni.sh in clent
 	
@@ -48,8 +53,10 @@ update the submodule of gearsbox
 
 6. make
 
+### protubuf
 
-.####more infomation  
+
+.####more infomation  about android gradle build
 http://ph0b.com/android-studio-gradle-and-ndk-integration/
 http://ph0b.com/new-android-studio-ndk-support/  
 http://www.slideshare.net/ph0b/mastering-the-ndk-with-android-studio-and-the-gradleexperimental-plugin  

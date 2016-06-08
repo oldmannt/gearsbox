@@ -33,7 +33,7 @@ async_loop_gen = interface +c {
 }
 
 crash_handler_gen = interface +c +o{
-    
+    header(path:string, url:string);
 }
 
 breakpad_gen = interface +c +o {

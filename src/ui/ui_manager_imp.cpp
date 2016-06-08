@@ -75,6 +75,7 @@ std::shared_ptr<ViewGen> UiManagerImp::getView(const std::string &id){
     MapView::iterator it(m_mapView.find(id));
     if (it==m_mapView.end()){
         G_LOG_FC(LOG_ERROR, "id dont' exist, nothing finded");
+        return nullptr;
     }
     return it->second;
 

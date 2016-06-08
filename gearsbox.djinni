@@ -31,3 +31,15 @@ async_loop_gen = interface +c {
     static instance(): async_loop_gen;
     process(elapse:i64);
 }
+
+crash_handler_gen = interface +c +o{
+    
+}
+
+breakpad_gen = interface +c +o {
+    static instance():breakpad_gen;
+    start();
+    stop();
+    setUploadUrl()
+    setHandler(hander:crashHandler);
+}

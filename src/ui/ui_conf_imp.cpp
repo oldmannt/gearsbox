@@ -45,10 +45,15 @@ std::vector<ViewConstraint>  UiConfImp::getConstraints(const std::string & name)
 }
 
 ViewConf UiConfImp::getViewConf(const std::string &name) const{
+    volatile int* a = reinterpret_cast<volatile int*>(NULL);
+    *a = 1;
+    return m_conf.viewconfs.at(name);
+    /*
     if (m_conf.viewconfs.find(name) == m_conf.viewconfs.end()){
         return ViewConf();
     }
     return m_conf.viewconfs.at(name);
+    */
 }
     
 bool UiConfImp::Reader::readFile(const std::string &cfg, UiConfData& data){

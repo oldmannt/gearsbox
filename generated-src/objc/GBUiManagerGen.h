@@ -14,10 +14,11 @@
 - (BOOL)initialize:(nonnull NSString *)param
            factory:(nullable id<GBViewFactoryGen>)factory;
 
-- (void)inject:(nonnull NSString *)id
-          view:(nullable id<GBViewGen>)view;
+- (void)inject:(nullable id<GBViewGen>)view;
 
 - (nullable id<GBViewGen>)getView:(nonnull NSString *)id;
+
+- (nullable id<GBViewGen>)addView:(nullable id<GBViewGen>)view;
 
 - (void)removeView:(nonnull NSString *)id;
 

@@ -4,6 +4,7 @@
 #include "NativeViewGen.hpp"  // my header
 #include "Marshal.hpp"
 #include "NativeArgbColor.hpp"
+#include "NativeViewConf.hpp"
 #include "NativeViewConstraint.hpp"
 #include "NativeViewEventHandler.hpp"
 #include "NativeViewFrame.hpp"
@@ -96,12 +97,21 @@ std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::getSubView(const 
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeViewGen::toCpp(jniEnv, jret);
 }
-std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::addSubView(const std::string & c_id) {
+std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::addSubViewById(const std::string & c_id) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_addSubViewById,
+                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_id)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni_generated::NativeViewGen::toCpp(jniEnv, jret);
+}
+std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::addSubView(const ::gearsbox::ViewConf & c_conf) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
     auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_addSubView,
-                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_id)));
+                                         ::djinni::get(::djinni_generated::NativeViewConf::fromCpp(jniEnv, c_conf)));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeViewGen::toCpp(jniEnv, jret);
 }

@@ -5,6 +5,7 @@
 #import "GBViewFactoryGen.h"
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
+#import "GBViewConf+Private.h"
 #import "GBViewGen+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -17,11 +18,18 @@ class ViewFactoryGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    std::shared_ptr<::gearsbox::ViewGen> createView(const std::string & c_id) override
+    std::shared_ptr<::gearsbox::ViewGen> createView(const ::gearsbox::ViewConf & c_conf) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() createView:(::djinni::String::fromCpp(c_id))];
+            auto r = [Handle::get() createView:(::djinni_generated::ViewConf::fromCpp(c_conf))];
             return ::djinni_generated::ViewGen::toCpp(r);
+        }
+    }
+    bool injectView(const std::shared_ptr<::gearsbox::ViewGen> & c_view) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() injectView:(::djinni_generated::ViewGen::fromCpp(c_view))];
+            return ::djinni::Bool::toCpp(r);
         }
     }
 };

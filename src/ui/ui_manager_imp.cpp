@@ -32,7 +32,7 @@ UiManagerImp::~UiManagerImp(){
 bool UiManagerImp::initialize(const std::string & param, const std::shared_ptr<ViewFactoryGen> & factory){
     if (nullptr == factory){
         G_LOG_FC(LOG_ERROR, "factory null");
-        //return false;
+        return false;
     }
     m_viewFactory = factory;
     if (!UiConfGen::instance()->initialize(param))
@@ -41,27 +41,34 @@ bool UiManagerImp::initialize(const std::string & param, const std::shared_ptr<V
     return true;
 }
 
-void UiManagerImp::inject(const std::string &id, const std::shared_ptr<ViewGen> &view){
-    m_mapView[id] = view;
+void UiManagerImp::inject(const std::shared_ptr<ViewGen> &view){
+    if (!m_viewFactory){
+        G_LOG_FC(LOG_ERROR, "factory null");
+        return;
+    }
+    if (!view){
+        G_LOG_FC(LOG_ERROR, "view null");
+        return;
+    }
+    if (!m_viewFactory->injectView(view)){
+        G_LOG_FC(LOG_ERROR, "inject view fail");
+        return;
+    }
+    
+    m_mapView[view->getId()] = view;
 }
 
-/*
-std::shared_ptr<ViewGen> UiManagerImp::buldView(const std::string & id, const std::string & parent){
-    std::shared_ptr<ViewGen> view_parent = getView(parent);
-    if (nullptr == view_parent){
-        G_LOG_FC(LOG_ERROR, "create view:%s parent:%s null failed", id.c_str(), parent.c_str());
+std::shared_ptr<ViewGen> UiManagerImp::addView(const std::shared_ptr<ViewGen> & view){
+    if (nullptr == view)
+        return nullptr;
+    
+    if (m_mapView[view->getId()]!=nullptr){
+        G_LOG_FC(LOG_ERROR, "view id %s already exist", view->getId().c_str());
         return nullptr;
     }
     
-    ViewConf view_conf = UiConfGen::instance()->getViewConf(id);
-    std::shared_ptr<ViewGen> view = m_viewFactory->createView(id, view_conf);
-    if (nullptr == view){
-        G_LOG_FC(LOG_ERROR, "create view:%s failed", id.c_str());
-        return nullptr;
-    }
-    
+    m_mapView[view->getId()] = view;
 }
-*/
 
 void UiManagerImp::removeView(const std::string &id){
     MapView::iterator it(m_mapView.find(id));
@@ -74,7 +81,7 @@ void UiManagerImp::removeView(const std::string &id){
 std::shared_ptr<ViewGen> UiManagerImp::getView(const std::string &id){
     MapView::iterator it(m_mapView.find(id));
     if (it==m_mapView.end()){
-        G_LOG_FC(LOG_ERROR, "id dont' exist, nothing finded");
+        G_LOG_FC(LOG_ERROR, "id:%s dont' exist, nothing finded", id.c_str());
         return nullptr;
     }
     return it->second;

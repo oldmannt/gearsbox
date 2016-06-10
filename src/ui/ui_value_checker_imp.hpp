@@ -14,6 +14,7 @@
 #include "view_frame.hpp"
 #include "text_boarder.hpp"
 #include "text_align.hpp"
+#include <math.h>
 
 namespace gearsbox{
     
@@ -22,11 +23,17 @@ public:
     virtual ~UivalueCheckerImp() {}
     
     virtual bool isValidColor(const ArgbColor & value){
-        return (value.a > -1.0f);
+        return (value.a > 0.000001f ||
+                value.r > 0.000001f ||
+                value.g > 0.000001f ||
+                value.b > 0.000001f);
     };
     
     virtual bool isValidFrame(const ViewFrame & value){
-        return !(value.w < 0);
+        return (fabsf(value.x-0.0f) > 0.000001f ||
+                fabsf(value.y-0.0f) > 0.000001f ||
+                fabsf(value.w-0.0f) > 0.000001f ||
+                fabsf(value.h-0.0f) > 0.000001f);
     }
     
     virtual bool isValidTextBoarder(TextBoarder value){

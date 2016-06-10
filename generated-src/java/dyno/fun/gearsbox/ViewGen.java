@@ -22,7 +22,9 @@ public abstract class ViewGen {
 
     public abstract ViewGen getSubView(String id);
 
-    public abstract ViewGen addSubView(String id);
+    public abstract ViewGen addSubViewById(String id);
+
+    public abstract ViewGen addSubView(ViewConf conf);
 
     public abstract boolean removeSubView(String id);
 

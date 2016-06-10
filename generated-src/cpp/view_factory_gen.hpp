@@ -4,17 +4,19 @@
 #pragma once
 
 #include <memory>
-#include <string>
 
 namespace gearsbox {
 
 class ViewGen;
+struct ViewConf;
 
 class ViewFactoryGen {
 public:
     virtual ~ViewFactoryGen() {}
 
-    virtual std::shared_ptr<ViewGen> createView(const std::string & id) = 0;
+    virtual std::shared_ptr<ViewGen> createView(const ViewConf & conf) = 0;
+
+    virtual bool injectView(const std::shared_ptr<ViewGen> & view) = 0;
 };
 
 }  // namespace gearsbox

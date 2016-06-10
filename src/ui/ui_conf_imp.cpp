@@ -45,15 +45,10 @@ std::vector<ViewConstraint>  UiConfImp::getConstraints(const std::string & name)
 }
 
 ViewConf UiConfImp::getViewConf(const std::string &name) const{
-    volatile int* a = reinterpret_cast<volatile int*>(NULL);
-    *a = 1;
-    return m_conf.viewconfs.at(name);
-    /*
     if (m_conf.viewconfs.find(name) == m_conf.viewconfs.end()){
         return ViewConf();
     }
     return m_conf.viewconfs.at(name);
-    */
 }
     
 bool UiConfImp::Reader::readFile(const std::string &cfg, UiConfData& data){
@@ -99,6 +94,7 @@ bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
                 vec_consttraints.push_back(view_consttraint);
             }
             data.predef_constraints[predef_name] = vec_consttraints;
+            G_LOG_FC(LOG_INFO, "parse array [%s] %d constraints ", predef_name.c_str(), vec_consttraints.size());
         }
         
         Json::Value& views_json = json_cfg["views"];
@@ -111,6 +107,7 @@ bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
                 if (!readView(views_json[i], view_conf))
                     continue;
                 data.viewconfs[view_conf.id] = view_conf;
+                G_LOG_FC(LOG_INFO, "parse view [%s]", view_conf.id.c_str());
             }
             
         }
@@ -142,9 +139,9 @@ bool UiConfImp::Reader::readConstraint(const Json::Value& cfg, ViewConstraint& c
     //{"from":"exchange_info","to":"first_us_unit","type_from":"height","type_to":"height","multiplier":1,"offset":0},
     
     try{
-        constraint.view_from = cfg["frome"].asString();
+        constraint.view_from = cfg["from"].asString();
         constraint.view_to = cfg["to"].asString();
-        constraint.type = getConstraintType(cfg["type_frome"].asString());
+        constraint.type = getConstraintType(cfg["type_from"].asString());
         constraint.type_to = getConstraintType(cfg["type_to"].asString());
         constraint.multiplier = cfg["multiplier"].asFloat();
         constraint.offset = cfg["offset"].asFloat();
@@ -158,6 +155,8 @@ bool UiConfImp::Reader::readConstraint(const Json::Value& cfg, ViewConstraint& c
         return false;
     }
     
+    G_LOG_FC(LOG_INFO, "frome:%s to:%s type:%d typeto:%d mul:%02f off:%02f", constraint.view_from.c_str(),
+        constraint.view_to.c_str(), constraint.type, constraint.type_to, constraint.multiplier, constraint.offset);
     return true;
 }
     ViewType getViewType(const std::string& str){
@@ -203,8 +202,9 @@ bool UiConfImp::Reader::readView(const Json::Value& cfg, ViewConf& view){
             }
             view.constraints.push_back(view_constraint);
         }
+        G_LOG_FC(LOG_INFO, "parse %d constraints in views [%s], ", view.constraints.size(), view.id.c_str());
         
-        const Json::Value& views_json = cfg["vies"];
+        const Json::Value& views_json = cfg["views"];
         for (Json::ArrayIndex i=0; i<views_json.size(); ++i) {
             if (views_json[i].type() == Json::ValueType::nullValue){
                 G_LOG_FC(LOG_ERROR, "parse subview json null %d", i);
@@ -216,6 +216,7 @@ bool UiConfImp::Reader::readView(const Json::Value& cfg, ViewConf& view){
                 continue;
             }
             view.subviews[subview.id] = subview;
+            G_LOG_FC(LOG_INFO, "parse subview [%s] in views [%s], ", subview.id.c_str(), view.id.c_str());
         }
         
     } catch (std::exception &ex) {

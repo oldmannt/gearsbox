@@ -16,18 +16,15 @@ class GBViewImp: GBViewGen {
     private var m_controller:UIViewController?
     private var m_subView:[String:GBViewImp] = [:]
     private var m_handler:GBViewEventHandler?
-    private var m_viewFactory:GBViewFactoryImp!
     
     public init(id: String, view: UIView){
         m_id = id
         m_view = view
-        m_viewFactory = GBViewFactoryImp()
     }
     
     public init(id: String, view: UIView, constroller:UIViewController){
         m_id = id
         m_view = view
-        m_viewFactory = GBViewFactoryImp()
         m_controller = constroller
     }
     
@@ -88,32 +85,39 @@ class GBViewImp: GBViewGen {
         return nil
     }
     
-    @objc public func addSubView(id: String) -> GBViewGen?{
-        if m_subView[id] != nil {
-            GBLogGen.instance()?.logerrf("addView failed aready exist id: \(id) \(#file) \(#function) \(#line) ")
-            return nil;
-        }
-        
-        if id == m_id {
-            GBLogGen.instance()?.logerrf("addView failed this parent id: \(id) \(#file) \(#function) \(#line) ")
-            return nil;
-        }
-        let view:UIView? = createView(id)
-        if nil == view {
-            GBLogGen.instance()?.logerrf("addView failed id: \(id) \(#file) \(#function) \(#line) ")
+    @objc public func addSubViewById(id: String) -> GBViewGen?{
+        let view_conf:GBViewConf = (GBUiConfGen.instance()?.getViewConf(id))!
+        if view_conf.id != id {
+            GBLogGen.instance()?.logerrf("add subview failed can't find ViewConf id:\(id) \(#file) \(#function) \(#line) ")
             return nil
         }
+
+        return addSubView(view_conf)
+    }
+    
+    @objc public func addSubView(conf: GBViewConf) -> GBViewGen?{
+        if m_subView[conf.id] != nil {
+            GBLogGen.instance()?.logerrf("addView failed aready exist id: \(conf.id) \(#file) \(#function) \(#line) ")
+            return nil;
+        }
         
-        m_view.addSubview(view!)
-        let view_gen:GBViewImp? = m_viewFactory.createView(id) as? GBViewImp;
+        if conf.id == m_id {
+            GBLogGen.instance()?.logerrf("addView failed this parent id: \(conf.id) \(#file) \(#function) \(#line) ")
+            return nil;
+        }
+        
+        let view_gen:GBViewImp? = GBViewFactoryImp.instance.createView(conf) as? GBViewImp;
         if (nil == view_gen){
             return nil
         }
         
-        view_gen?.setUIViewController(m_controller!);
-        m_subView[id] = view_gen
+        m_view.addSubview(view_gen!.getUIView())
+        view_gen?.setUIViewController(m_controller!)
+        m_subView[conf.id] = view_gen
         return view_gen
     }
+    
+    
     
     @objc public func removeSubView(id: String) -> Bool{
         if !removeSubViewImp(id){
@@ -133,9 +137,10 @@ class GBViewImp: GBViewGen {
     @objc public func addConstraint(constraint: GBViewConstraint){
         let typestr = ["None    ","Leading ","Trailing","Top     ","Bottom  ","Width   ","Height  ","CenterX ","CenterY "]
         print("constraint: viewFrome:\(constraint.viewFrom) viewTo:\(constraint.viewTo) type:\(typestr[constraint.type.rawValue]) typeTo:\(typestr[constraint.typeTo.rawValue]) multiplier:\(constraint.multiplier) offset:\(constraint.offset)")
+        
         let view:GBViewImp? = m_subView[constraint.viewFrom]
         if view == nil{
-            GBLogGen.instance()?.logerrf("viewFrome nil \(#file) \(#function) \(#line) ")
+            GBLogGen.instance()?.logerrf("viewFrome nil in view id:\(getId())\(#file) \(#function) \(#line) ")
             return
         }
         
@@ -145,6 +150,9 @@ class GBViewImp: GBViewGen {
         }else{
             toview = m_subView[constraint.viewTo]
         }
+        
+        let ios_view1:UIView = (view?.getUIView())!
+        let ios_toview:UIView? = (toview != nil) ? (toview!.getUIView()) : nil
         
         let multi:CGFloat = CGFloat(constraint.multiplier)
         let offset:CGFloat = CGFloat(constraint.offset)
@@ -160,8 +168,8 @@ class GBViewImp: GBViewGen {
         }
         
         view!.getUIView().translatesAutoresizingMaskIntoConstraints = false
-        m_view.addConstraint(NSLayoutConstraint(item: view!.getUIView(), attribute: attr, relatedBy: .Equal,
-            toItem: toview!.getUIView(), attribute: toattr, multiplier: multi, constant: offset))
+        m_view.addConstraint(NSLayoutConstraint(item: ios_view1, attribute: attr, relatedBy: .Equal,
+            toItem: ios_toview, attribute: toattr, multiplier: multi, constant: offset))
 
     }
     
@@ -213,31 +221,6 @@ class GBViewImp: GBViewGen {
         view_gen?.getUIView().removeFromSuperview()
         GBUiManagerGen.instance()?.removeView(id)
         return true
-    }
-    
-    private func createView(id:String) -> UIView?{
-        let view_conf:GBViewConf? = GBUiConfGen.instance()?.getViewConf(id)
-        if nil == view_conf {
-            GBLogGen.instance()?.logerrf("can't find ViewConf id:\(id) \(#file) \(#function) \(#line) ")
-            return nil
-        }
-        
-        switch view_conf!.type {
-        case GBViewType.Base:
-            return UIView()
-        case GBViewType.Label:
-            return UILabel()
-        case GBViewType.Input:
-            let view:UITextField = UITextField()
-            view.placeholder="  Enter here"
-            view.borderStyle = UITextBorderStyle.RoundedRect
-
-            return view
-        default: break
-        }
-        
-        GBLogGen.instance()?.logerrf("unsupported type id:\(id) type:\(view_conf!.type) \(#file) \(#function) \(#line) ")
-        return nil
     }
     
     

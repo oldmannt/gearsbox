@@ -32,14 +32,26 @@ async_loop_gen = interface +c {
     process(elapse:i64);
 }
 
+timer_handler_gen = interface +c +o +j {
+    handler(time_passed:i64, repeated:i32);
+}
+
+timer_gen = interface +c {
+    static create(timeout:i64, repeat_times:i32, hander:timer_handler_gen):timer_gen;
+    start():bool;
+    stop();
+    getRepeated():i32;
+    getTimePassed():i64;
+    isRunning():bool;
+}
+
 crash_handler_gen = interface +c +o{
     header(path:string, url:string);
 }
 
 breakpad_gen = interface +c +o {
-    static instance():breakpad_gen;
     start();
     stop();
-    setUploadUrl()
-    setHandler(hander:crashHandler);
+    setUploadUrl();
+    setHandler(hander:crash_handler_gen);
 }

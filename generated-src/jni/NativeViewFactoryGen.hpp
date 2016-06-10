@@ -33,14 +33,16 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
-        std::shared_ptr<::gearsbox::ViewGen> createView(const std::string & id) override;
+        std::shared_ptr<::gearsbox::ViewGen> createView(const ::gearsbox::ViewConf & conf) override;
+        bool injectView(const std::shared_ptr<::gearsbox::ViewGen> & view) override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::ViewFactoryGen, ::djinni_generated::NativeViewFactoryGen>;
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/ViewFactoryGen") };
-    const jmethodID method_createView { ::djinni::jniGetMethodID(clazz.get(), "createView", "(Ljava/lang/String;)Ldyno/fun/gearsbox/ViewGen;") };
+    const jmethodID method_createView { ::djinni::jniGetMethodID(clazz.get(), "createView", "(Ldyno/fun/gearsbox/ViewConf;)Ldyno/fun/gearsbox/ViewGen;") };
+    const jmethodID method_injectView { ::djinni::jniGetMethodID(clazz.get(), "injectView", "(Ldyno/fun/gearsbox/ViewGen;)Z") };
 };
 
 }  // namespace djinni_generated

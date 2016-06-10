@@ -113,7 +113,8 @@ view_gen = interface +j +o {
 	setBoardWidth(width:f32);
 
 	getSubView(id:string):view_gen;
-	addSubView(id:string):view_gen;
+	addSubViewById(id:string):view_gen;
+	addSubView(conf:view_conf):view_gen;
 	removeSubView(id:string):bool;
 	removeAllSubView();
 	addConstraint(constraint:view_constraint);
@@ -122,14 +123,16 @@ view_gen = interface +j +o {
 }
 
 view_factory_gen = interface +j +o{
-	createView(id:string):view_gen;
+	createView(conf:view_conf):view_gen;
+	injectView(view:view_gen):bool;
 }
 
 ui_manager_gen = interface +c{
 	static instance():ui_manager_gen;
 	initialize(param:string, factory:view_factory_gen):bool;
-	inject(id:string, view:view_gen);
+	inject(view:view_gen);
 	getView(id:string):view_gen;
+	addView(view:view_gen):view_gen;
 	removeView(id:string);
 }
 

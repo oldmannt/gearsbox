@@ -11,25 +11,51 @@ import UIKit
 
 class GBViewFactoryImp: GBViewFactoryGen {
     
-    @objc internal func createView(id: String) -> GBViewGen?{
-        if ((GBUiManagerGen.instance()?.getView(id)) != nil){
-            GBLogGen.instance()?.logerrf("create failed already in manager id:\(id) \(#file) \(#function) \(#line) ")
-            return nil
+    static let instance = GBViewFactoryImp()
+    @objc internal func injectView(view: GBViewGen?) -> Bool{
+        if view == nil {
+            GBLogGen.instance()?.logerrf("param view nil \(#file) \(#function) \(#line) ")
+            return false
         }
         
-        let view_conf:GBViewConf = (GBUiConfGen.instance()?.getViewConf(id))!
-        if view_conf.id != id {
-            GBLogGen.instance()?.logerrf("create failed can't find ViewConf id:\(id) \(#file) \(#function) \(#line) ")
-            return nil
+        let view_imp:GBViewImp? = view! as? GBViewImp;
+        if (nil == view_imp){
+            GBLogGen.instance()?.logerrf("case view failed id:\(view!.getId()) \(#file) \(#function) \(#line) ")
+        }
+
+        let view_conf:GBViewConf = (GBUiConfGen.instance()?.getViewConf(view!.getId()))!
+        if view_conf.id != view!.getId() {
+            GBLogGen.instance()?.logerrf("create failed can't find ViewConf id:\(view!.getId()) \(#file) \(#function) \(#line) ")
+            return false
         }
         
-        let ios_view:UIView? = createView(view_conf);
+        return confView(view_imp!, conf: view_conf);
+        
+    }
+    
+    @objc internal func createView(conf: GBViewConf) -> GBViewGen?{
+        if ((GBUiManagerGen.instance()?.getView(conf.id)) != nil){
+            GBLogGen.instance()?.logerrf("create failed already in manager id:\(conf.id) \(#file) \(#function) \(#line) ")
+            return nil
+        }
+
+        let ios_view:UIView? = createView(conf);
         if (nil == ios_view){
             return nil
         }
         
-        let view_gen:GBViewImp = GBViewImp(id: id, view:ios_view!)
-        return view_gen
+        let view_imp:GBViewImp = GBViewImp(id: conf.id, view:ios_view!)
+        createSubViews(view_imp, subviews: conf.subviews)
+        createConstraints(view_imp, constraints: conf.constraints)
+        return view_imp
+    }
+    
+    private func confView(view_imp: GBViewImp, conf:GBViewConf)->Bool{
+        let ios_view:UIView = view_imp.getUIView()
+        setBaseConf(ios_view, conf: conf)
+        createSubViews(view_imp, subviews: conf.subviews)
+        createConstraints(view_imp, constraints: conf.constraints)
+        return true
     }
     
     private func createBase(conf:GBViewConf)->UIView{
@@ -56,7 +82,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
         case GBViewType.Base:
             return createBase(view_conf);
         case GBViewType.Label:
-            return createBase(view_conf);
+            return createLabel(view_conf);
         case GBViewType.Input:
             return createInput(view_conf);
         default: break
@@ -71,6 +97,8 @@ class GBViewFactoryImp: GBViewFactoryGen {
         if (conf.text.characters.count>0){
             label.text = conf.text
         }
+        label.backgroundColor = UIColor.blackColor()
+        label.text = "12345678"
         
         if (conf.fontsize>0){
             label.font = label.font.fontWithSize(CGFloat(conf.fontsize));
@@ -86,8 +114,20 @@ class GBViewFactoryImp: GBViewFactoryGen {
             input.borderStyle = GBTyperConvertor.convertUITextBoarder(conf.textboarder);
         }
     }
+    
+    private func createSubViews(view_imp:GBViewImp, subviews:[String: GBViewConf]){
+        for (_, sub_conf) in subviews {
+            view_imp.addSubView(sub_conf);
+        }
+    }
+    
+    private func createConstraints(view_imp:GBViewImp, constraints:[GBViewConstraint]){
+        for constraint in constraints {
+            view_imp.addConstraint(constraint)
+        }
+    }
 
-    private func setBaseConf(view:UIView, conf:GBViewConf){
+    private func setBaseConf(view:UIView, conf:GBViewConf)->Bool{
         view.accessibilityIdentifier = conf.id;
 
         if (GBUiValueCheckerGen.instance()?.isValidFrame(conf.frame) == true){
@@ -97,6 +137,8 @@ class GBViewFactoryImp: GBViewFactoryGen {
         if (GBUiValueCheckerGen.instance()?.isValidColor(conf.bgcolor) == true){
             view.backgroundColor = GBTyperConvertor.convertUIColor(conf.bgcolor);
         }
+        
+        return true
     }
 
 }

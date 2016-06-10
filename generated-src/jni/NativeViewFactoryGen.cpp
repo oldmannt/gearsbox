@@ -3,6 +3,7 @@
 
 #include "NativeViewFactoryGen.hpp"  // my header
 #include "Marshal.hpp"
+#include "NativeViewConf.hpp"
 #include "NativeViewGen.hpp"
 
 namespace djinni_generated {
@@ -15,14 +16,23 @@ NativeViewFactoryGen::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jniGetT
 
 NativeViewFactoryGen::JavaProxy::~JavaProxy() = default;
 
-std::shared_ptr<::gearsbox::ViewGen> NativeViewFactoryGen::JavaProxy::createView(const std::string & c_id) {
+std::shared_ptr<::gearsbox::ViewGen> NativeViewFactoryGen::JavaProxy::createView(const ::gearsbox::ViewConf & c_conf) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewFactoryGen>::get();
     auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_createView,
-                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_id)));
+                                         ::djinni::get(::djinni_generated::NativeViewConf::fromCpp(jniEnv, c_conf)));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeViewGen::toCpp(jniEnv, jret);
+}
+bool NativeViewFactoryGen::JavaProxy::injectView(const std::shared_ptr<::gearsbox::ViewGen> & c_view) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewFactoryGen>::get();
+    auto jret = jniEnv->CallBooleanMethod(Handle::get().get(), data.method_injectView,
+                                          ::djinni::get(::djinni_generated::NativeViewGen::fromCpp(jniEnv, c_view)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::Bool::toCpp(jniEnv, jret);
 }
 
 }  // namespace djinni_generated

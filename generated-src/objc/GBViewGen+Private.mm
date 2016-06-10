@@ -6,6 +6,7 @@
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
 #import "GBArgbColor+Private.h"
+#import "GBViewConf+Private.h"
 #import "GBViewConstraint+Private.h"
 #import "GBViewEventHandler+Private.h"
 #import "GBViewFrame+Private.h"
@@ -82,10 +83,17 @@ public:
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }
-    std::shared_ptr<::gearsbox::ViewGen> addSubView(const std::string & c_id) override
+    std::shared_ptr<::gearsbox::ViewGen> addSubViewById(const std::string & c_id) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() addSubView:(::djinni::String::fromCpp(c_id))];
+            auto r = [Handle::get() addSubViewById:(::djinni::String::fromCpp(c_id))];
+            return ::djinni_generated::ViewGen::toCpp(r);
+        }
+    }
+    std::shared_ptr<::gearsbox::ViewGen> addSubView(const ::gearsbox::ViewConf & c_conf) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() addSubView:(::djinni_generated::ViewConf::fromCpp(c_conf))];
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }

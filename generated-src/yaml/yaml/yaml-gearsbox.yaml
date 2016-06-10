@@ -59,6 +59,35 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/AsyncLoopGen;'
 ---
+name: gb_breakpad_gen
+typedef: 'interface +c +o'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::BreakpadGen'
+  header: '"breakpad_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBBreakpadGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBBreakpadGen'
+  header: '"GBBreakpadGen.h"'
+objcpp:
+  translator: '::djinni_generated::BreakpadGen'
+  header: '"GBBreakpadGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.BreakpadGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.BreakpadGen'
+jni:
+  translator: '::djinni_generated::NativeBreakpadGen'
+  header: '"NativeBreakpadGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/BreakpadGen;'
+---
 name: gb_callback_http_gen
 typedef: 'interface +o +j'
 params: []
@@ -116,6 +145,35 @@ jni:
   header: '"NativeConstraintType.hpp"'
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/ConstraintType;'
+---
+name: gb_crash_handler_gen
+typedef: 'interface +c +o'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::CrashHandlerGen'
+  header: '"crash_handler_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBCrashHandlerGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBCrashHandlerGen'
+  header: '"GBCrashHandlerGen.h"'
+objcpp:
+  translator: '::djinni_generated::CrashHandlerGen'
+  header: '"GBCrashHandlerGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.CrashHandlerGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.CrashHandlerGen'
+jni:
+  translator: '::djinni_generated::NativeCrashHandlerGen'
+  header: '"NativeCrashHandlerGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/CrashHandlerGen;'
 ---
 name: gb_http_request_gen
 typedef: 'interface +c'
@@ -232,6 +290,64 @@ jni:
   header: '"NativeTextBoarder.hpp"'
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/TextBoarder;'
+---
+name: gb_timer_gen
+typedef: 'interface +c'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::TimerGen'
+  header: '"timer_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBTimerGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBTimerGen'
+  header: '"GBTimerGen.h"'
+objcpp:
+  translator: '::djinni_generated::TimerGen'
+  header: '"GBTimerGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.TimerGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.TimerGen'
+jni:
+  translator: '::djinni_generated::NativeTimerGen'
+  header: '"NativeTimerGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/TimerGen;'
+---
+name: gb_timer_handler_gen
+typedef: 'interface +c +o +j'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::TimerHandlerGen'
+  header: '"timer_handler_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBTimerHandlerGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBTimerHandlerGen'
+  header: '"GBTimerHandlerGen.h"'
+objcpp:
+  translator: '::djinni_generated::TimerHandlerGen'
+  header: '"GBTimerHandlerGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.TimerHandlerGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.TimerHandlerGen'
+jni:
+  translator: '::djinni_generated::NativeTimerHandlerGen'
+  header: '"NativeTimerHandlerGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/TimerHandlerGen;'
 ---
 name: gb_typer_convertor
 typedef: 'interface +o +j'

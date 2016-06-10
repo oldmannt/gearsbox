@@ -4,5 +4,7 @@
 package dyno.fun.gearsbox;
 
 public abstract class ViewFactoryGen {
-    public abstract ViewGen createView(String id);
+    public abstract ViewGen createView(ViewConf conf);
+
+    public abstract boolean injectView(ViewGen view);
 }

@@ -8,9 +8,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class UiManagerGen {
     public abstract boolean initialize(String param, ViewFactoryGen factory);
 
-    public abstract void inject(String id, ViewGen view);
+    public abstract void inject(ViewGen view);
 
     public abstract ViewGen getView(String id);
+
+    public abstract ViewGen addView(ViewGen view);
 
     public abstract void removeView(String id);
 
@@ -48,12 +50,12 @@ public abstract class UiManagerGen {
         private native boolean native_initialize(long _nativeRef, String param, ViewFactoryGen factory);
 
         @Override
-        public void inject(String id, ViewGen view)
+        public void inject(ViewGen view)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_inject(this.nativeRef, id, view);
+            native_inject(this.nativeRef, view);
         }
-        private native void native_inject(long _nativeRef, String id, ViewGen view);
+        private native void native_inject(long _nativeRef, ViewGen view);
 
         @Override
         public ViewGen getView(String id)
@@ -62,6 +64,14 @@ public abstract class UiManagerGen {
             return native_getView(this.nativeRef, id);
         }
         private native ViewGen native_getView(long _nativeRef, String id);
+
+        @Override
+        public ViewGen addView(ViewGen view)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_addView(this.nativeRef, view);
+        }
+        private native ViewGen native_addView(long _nativeRef, ViewGen view);
 
         @Override
         public void removeView(String id)

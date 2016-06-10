@@ -48,17 +48,22 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (void)inject:(nonnull NSString *)id
-          view:(nullable id<GBViewGen>)view {
+- (void)inject:(nullable id<GBViewGen>)view {
     try {
-        _cppRefHandle.get()->inject(::djinni::String::toCpp(id),
-                                    ::djinni_generated::ViewGen::toCpp(view));
+        _cppRefHandle.get()->inject(::djinni_generated::ViewGen::toCpp(view));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
 - (nullable id<GBViewGen>)getView:(nonnull NSString *)id {
     try {
         auto r = _cppRefHandle.get()->getView(::djinni::String::toCpp(id));
+        return ::djinni_generated::ViewGen::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (nullable id<GBViewGen>)addView:(nullable id<GBViewGen>)view {
+    try {
+        auto r = _cppRefHandle.get()->addView(::djinni_generated::ViewGen::toCpp(view));
         return ::djinni_generated::ViewGen::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

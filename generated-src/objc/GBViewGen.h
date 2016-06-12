@@ -32,9 +32,12 @@
 
 - (void)setBoardWidth:(float)width;
 
+- (void)setText:(nonnull NSString *)text;
+
 - (nullable id<GBViewGen>)getSubView:(nonnull NSString *)id;
 
-- (nullable id<GBViewGen>)addSubViewById:(nonnull NSString *)id;
+- (nullable id<GBViewGen>)addSubViewById:(nonnull NSString *)id
+                                    type:(GBViewType)type;
 
 - (nullable id<GBViewGen>)addSubView:(nonnull GBViewConf *)conf;
 

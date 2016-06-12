@@ -111,9 +111,10 @@ view_gen = interface +j +o {
 	getType():view_type;
 	setBoardColor(color:argb_color);
 	setBoardWidth(width:f32);
+	setText(text:string);
 
 	getSubView(id:string):view_gen;
-	addSubViewById(id:string):view_gen;
+	addSubViewById(id:string,type:view_type):view_gen;
 	addSubView(conf:view_conf):view_gen;
 	removeSubView(id:string):bool;
 	removeAllSubView();
@@ -124,6 +125,7 @@ view_gen = interface +j +o {
 
 view_factory_gen = interface +j +o{
 	createView(conf:view_conf):view_gen;
+	createViewById(id:string, type:view_type):view_gen;
 	injectView(view:view_gen):bool;
 }
 
@@ -132,7 +134,7 @@ ui_manager_gen = interface +c{
 	initialize(param:string, factory:view_factory_gen):bool;
 	inject(view:view_gen);
 	getView(id:string):view_gen;
-	addView(view:view_gen):view_gen;
+	addView(view:view_gen):bool;
 	removeView(id:string);
 }
 

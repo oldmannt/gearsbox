@@ -35,9 +35,11 @@ public:
 
     virtual void setBoardWidth(float width) = 0;
 
+    virtual void setText(const std::string & text) = 0;
+
     virtual std::shared_ptr<ViewGen> getSubView(const std::string & id) = 0;
 
-    virtual std::shared_ptr<ViewGen> addSubViewById(const std::string & id) = 0;
+    virtual std::shared_ptr<ViewGen> addSubViewById(const std::string & id, ViewType type) = 0;
 
     virtual std::shared_ptr<ViewGen> addSubView(const ViewConf & conf) = 0;
 

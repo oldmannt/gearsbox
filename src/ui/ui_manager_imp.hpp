@@ -22,7 +22,7 @@ public:
     virtual bool initialize(const std::string & param, const std::shared_ptr<ViewFactoryGen> & factory);
     virtual void inject(const std::shared_ptr<ViewGen> & view);
     virtual std::shared_ptr<ViewGen> getView(const std::string & id);
-    virtual std::shared_ptr<ViewGen> addView(const std::shared_ptr<ViewGen> & view);
+    virtual bool addView(const std::shared_ptr<ViewGen> & view);
     virtual void removeView(const std::string & id);
     
 private:

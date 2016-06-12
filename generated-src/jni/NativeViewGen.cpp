@@ -88,6 +88,14 @@ void NativeViewGen::JavaProxy::setBoardWidth(float c_width) {
                            ::djinni::get(::djinni::F32::fromCpp(jniEnv, c_width)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
+void NativeViewGen::JavaProxy::setText(const std::string & c_text) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setText,
+                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c_text)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::getSubView(const std::string & c_id) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
@@ -97,12 +105,13 @@ std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::getSubView(const 
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeViewGen::toCpp(jniEnv, jret);
 }
-std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::addSubViewById(const std::string & c_id) {
+std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::addSubViewById(const std::string & c_id, ::gearsbox::ViewType c_type) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
     auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_addSubViewById,
-                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_id)));
+                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_id)),
+                                         ::djinni::get(::djinni_generated::NativeViewType::fromCpp(jniEnv, c_type)));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeViewGen::toCpp(jniEnv, jret);
 }

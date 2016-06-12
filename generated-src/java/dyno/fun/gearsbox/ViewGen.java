@@ -20,9 +20,11 @@ public abstract class ViewGen {
 
     public abstract void setBoardWidth(float width);
 
+    public abstract void setText(String text);
+
     public abstract ViewGen getSubView(String id);
 
-    public abstract ViewGen addSubViewById(String id);
+    public abstract ViewGen addSubViewById(String id, ViewType type);
 
     public abstract ViewGen addSubView(ViewConf conf);
 

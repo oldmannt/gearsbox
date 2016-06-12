@@ -12,7 +12,7 @@ public abstract class UiManagerGen {
 
     public abstract ViewGen getView(String id);
 
-    public abstract ViewGen addView(ViewGen view);
+    public abstract boolean addView(ViewGen view);
 
     public abstract void removeView(String id);
 
@@ -66,12 +66,12 @@ public abstract class UiManagerGen {
         private native ViewGen native_getView(long _nativeRef, String id);
 
         @Override
-        public ViewGen addView(ViewGen view)
+        public boolean addView(ViewGen view)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
             return native_addView(this.nativeRef, view);
         }
-        private native ViewGen native_addView(long _nativeRef, ViewGen view);
+        private native boolean native_addView(long _nativeRef, ViewGen view);
 
         @Override
         public void removeView(String id)

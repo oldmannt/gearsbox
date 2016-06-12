@@ -34,7 +34,7 @@ private:
     int32_t m_repeated;
     bool m_running;
     std::shared_ptr<TimerHandlerGen> m_handler;
-    uv_timer_t m_timer;
+    uv_timer_t* m_timer;
 };
     
 }

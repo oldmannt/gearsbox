@@ -61,13 +61,13 @@ CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_UiManagerGen_00024CppProxy_nat
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_UiManagerGen_00024CppProxy_native_1addView(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_view)
+CJNIEXPORT jboolean JNICALL Java_dyno_fun_gearsbox_UiManagerGen_00024CppProxy_native_1addView(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_view)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::UiManagerGen>(nativeRef);
         auto r = ref->addView(::djinni_generated::NativeViewGen::toCpp(jniEnv, j_view));
-        return ::djinni::release(::djinni_generated::NativeViewGen::fromCpp(jniEnv, r));
+        return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 

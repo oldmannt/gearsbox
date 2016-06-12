@@ -18,7 +18,7 @@
 
 - (nullable id<GBViewGen>)getView:(nonnull NSString *)id;
 
-- (nullable id<GBViewGen>)addView:(nullable id<GBViewGen>)view;
+- (BOOL)addView:(nullable id<GBViewGen>)view;
 
 - (void)removeView:(nonnull NSString *)id;
 

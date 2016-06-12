@@ -76,6 +76,12 @@ public:
             [Handle::get() setBoardWidth:(::djinni::F32::fromCpp(c_width))];
         }
     }
+    void setText(const std::string & c_text) override
+    {
+        @autoreleasepool {
+            [Handle::get() setText:(::djinni::String::fromCpp(c_text))];
+        }
+    }
     std::shared_ptr<::gearsbox::ViewGen> getSubView(const std::string & c_id) override
     {
         @autoreleasepool {
@@ -83,10 +89,11 @@ public:
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }
-    std::shared_ptr<::gearsbox::ViewGen> addSubViewById(const std::string & c_id) override
+    std::shared_ptr<::gearsbox::ViewGen> addSubViewById(const std::string & c_id, ::gearsbox::ViewType c_type) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() addSubViewById:(::djinni::String::fromCpp(c_id))];
+            auto r = [Handle::get() addSubViewById:(::djinni::String::fromCpp(c_id))
+                                              type:(::djinni::Enum<::gearsbox::ViewType, GBViewType>::fromCpp(c_type))];
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }

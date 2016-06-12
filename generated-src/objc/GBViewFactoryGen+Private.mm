@@ -25,6 +25,14 @@ public:
             return ::djinni_generated::ViewGen::toCpp(r);
         }
     }
+    std::shared_ptr<::gearsbox::ViewGen> createViewById(const std::string & c_id, ::gearsbox::ViewType c_type) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() createViewById:(::djinni::String::fromCpp(c_id))
+                                              type:(::djinni::Enum<::gearsbox::ViewType, GBViewType>::fromCpp(c_type))];
+            return ::djinni_generated::ViewGen::toCpp(r);
+        }
+    }
     bool injectView(const std::shared_ptr<::gearsbox::ViewGen> & c_view) override
     {
         @autoreleasepool {

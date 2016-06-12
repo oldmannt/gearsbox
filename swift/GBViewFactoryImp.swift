@@ -50,6 +50,15 @@ class GBViewFactoryImp: GBViewFactoryGen {
         return view_imp
     }
     
+    @objc internal func createViewById(id: String, type:GBViewType) -> GBViewGen?{
+        var view_conf:GBViewConf = (GBUiConfGen.instance()?.getViewConf(id))!
+        if view_conf.id != id {
+            view_conf = createViewConf(id, type: type)
+        }
+
+        return createView(view_conf)
+    }
+    
     private func confView(view_imp: GBViewImp, conf:GBViewConf)->Bool{
         let ios_view:UIView = view_imp.getUIView()
         setBaseConf(ios_view, conf: conf)
@@ -80,25 +89,26 @@ class GBViewFactoryImp: GBViewFactoryGen {
         
         switch view_conf.type {
         case GBViewType.Base:
-            return createBase(view_conf);
+            return createBase(view_conf)
         case GBViewType.Label:
-            return createLabel(view_conf);
+            return createLabel(view_conf)
         case GBViewType.Input:
-            return createInput(view_conf);
+            return createInput(view_conf)
         default: break
         }
         
         GBLogGen.instance()?.logerrf("unsupported type id:\(view_conf.id) type:\(view_conf.type) \(#file) \(#function) \(#line) ")
         return nil
     }
-    
+       
     private func setLabelConf(label:UILabel, conf:GBViewConf){
         setBaseConf(label, conf: conf)
         if (conf.text.characters.count>0){
             label.text = conf.text
         }
-        label.backgroundColor = UIColor.blackColor()
-        label.text = "12345678"
+        //label.backgroundColor = UIColor.blackColor()
+        //label.text = "12345678"
+        label.adjustsFontSizeToFitWidth = true;
         
         if (conf.fontsize>0){
             label.font = label.font.fontWithSize(CGFloat(conf.fontsize));
@@ -139,6 +149,15 @@ class GBViewFactoryImp: GBViewFactoryGen {
         }
         
         return true
+    }
+    
+
+    private func createViewConf(id:String, type:GBViewType)->GBViewConf{
+        let conf:GBViewConf = GBViewConf(id: id, type: type, frame: GBViewConf.noframe(),
+                        bgcolor: GBViewConf.nogbcolor(), fontsize: -1, textalign: GBTextAlign.None,
+                        textboarder: GBTextBoarder.None, text: "",
+                        constraints: [GBViewConstraint](), subviews: [String : GBViewConf]())
+        return conf
     }
 
 }

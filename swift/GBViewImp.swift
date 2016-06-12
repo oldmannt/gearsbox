@@ -67,6 +67,15 @@ class GBViewImp: GBViewGen {
         m_view.layer.borderColor = GBTyperConvertor.convertUIColor(color)
     }
     
+    @objc public func setText(text: String) {
+        if let label = m_view as? UILabel {
+            label.text = text
+        }
+        else if let text_view = m_view as? UITextView {
+            text_view.text = text
+        }
+    }
+    
     @objc public func setBoardWidth(width: Float){
         m_view.layer.borderWidth = CGFloat(width)
     }
@@ -76,23 +85,27 @@ class GBViewImp: GBViewGen {
     }
     
     @objc public func getSubView(id: String) -> GBViewGen?{
-        for (view_id,view_gen) in m_subView {
-            if id == view_id {
-                return view_gen
-            }
-        }
-        GBLogGen.instance()?.logerrf("get sub view nil \(#file) \(#function) \(#line) ")
-        return nil
+        return m_subView[id]
     }
     
-    @objc public func addSubViewById(id: String) -> GBViewGen?{
-        let view_conf:GBViewConf = (GBUiConfGen.instance()?.getViewConf(id))!
-        if view_conf.id != id {
-            GBLogGen.instance()?.logerrf("add subview failed can't find ViewConf id:\(id) \(#file) \(#function) \(#line) ")
+    @objc public func addSubViewById(id: String, type:GBViewType) -> GBViewGen?{
+        if m_subView[id] != nil {
+            GBLogGen.instance()?.logerrf("addSubViewById failed aready exist id: \(id) \(#file) \(#function) \(#line) ")
+            return nil;
+        }
+        
+        if id == m_id {
+            GBLogGen.instance()?.logerrf("addSubViewById failed this parent id: \(id) \(#file) \(#function) \(#line) ")
+            return nil;
+        }
+        
+        let view_gen:GBViewImp? = GBViewFactoryImp.instance.createViewById(id, type: type) as? GBViewImp;
+        if (nil == view_gen){
             return nil
         }
 
-        return addSubView(view_conf)
+        addSubView(view_gen!)
+        return view_gen
     }
     
     @objc public func addSubView(conf: GBViewConf) -> GBViewGen?{
@@ -111,14 +124,18 @@ class GBViewImp: GBViewGen {
             return nil
         }
         
-        m_view.addSubview(view_gen!.getUIView())
-        view_gen?.setUIViewController(m_controller!)
-        m_subView[conf.id] = view_gen
+        addSubView(view_gen!)
         return view_gen
     }
     
-    
-    
+    private func addSubView(subview:GBViewImp)->Bool{
+        m_view.addSubview(subview.getUIView())
+        subview.setUIViewController(m_controller!)
+        m_subView[subview.getId()] = subview
+        GBUiManagerGen.instance()?.addView(subview)
+        return true;
+    }
+
     @objc public func removeSubView(id: String) -> Bool{
         if !removeSubViewImp(id){
             return false

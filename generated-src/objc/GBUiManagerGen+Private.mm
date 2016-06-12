@@ -61,10 +61,10 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (nullable id<GBViewGen>)addView:(nullable id<GBViewGen>)view {
+- (BOOL)addView:(nullable id<GBViewGen>)view {
     try {
         auto r = _cppRefHandle.get()->addView(::djinni_generated::ViewGen::toCpp(view));
-        return ::djinni_generated::ViewGen::fromCpp(r);
+        return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

@@ -41,6 +41,9 @@ bool UiConfImp::load(const std::string& cfg){
 }
 
 std::vector<ViewConstraint>  UiConfImp::getConstraints(const std::string & name) const{
+    MapConstraints::const_iterator find = m_conf.predef_constraints.find(name);
+    if (find == m_conf.predef_constraints.end())
+        return std::vector<ViewConstraint>();
     return m_conf.predef_constraints.at(name);
 }
 

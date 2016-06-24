@@ -82,6 +82,25 @@ public:
             [Handle::get() setText:(::djinni::String::fromCpp(c_text))];
         }
     }
+    std::string getText() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getText];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+    void setTextColor(const ::gearsbox::ArgbColor & c_color) override
+    {
+        @autoreleasepool {
+            [Handle::get() setTextColor:(::djinni_generated::ArgbColor::fromCpp(c_color))];
+        }
+    }
+    void setFontSize(int32_t c_size) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFontSize:(::djinni::I32::fromCpp(c_size))];
+        }
+    }
     std::shared_ptr<::gearsbox::ViewGen> getSubView(const std::string & c_id) override
     {
         @autoreleasepool {

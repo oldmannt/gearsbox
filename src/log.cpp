@@ -126,6 +126,19 @@ void g_logouts(int output, int lev, const char* msg) {
 
 }
 
+void g_log_lx(int output, int lev, const char* fmt, ...){
+    if (g_log_info.init == 0){
+        g_loginit(LOG_CONSOLE, "");
+    }
+    
+    char buf[512] = {0};
+    va_list va;
+    va_start(va, fmt);
+    vsnprintf(buf,sizeof(buf),fmt,va);
+    va_end(va);
+    g_logouts(output, lev, buf);
+}
+
 void g_logout(int output, int lev, const char *const func, const char *const file, const unsigned line, const char* fmt, ...) {
     if (g_log_info.init == 0){
         g_loginit(LOG_CONSOLE, "");

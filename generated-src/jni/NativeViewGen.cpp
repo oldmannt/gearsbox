@@ -96,6 +96,30 @@ void NativeViewGen::JavaProxy::setText(const std::string & c_text) {
                            ::djinni::get(::djinni::String::fromCpp(jniEnv, c_text)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
+std::string NativeViewGen::JavaProxy::getText() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getText);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::String::toCpp(jniEnv, jret);
+}
+void NativeViewGen::JavaProxy::setTextColor(const ::gearsbox::ArgbColor & c_color) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setTextColor,
+                           ::djinni::get(::djinni_generated::NativeArgbColor::fromCpp(jniEnv, c_color)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeViewGen::JavaProxy::setFontSize(int32_t c_size) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setFontSize,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_size)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::getSubView(const std::string & c_id) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

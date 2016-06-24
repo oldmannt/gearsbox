@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
 
@@ -36,6 +37,12 @@ public:
     virtual void setBoardWidth(float width) = 0;
 
     virtual void setText(const std::string & text) = 0;
+
+    virtual std::string getText() = 0;
+
+    virtual void setTextColor(const ArgbColor & color) = 0;
+
+    virtual void setFontSize(int32_t size) = 0;
 
     virtual std::shared_ptr<ViewGen> getSubView(const std::string & id) = 0;
 

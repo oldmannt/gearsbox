@@ -97,7 +97,7 @@ bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
                 vec_consttraints.push_back(view_consttraint);
             }
             data.predef_constraints[predef_name] = vec_consttraints;
-            G_LOG_FC(LOG_INFO, "parse array [%s] %d constraints ", predef_name.c_str(), vec_consttraints.size());
+            //G_LOG_FC(LOG_INFO, "parse array [%s] %d constraints ", predef_name.c_str(), vec_consttraints.size());
         }
         
         Json::Value& views_json = json_cfg["views"];
@@ -110,7 +110,7 @@ bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
                 if (!readView(views_json[i], view_conf))
                     continue;
                 data.viewconfs[view_conf.id] = view_conf;
-                G_LOG_FC(LOG_INFO, "parse view [%s]", view_conf.id.c_str());
+                //G_LOG_FC(LOG_INFO, "parse view [%s]", view_conf.id.c_str());
             }
             
         }
@@ -158,8 +158,8 @@ bool UiConfImp::Reader::readConstraint(const Json::Value& cfg, ViewConstraint& c
         return false;
     }
     
-    G_LOG_FC(LOG_INFO, "frome:%s to:%s type:%d typeto:%d mul:%02f off:%02f", constraint.view_from.c_str(),
-        constraint.view_to.c_str(), constraint.type, constraint.type_to, constraint.multiplier, constraint.offset);
+    //G_LOG_FC(LOG_INFO, "frome:%s to:%s type:%d typeto:%d mul:%02f off:%02f", constraint.view_from.c_str(),
+        //constraint.view_to.c_str(), constraint.type, constraint.type_to, constraint.multiplier, constraint.offset);
     return true;
 }
     ViewType getViewType(const std::string& str){
@@ -188,9 +188,16 @@ bool UiConfImp::Reader::readView(const Json::Value& cfg, ViewConf& view){
     
     try {
         this->readViewFrame(cfg["frame"], view.frame);
-        view.textboarder = TextBoarder(cfg["text_boarder"].asInt());
-        view.fontsize = cfg["fontsize"].asInt();
-        view.textalign = TextAlign(cfg["textalign"].asInt());
+        if (cfg["text_boarder"].type()!=Json::ValueType::nullValue)
+            view.textboarder = TextBoarder(cfg["text_boarder"].asInt());
+        if (cfg["fontsize"].type()!=Json::ValueType::nullValue)
+            view.fontsize = cfg["fontsize"].asInt();
+        if (cfg["textalign"].type()!=Json::ValueType::nullValue)
+            view.textalign = TextAlign(cfg["textalign"].asInt());
+        if (cfg["keyboardtype"].type()!=Json::ValueType::nullValue)
+            view.keyboardtype = readTextKeyboard(cfg["keyboardtype"].asString());
+        if (cfg["numericText"].type()!=Json::ValueType::nullValue)
+            view.numericText = cfg["numericText"].asBool();
         
         const Json::Value& constraints_json = cfg["constraints"];
         for (Json::ArrayIndex i=0; i<constraints_json.size(); ++i) {
@@ -205,7 +212,7 @@ bool UiConfImp::Reader::readView(const Json::Value& cfg, ViewConf& view){
             }
             view.constraints.push_back(view_constraint);
         }
-        G_LOG_FC(LOG_INFO, "parse %d constraints in views [%s], ", view.constraints.size(), view.id.c_str());
+        //G_LOG_FC(LOG_INFO, "parse %d constraints in views [%s], ", view.constraints.size(), view.id.c_str());
         
         const Json::Value& views_json = cfg["views"];
         for (Json::ArrayIndex i=0; i<views_json.size(); ++i) {
@@ -219,11 +226,12 @@ bool UiConfImp::Reader::readView(const Json::Value& cfg, ViewConf& view){
                 continue;
             }
             view.subviews[subview.id] = subview;
-            G_LOG_FC(LOG_INFO, "parse subview [%s] in views [%s], ", subview.id.c_str(), view.id.c_str());
+            //G_LOG_FC(LOG_INFO, "parse subview [%s] in views [%s], ", subview.id.c_str(), view.id.c_str());
         }
         
     } catch (std::exception &ex) {
-        G_LOG_FC(LOG_INFO, "parse view miss not request property:%s", ex.what());
+        G_LOG_FC(LOG_ERROR, "parse view miss not request property:%s", ex.what());
+        return false;
     }
     
     return true;
@@ -241,6 +249,24 @@ bool UiConfImp::Reader::readViewFrame(const Json::Value &cfg, gearsbox::ViewFram
     }
     
     return true;
+}
+    
+TextKeyboard UiConfImp::Reader::readTextKeyboard(const std::string& cfg){
+    if (cfg == "Default")
+        return TextKeyboard::DEFAULT;
+    else if (cfg == "ASCII")
+        return TextKeyboard::ASCII;
+    else if (cfg == "URL")
+        return TextKeyboard::URL;
+    else if (cfg == "NumberPad")
+        return TextKeyboard::NUMBERPAD;
+    else if (cfg == "PhonePad")
+        return TextKeyboard::PHONEPAD;
+    else if (cfg == "DecimalPad")
+        return TextKeyboard::DECIMALPAD;
+    
+    G_LOG_FC(LOG_ERROR, "parse TextKeyboard no match:%s", cfg.c_str());
+    return TextKeyboard::DEFAULT;
 }
     
 }

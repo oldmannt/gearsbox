@@ -10,6 +10,7 @@
 #define ui_conf_imp_hpp
 
 #include "ui_conf_gen.hpp"
+#include "text_keyboard.hpp"
 #include "view_frame.hpp"
 #include <unordered_map>
 #include <vector>
@@ -47,6 +48,7 @@ private:
         bool readConstraint(const Json::Value& cfg, ViewConstraint& constraint);
         bool readView(const Json::Value& cfg, ViewConf& view);
         bool readViewFrame(const Json::Value& cfg, ViewFrame& frame);
+        TextKeyboard readTextKeyboard(const std::string& cfg);
     };
 };
 }

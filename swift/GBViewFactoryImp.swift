@@ -108,10 +108,15 @@ class GBViewFactoryImp: GBViewFactoryGen {
         }
         //label.backgroundColor = UIColor.blackColor()
         //label.text = "12345678"
-        label.adjustsFontSizeToFitWidth = true;
+        //label.adjustsFontSizeToFitWidth = true;
+        label.userInteractionEnabled = true;
         
         if (conf.fontsize>0){
             label.font = label.font.fontWithSize(CGFloat(conf.fontsize));
+        }
+        
+        if (conf.textalign != GBTextAlign.None){
+            label.textAlignment = GBTyperConvertor.convertUITextAlign(conf.textalign)!
         }
     }
     
@@ -122,6 +127,12 @@ class GBViewFactoryImp: GBViewFactoryGen {
         }
         if (GBUiValueCheckerGen.instance()?.isValidTextBoarder(conf.textboarder) == true){
             input.borderStyle = GBTyperConvertor.convertUITextBoarder(conf.textboarder);
+        }
+        if (conf.keyboardtype != GBTextKeyboard.Default){
+            input.keyboardType = GBTyperConvertor.convertKeyboardType(conf.keyboardtype)
+        }
+        if (conf.numericText){
+            input.delegate = NumInputDelegate(edt: input)
         }
     }
     
@@ -156,6 +167,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
         let conf:GBViewConf = GBViewConf(id: id, type: type, frame: GBViewConf.noframe(),
                         bgcolor: GBViewConf.nogbcolor(), fontsize: -1, textalign: GBTextAlign.None,
                         textboarder: GBTextBoarder.None, text: "",
+                        numericText: false, keyboardtype: GBTextKeyboard.Default,
                         constraints: [GBViewConstraint](), subviews: [String : GBViewConf]())
         return conf
     }

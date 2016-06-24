@@ -3,6 +3,7 @@
 
 #include "view_conf_base.hpp"
 #include "argb_color.hpp"
+#include "text_keyboard.hpp"
 
 namespace gearsbox {
     
@@ -19,6 +20,8 @@ namespace gearsbox {
                      , TextAlign::NONE      // TextAlign textalign_,
                      , TextBoarder::NONE    // TextBoarder textboarder_,
                      , ""                   // std::string text_,
+                     , false                // numericText
+                     , TextKeyboard::DEFAULT// keyboardtype
                      , std::vector<ViewConstraint>()
                      , std::unordered_map<std::string, ViewConf>()){
             

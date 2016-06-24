@@ -117,6 +117,35 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/CallbackHttpGen;'
 ---
+name: gb_config_gen
+typedef: 'interface +c'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::ConfigGen'
+  header: '"config_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBConfigGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBConfigGen'
+  header: '"GBConfigGen.h"'
+objcpp:
+  translator: '::djinni_generated::ConfigGen'
+  header: '"GBConfigGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.ConfigGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.ConfigGen'
+jni:
+  translator: '::djinni_generated::NativeConfigGen'
+  header: '"NativeConfigGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/ConfigGen;'
+---
 name: gb_constraint_type
 typedef: 'enum'
 params: []
@@ -204,6 +233,64 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/HttpRequestGen;'
 ---
+name: gb_lang_type
+typedef: 'enum'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::LangType'
+  header: '"lang_type.hpp"'
+  byValue: true
+objc:
+  typename: 'GBLangType'
+  pointer: false
+  hash: '%s.hash'
+  boxed: 'NSNumber'
+  header: '"GBLangType.h"'
+objcpp:
+  translator: '::djinni::Enum<::gearsbox::LangType, GBLangType>'
+  header: '"DJIMarshal+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.LangType'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.LangType'
+jni:
+  translator: '::djinni_generated::NativeLangType'
+  header: '"NativeLangType.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/LangType;'
+---
+name: gb_language_store_gen
+typedef: 'interface +c'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::LanguageStoreGen'
+  header: '"language_store_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBLanguageStoreGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBLanguageStoreGen'
+  header: '"GBLanguageStoreGen.h"'
+objcpp:
+  translator: '::djinni_generated::LanguageStoreGen'
+  header: '"GBLanguageStoreGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.LanguageStoreGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.LanguageStoreGen'
+jni:
+  translator: '::djinni_generated::NativeLanguageStoreGen'
+  header: '"NativeLanguageStoreGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/LanguageStoreGen;'
+---
 name: gb_log_gen
 typedef: 'interface +c'
 params: []
@@ -232,6 +319,64 @@ jni:
   header: '"NativeLogGen.hpp"'
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/LogGen;'
+---
+name: gb_platform_executor_gen
+typedef: 'interface +o +j'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::PlatformExecutorGen'
+  header: '"platform_executor_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBPlatformExecutorGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBPlatformExecutorGen'
+  header: '"GBPlatformExecutorGen.h"'
+objcpp:
+  translator: '::djinni_generated::PlatformExecutorGen'
+  header: '"GBPlatformExecutorGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.PlatformExecutorGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.PlatformExecutorGen'
+jni:
+  translator: '::djinni_generated::NativePlatformExecutorGen'
+  header: '"NativePlatformExecutorGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/PlatformExecutorGen;'
+---
+name: gb_platform_utility_gen
+typedef: 'interface +c'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::PlatformUtilityGen'
+  header: '"platform_utility_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBPlatformUtilityGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBPlatformUtilityGen'
+  header: '"GBPlatformUtilityGen.h"'
+objcpp:
+  translator: '::djinni_generated::PlatformUtilityGen'
+  header: '"GBPlatformUtilityGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.PlatformUtilityGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.PlatformUtilityGen'
+jni:
+  translator: '::djinni_generated::NativePlatformUtilityGen'
+  header: '"NativePlatformUtilityGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/PlatformUtilityGen;'
 ---
 name: gb_text_align
 typedef: 'enum'
@@ -290,6 +435,35 @@ jni:
   header: '"NativeTextBoarder.hpp"'
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/TextBoarder;'
+---
+name: gb_text_keyboard
+typedef: 'enum'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::TextKeyboard'
+  header: '"text_keyboard.hpp"'
+  byValue: true
+objc:
+  typename: 'GBTextKeyboard'
+  pointer: false
+  hash: '%s.hash'
+  boxed: 'NSNumber'
+  header: '"GBTextKeyboard.h"'
+objcpp:
+  translator: '::djinni::Enum<::gearsbox::TextKeyboard, GBTextKeyboard>'
+  header: '"DJIMarshal+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.TextKeyboard'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.TextKeyboard'
+jni:
+  translator: '::djinni_generated::NativeTextKeyboard'
+  header: '"NativeTextKeyboard.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/TextKeyboard;'
 ---
 name: gb_timer_gen
 typedef: 'interface +c'
@@ -464,6 +638,35 @@ jni:
   header: '"NativeUiValueCheckerGen.hpp"'
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/UiValueCheckerGen;'
+---
+name: gb_user_config_gen
+typedef: 'interface +c'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::UserConfigGen'
+  header: '"user_config_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBUserConfigGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBUserConfigGen'
+  header: '"GBUserConfigGen.h"'
+objcpp:
+  translator: '::djinni_generated::UserConfigGen'
+  header: '"GBUserConfigGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.UserConfigGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.UserConfigGen'
+jni:
+  translator: '::djinni_generated::NativeUserConfigGen'
+  header: '"NativeUserConfigGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/UserConfigGen;'
 ---
 name: gb_view_conf
 typedef: 'record +c'

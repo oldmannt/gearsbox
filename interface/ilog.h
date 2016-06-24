@@ -31,13 +31,15 @@ int g_loginit(int outputs, const char* param);
 void g_logout(int output, int lev, const char *const func, const char *const file, const unsigned line, const char* fmt, ...);
 void g_logouts(int output, int lev, const char* msg);
 void g_loglev(int lev);
+void g_log_lx(int output, int lev, const char* fmt, ...);
 
 #define G_LOG(output, lev, ...) g_logout(output, lev, __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 #define G_LOG_C(lev, ...) g_logout(LOG_CONSOLE, lev, __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 
 #define G_LOG_F(lev, ...) g_logout(LOG_FILE, lev, __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
 #define G_LOG_FC(lev, ...) g_logout(LOG_FILE|LOG_CONSOLE, lev, __FUNCTION__, __FILE__, __LINE__, __VA_ARGS__)
-    
+
+#define G_LOG_LX(...) g_log_lx(LOG_CONSOLE, LOG_INFO,__VA_ARGS__)
 
 #ifdef __cplusplus
 }   // end of extern "C"

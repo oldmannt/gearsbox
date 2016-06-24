@@ -34,6 +34,12 @@
 
 - (void)setText:(nonnull NSString *)text;
 
+- (nonnull NSString *)getText;
+
+- (void)setTextColor:(nonnull GBArgbColor *)color;
+
+- (void)setFontSize:(int32_t)size;
+
 - (nullable id<GBViewGen>)getSubView:(nonnull NSString *)id;
 
 - (nullable id<GBViewGen>)addSubViewById:(nonnull NSString *)id

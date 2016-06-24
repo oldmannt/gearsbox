@@ -88,4 +88,21 @@ class  GBTyperConvertor {
             return nil;
         }
     }
+    
+    static func convertKeyboardType(type: GBTextKeyboard)->UIKeyboardType{
+        switch type {
+        case GBTextKeyboard.Default:
+            return UIKeyboardType.Default
+        case GBTextKeyboard.ASCII:
+            return UIKeyboardType.ASCIICapable
+        case GBTextKeyboard.DecimalPad:
+            return UIKeyboardType.DecimalPad
+        case GBTextKeyboard.NumberPad:
+            return UIKeyboardType.NumberPad
+        case GBTextKeyboard.PhonePad:
+            return UIKeyboardType.PhonePad
+        case GBTextKeyboard.URL:
+            return UIKeyboardType.URL
+        }
+    }
 }

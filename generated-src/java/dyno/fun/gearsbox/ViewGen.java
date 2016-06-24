@@ -22,6 +22,12 @@ public abstract class ViewGen {
 
     public abstract void setText(String text);
 
+    public abstract String getText();
+
+    public abstract void setTextColor(ArgbColor color);
+
+    public abstract void setFontSize(int size);
+
     public abstract ViewGen getSubView(String id);
 
     public abstract ViewGen addSubViewById(String id, ViewType type);

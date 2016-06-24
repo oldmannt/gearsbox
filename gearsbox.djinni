@@ -55,3 +55,46 @@ breakpad_gen = interface +c +o {
     setUploadUrl();
     setHandler(hander:crash_handler_gen);
 }
+
+platform_executor_gen = interface +o +j{
+    endEniting(force:bool);
+}
+
+platform_utility_gen = interface +c {
+    static instance():platform_utility_gen;
+    setPlatofrmExcutor(excuser:platform_executor_gen);
+    getExcutor():platform_executor_gen;
+}
+
+config_gen = interface +c {
+    static create():config_gen;
+    initialize(param:string):bool;
+
+    getString(type:string):string;
+    getInt(type:string):i32;
+    getFloat(type:string):f32;
+    getI64(type:string):i64;
+
+    setString(type:string, value:string);
+    setInt(type:string, value:i32);
+    setFloat(type:string, value:f32);
+    setI64(type:string, value:i64);
+}
+
+user_config_gen = interface +c {
+    static instance():config_gen;
+}
+
+lang_type = enum{
+    LANG_NONE;
+    LANG_CHS;
+    LANG_ENG;
+}
+
+language_store_gen = interface +c {
+    static instance():language_store_gen;
+    initialize(param:string):bool;
+    setLanguage(lang:lang_type);
+    getLanguage():lang_type;
+    getString(type:string):string;
+}

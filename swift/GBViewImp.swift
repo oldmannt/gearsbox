@@ -71,8 +71,38 @@ class GBViewImp: GBViewGen {
         if let label = m_view as? UILabel {
             label.text = text
         }
-        else if let text_view = m_view as? UITextView {
+        else if let text_view = m_view as? UITextField {
             text_view.text = text
+        }
+    }
+    
+    @objc public func getText() -> String{
+        if let label = m_view as? UILabel {
+            return label.text!
+        }
+        else if let text_view = m_view as? UITextField {
+            return  text_view.text!
+        }
+        GBLogGen.instance()?.logerrf("m_view \(m_view.dynamicType) ")
+        return ""
+    }
+    
+    @objc public func setTextColor(color: GBArgbColor){
+        if let label = m_view as? UILabel {
+            label.textColor = GBTyperConvertor.convertUIColor(color)
+        }
+        else if let text_view = m_view as? UITextField {
+            text_view.textColor = GBTyperConvertor.convertUIColor(color)
+        }
+    }
+    
+    @objc public func setFontSize(size: Int32){
+        if let label = m_view as? UILabel {
+            //label.font.fontWithSize(CGFloat(size));
+            label.font = UIFont.systemFontOfSize(CGFloat(size))
+        }
+        else if let text_view = m_view as? UITextField {
+            text_view.font!.fontWithSize(CGFloat(size));
         }
     }
     
@@ -152,8 +182,8 @@ class GBViewImp: GBViewGen {
     }
     
     @objc public func addConstraint(constraint: GBViewConstraint){
-        let typestr = ["None    ","Leading ","Trailing","Top     ","Bottom  ","Width   ","Height  ","CenterX ","CenterY "]
-        print("constraint: viewFrome:\(constraint.viewFrom) viewTo:\(constraint.viewTo) type:\(typestr[constraint.type.rawValue]) typeTo:\(typestr[constraint.typeTo.rawValue]) multiplier:\(constraint.multiplier) offset:\(constraint.offset)")
+        //let typestr = ["None    ","Leading ","Trailing","Top     ","Bottom  ","Width   ","Height  ","CenterX ","CenterY "]
+        //print("constraint: viewFrome:\(constraint.viewFrom) viewTo:\(constraint.viewTo) type:\(typestr[constraint.type.rawValue]) typeTo:\(typestr[constraint.typeTo.rawValue]) multiplier:\(constraint.multiplier) offset:\(constraint.offset)")
         
         let view:GBViewImp? = m_subView[constraint.viewFrom]
         if view == nil{

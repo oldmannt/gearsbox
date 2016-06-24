@@ -1,0 +1,5 @@
+test_mgr_gen = interface +c {
+    static instance():test_mgr_gen;
+    initialize(self_path:string):bool;
+    runTests():i32;
+}

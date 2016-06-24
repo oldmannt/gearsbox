@@ -61,6 +61,15 @@ text_align = enum {
 	Right;
 }
 
+text_keyboard = enum {
+	Default;
+	ASCII;
+	URL;
+	NumberPad;
+	PhonePad;
+	DecimalPad;
+}
+
 view_conf = record +c{
 	const noframe:view_frame = {x=-1,y=-1,w=-1,h=-1};
 	const nogbcolor:argb_color = {a=-1,r=0,g=0,b=0};
@@ -68,11 +77,15 @@ view_conf = record +c{
 	id:string;
 	type:view_type;
 	frame:view_frame;
+
 	bgcolor:argb_color;
 	fontsize:i32;
 	textalign:text_align;
 	textboarder:text_boarder;
 	text:string;
+	numericText:bool;
+	keyboardtype:text_keyboard;
+
 	constraints:list<view_constraint>;
 	subviews:map<string, view_conf>;
 }
@@ -112,6 +125,9 @@ view_gen = interface +j +o {
 	setBoardColor(color:argb_color);
 	setBoardWidth(width:f32);
 	setText(text:string);
+	getText():string;
+	setTextColor(color:argb_color);
+	setFontSize(size:i32);
 
 	getSubView(id:string):view_gen;
 	addSubViewById(id:string,type:view_type):view_gen;
@@ -144,6 +160,7 @@ typer_convertor = interface +j +o {
 	convertUIConstraintType(type:constraint_type);
 	convertUITextBoarder(type:text_boarder);
 	convertUITextAlign(type:text_align);
+	convertKeyboardType(type:text_keyboard);
 }
 
 ui_value_checker_gen = interface +c {

@@ -523,34 +523,34 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/TimerHandlerGen;'
 ---
-name: gb_typer_convertor
+name: gb_typer_convertor_dummy
 typedef: 'interface +o +j'
 params: []
 prefix: gb_
 cpp:
-  typename: '::gearsbox::TyperConvertor'
-  header: '"typer_convertor.hpp"'
+  typename: '::gearsbox::TyperConvertorDummy'
+  header: '"typer_convertor_dummy.hpp"'
   byValue: false
 objc:
-  typename: 'GBTyperConvertor'
+  typename: 'GBTyperConvertorDummy'
   pointer: true
   hash: '%s.hash'
-  boxed: 'GBTyperConvertor'
-  header: '"GBTyperConvertor.h"'
+  boxed: 'GBTyperConvertorDummy'
+  header: '"GBTyperConvertorDummy.h"'
 objcpp:
-  translator: '::djinni_generated::TyperConvertor'
-  header: '"GBTyperConvertor+Private.h"'
+  translator: '::djinni_generated::TyperConvertorDummy'
+  header: '"GBTyperConvertorDummy+Private.h"'
 java:
   reference: true
-  typename: 'dyno.fun.gearsbox.TyperConvertor'
+  typename: 'dyno.fun.gearsbox.TyperConvertorDummy'
   generic: true
   hash: '%s.hashCode()'
-  boxed: 'dyno.fun.gearsbox.TyperConvertor'
+  boxed: 'dyno.fun.gearsbox.TyperConvertorDummy'
 jni:
-  translator: '::djinni_generated::NativeTyperConvertor'
-  header: '"NativeTyperConvertor.hpp"'
+  translator: '::djinni_generated::NativeTyperConvertorDummy'
+  header: '"NativeTyperConvertorDummy.hpp"'
   typename: jobject
-  typeSignature: 'Ldyno/fun/gearsbox/TyperConvertor;'
+  typeSignature: 'Ldyno/fun/gearsbox/TyperConvertorDummy;'
 ---
 name: gb_ui_conf_gen
 typedef: 'interface +c'

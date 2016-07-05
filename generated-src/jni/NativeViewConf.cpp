@@ -31,14 +31,15 @@ auto NativeViewConf::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::Loca
                                                            ::djinni::get(::djinni::String::fromCpp(jniEnv, c.text)),
                                                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c.numericText)),
                                                            ::djinni::get(::djinni_generated::NativeTextKeyboard::fromCpp(jniEnv, c.keyboardtype)),
+                                                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c.maxlength)),
                                                            ::djinni::get(::djinni::List<::djinni_generated::NativeViewConstraint>::fromCpp(jniEnv, c.constraints)),
-                                                           ::djinni::get(::djinni::Map<::djinni::String, ::djinni_generated::NativeViewConf>::fromCpp(jniEnv, c.subviews)))};
+                                                           ::djinni::get(::djinni::List<::djinni_generated::NativeViewConf>::fromCpp(jniEnv, c.subviews)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
 auto NativeViewConf::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
-    ::djinni::JniLocalScope jscope(jniEnv, 13);
+    ::djinni::JniLocalScope jscope(jniEnv, 14);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeViewConf>::get();
     return {::djinni::String::toCpp(jniEnv, (jstring)jniEnv->GetObjectField(j, data.field_mId)),
@@ -51,8 +52,9 @@ auto NativeViewConf::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
             ::djinni::String::toCpp(jniEnv, (jstring)jniEnv->GetObjectField(j, data.field_mText)),
             ::djinni::Bool::toCpp(jniEnv, jniEnv->GetBooleanField(j, data.field_mNumericText)),
             ::djinni_generated::NativeTextKeyboard::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mKeyboardtype)),
+            ::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mMaxlength)),
             ::djinni::List<::djinni_generated::NativeViewConstraint>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mConstraints)),
-            ::djinni::Map<::djinni::String, ::djinni_generated::NativeViewConf>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mSubviews))};
+            ::djinni::List<::djinni_generated::NativeViewConf>::toCpp(jniEnv, jniEnv->GetObjectField(j, data.field_mSubviews))};
 }
 
 }  // namespace djinni_generated

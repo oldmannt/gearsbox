@@ -6,6 +6,7 @@
 #include "NativeArgbColor.hpp"
 #include "NativeViewConf.hpp"
 #include "NativeViewConstraint.hpp"
+#include "NativeViewEvent.hpp"
 #include "NativeViewEventHandler.hpp"
 #include "NativeViewFrame.hpp"
 #include "NativeViewGen.hpp"
@@ -72,20 +73,13 @@ void NativeViewGen::JavaProxy::setVisiable(bool c_v) {
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeViewType::toCpp(jniEnv, jret);
 }
-void NativeViewGen::JavaProxy::setBoardColor(const ::gearsbox::ArgbColor & c_color) {
+void NativeViewGen::JavaProxy::setBoard(float c_width, const ::gearsbox::ArgbColor & c_color) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
-    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setBoardColor,
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setBoard,
+                           ::djinni::get(::djinni::F32::fromCpp(jniEnv, c_width)),
                            ::djinni::get(::djinni_generated::NativeArgbColor::fromCpp(jniEnv, c_color)));
-    ::djinni::jniExceptionCheck(jniEnv);
-}
-void NativeViewGen::JavaProxy::setBoardWidth(float c_width) {
-    auto jniEnv = ::djinni::jniGetThreadEnv();
-    ::djinni::JniLocalScope jscope(jniEnv, 10);
-    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
-    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setBoardWidth,
-                           ::djinni::get(::djinni::F32::fromCpp(jniEnv, c_width)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
 void NativeViewGen::JavaProxy::setText(const std::string & c_text) {
@@ -118,6 +112,22 @@ void NativeViewGen::JavaProxy::setFontSize(int32_t c_size) {
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_setFontSize,
                            ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_size)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeViewGen::JavaProxy::setNumbernic(int32_t c_type) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setNumbernic,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_type)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeViewGen::JavaProxy::setMaxTextLen(int32_t c_length) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setMaxTextLen,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_length)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
 std::shared_ptr<::gearsbox::ViewGen> NativeViewGen::JavaProxy::getSubView(const std::string & c_id) {
@@ -172,11 +182,12 @@ void NativeViewGen::JavaProxy::addConstraint(const ::gearsbox::ViewConstraint & 
                            ::djinni::get(::djinni_generated::NativeViewConstraint::fromCpp(jniEnv, c_constraint)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
-void NativeViewGen::JavaProxy::setEventHandler(const std::shared_ptr<::gearsbox::ViewEventHandler> & c_handler) {
+void NativeViewGen::JavaProxy::setEventHandler(::gearsbox::ViewEvent c_event, const std::shared_ptr<::gearsbox::ViewEventHandler> & c_handler) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_setEventHandler,
+                           ::djinni::get(::djinni_generated::NativeViewEvent::fromCpp(jniEnv, c_event)),
                            ::djinni::get(::djinni_generated::NativeViewEventHandler::fromCpp(jniEnv, c_handler)));
     ::djinni::jniExceptionCheck(jniEnv);
 }

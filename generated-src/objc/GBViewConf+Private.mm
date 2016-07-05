@@ -24,8 +24,9 @@ auto ViewConf::toCpp(ObjcType obj) -> CppType
             ::djinni::String::toCpp(obj.text),
             ::djinni::Bool::toCpp(obj.numericText),
             ::djinni::Enum<::gearsbox::TextKeyboard, GBTextKeyboard>::toCpp(obj.keyboardtype),
+            ::djinni::I32::toCpp(obj.maxlength),
             ::djinni::List<::djinni_generated::ViewConstraint>::toCpp(obj.constraints),
-            ::djinni::Map<::djinni::String, ::djinni_generated::ViewConf>::toCpp(obj.subviews)};
+            ::djinni::List<::djinni_generated::ViewConf>::toCpp(obj.subviews)};
 }
 
 auto ViewConf::fromCpp(const CppType& cpp) -> ObjcType
@@ -40,8 +41,9 @@ auto ViewConf::fromCpp(const CppType& cpp) -> ObjcType
                                      text:(::djinni::String::fromCpp(cpp.text))
                               numericText:(::djinni::Bool::fromCpp(cpp.numericText))
                              keyboardtype:(::djinni::Enum<::gearsbox::TextKeyboard, GBTextKeyboard>::fromCpp(cpp.keyboardtype))
+                                maxlength:(::djinni::I32::fromCpp(cpp.maxlength))
                               constraints:(::djinni::List<::djinni_generated::ViewConstraint>::fromCpp(cpp.constraints))
-                                 subviews:(::djinni::Map<::djinni::String, ::djinni_generated::ViewConf>::fromCpp(cpp.subviews))];
+                                 subviews:(::djinni::List<::djinni_generated::ViewConf>::fromCpp(cpp.subviews))];
 }
 
 }  // namespace djinni_generated

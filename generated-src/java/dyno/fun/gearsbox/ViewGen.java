@@ -4,6 +4,14 @@
 package dyno.fun.gearsbox;
 
 public abstract class ViewGen {
+    public static final int NUMBER_INT = 1;
+
+    public static final int NUMBER_FLOAT = 2;
+
+    public static final int NUMBER_POSITIVE = 4;
+
+    public static final int NUMBER_NEGATIVE = 8;
+
     public abstract String getId();
 
     public abstract void setFrame(ViewFrame frame);
@@ -16,9 +24,7 @@ public abstract class ViewGen {
 
     public abstract ViewType getType();
 
-    public abstract void setBoardColor(ArgbColor color);
-
-    public abstract void setBoardWidth(float width);
+    public abstract void setBoard(float width, ArgbColor color);
 
     public abstract void setText(String text);
 
@@ -27,6 +33,10 @@ public abstract class ViewGen {
     public abstract void setTextColor(ArgbColor color);
 
     public abstract void setFontSize(int size);
+
+    public abstract void setNumbernic(int type);
+
+    public abstract void setMaxTextLen(int length);
 
     public abstract ViewGen getSubView(String id);
 
@@ -40,5 +50,5 @@ public abstract class ViewGen {
 
     public abstract void addConstraint(ViewConstraint constraint);
 
-    public abstract void setEventHandler(ViewEventHandler handler);
+    public abstract void setEventHandler(ViewEvent event, ViewEventHandler handler);
 }

@@ -4,7 +4,6 @@
 package dyno.fun.gearsbox;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public final class ViewConf {
 
@@ -41,9 +40,11 @@ public final class ViewConf {
 
     /*package*/ final TextKeyboard mKeyboardtype;
 
+    /*package*/ final int mMaxlength;
+
     /*package*/ final ArrayList<ViewConstraint> mConstraints;
 
-    /*package*/ final HashMap<String, ViewConf> mSubviews;
+    /*package*/ final ArrayList<ViewConf> mSubviews;
 
     public ViewConf(
             String id,
@@ -56,8 +57,9 @@ public final class ViewConf {
             String text,
             boolean numericText,
             TextKeyboard keyboardtype,
+            int maxlength,
             ArrayList<ViewConstraint> constraints,
-            HashMap<String, ViewConf> subviews) {
+            ArrayList<ViewConf> subviews) {
         this.mId = id;
         this.mType = type;
         this.mFrame = frame;
@@ -68,6 +70,7 @@ public final class ViewConf {
         this.mText = text;
         this.mNumericText = numericText;
         this.mKeyboardtype = keyboardtype;
+        this.mMaxlength = maxlength;
         this.mConstraints = constraints;
         this.mSubviews = subviews;
     }
@@ -112,11 +115,15 @@ public final class ViewConf {
         return mKeyboardtype;
     }
 
+    public int getMaxlength() {
+        return mMaxlength;
+    }
+
     public ArrayList<ViewConstraint> getConstraints() {
         return mConstraints;
     }
 
-    public HashMap<String, ViewConf> getSubviews() {
+    public ArrayList<ViewConf> getSubviews() {
         return mSubviews;
     }
 
@@ -133,6 +140,7 @@ public final class ViewConf {
                 "," + "mText=" + mText +
                 "," + "mNumericText=" + mNumericText +
                 "," + "mKeyboardtype=" + mKeyboardtype +
+                "," + "mMaxlength=" + mMaxlength +
                 "," + "mConstraints=" + mConstraints +
                 "," + "mSubviews=" + mSubviews +
         "}";

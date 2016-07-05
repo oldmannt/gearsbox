@@ -25,7 +25,7 @@ private:
     friend ::djinni::JniClass<NativeViewConf>;
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/ViewConf") };
-    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/lang/String;Ldyno/fun/gearsbox/ViewType;Ldyno/fun/gearsbox/ViewFrame;Ldyno/fun/gearsbox/ArgbColor;ILdyno/fun/gearsbox/TextAlign;Ldyno/fun/gearsbox/TextBoarder;Ljava/lang/String;ZLdyno/fun/gearsbox/TextKeyboard;Ljava/util/ArrayList;Ljava/util/HashMap;)V") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(Ljava/lang/String;Ldyno/fun/gearsbox/ViewType;Ldyno/fun/gearsbox/ViewFrame;Ldyno/fun/gearsbox/ArgbColor;ILdyno/fun/gearsbox/TextAlign;Ldyno/fun/gearsbox/TextBoarder;Ljava/lang/String;ZLdyno/fun/gearsbox/TextKeyboard;ILjava/util/ArrayList;Ljava/util/ArrayList;)V") };
     const jfieldID field_mId { ::djinni::jniGetFieldID(clazz.get(), "mId", "Ljava/lang/String;") };
     const jfieldID field_mType { ::djinni::jniGetFieldID(clazz.get(), "mType", "Ldyno/fun/gearsbox/ViewType;") };
     const jfieldID field_mFrame { ::djinni::jniGetFieldID(clazz.get(), "mFrame", "Ldyno/fun/gearsbox/ViewFrame;") };
@@ -36,8 +36,9 @@ private:
     const jfieldID field_mText { ::djinni::jniGetFieldID(clazz.get(), "mText", "Ljava/lang/String;") };
     const jfieldID field_mNumericText { ::djinni::jniGetFieldID(clazz.get(), "mNumericText", "Z") };
     const jfieldID field_mKeyboardtype { ::djinni::jniGetFieldID(clazz.get(), "mKeyboardtype", "Ldyno/fun/gearsbox/TextKeyboard;") };
+    const jfieldID field_mMaxlength { ::djinni::jniGetFieldID(clazz.get(), "mMaxlength", "I") };
     const jfieldID field_mConstraints { ::djinni::jniGetFieldID(clazz.get(), "mConstraints", "Ljava/util/ArrayList;") };
-    const jfieldID field_mSubviews { ::djinni::jniGetFieldID(clazz.get(), "mSubviews", "Ljava/util/HashMap;") };
+    const jfieldID field_mSubviews { ::djinni::jniGetFieldID(clazz.get(), "mSubviews", "Ljava/util/ArrayList;") };
 };
 
 }  // namespace djinni_generated

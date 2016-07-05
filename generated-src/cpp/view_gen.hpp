@@ -10,6 +10,7 @@
 namespace gearsbox {
 
 class ViewEventHandler;
+enum class ViewEvent;
 enum class ViewType;
 struct ArgbColor;
 struct ViewConf;
@@ -19,6 +20,14 @@ struct ViewFrame;
 class ViewGen {
 public:
     virtual ~ViewGen() {}
+
+    static int32_t const NUMBER_INT;
+
+    static int32_t const NUMBER_FLOAT;
+
+    static int32_t const NUMBER_POSITIVE;
+
+    static int32_t const NUMBER_NEGATIVE;
 
     virtual std::string getId() = 0;
 
@@ -32,9 +41,7 @@ public:
 
     virtual ViewType getType() = 0;
 
-    virtual void setBoardColor(const ArgbColor & color) = 0;
-
-    virtual void setBoardWidth(float width) = 0;
+    virtual void setBoard(float width, const ArgbColor & color) = 0;
 
     virtual void setText(const std::string & text) = 0;
 
@@ -43,6 +50,10 @@ public:
     virtual void setTextColor(const ArgbColor & color) = 0;
 
     virtual void setFontSize(int32_t size) = 0;
+
+    virtual void setNumbernic(int32_t type) = 0;
+
+    virtual void setMaxTextLen(int32_t length) = 0;
 
     virtual std::shared_ptr<ViewGen> getSubView(const std::string & id) = 0;
 
@@ -56,7 +67,7 @@ public:
 
     virtual void addConstraint(const ViewConstraint & constraint) = 0;
 
-    virtual void setEventHandler(const std::shared_ptr<ViewEventHandler> & handler) = 0;
+    virtual void setEventHandler(ViewEvent event, const std::shared_ptr<ViewEventHandler> & handler) = 0;
 };
 
 }  // namespace gearsbox

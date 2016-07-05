@@ -70,10 +70,9 @@ text_keyboard = enum {
 	DecimalPad;
 }
 
-view_conf = record +c{
+view_conf = record +c {
 	const noframe:view_frame = {x=-1,y=-1,w=-1,h=-1};
 	const nogbcolor:argb_color = {a=-1,r=0,g=0,b=0};
-
 	id:string;
 	type:view_type;
 	frame:view_frame;
@@ -85,9 +84,10 @@ view_conf = record +c{
 	text:string;
 	numericText:bool;
 	keyboardtype:text_keyboard;
+	maxlength:i32;
 
 	constraints:list<view_constraint>;
-	subviews:map<string, view_conf>;
+	subviews:list<view_conf>;
 }
 
 ui_conf_gen = interface +c {
@@ -116,18 +116,23 @@ view_event_handler = interface +c {
 }
 
 view_gen = interface +j +o {
+	const NUMBER_INT:i32 = 1;
+	const NUMBER_FLOAT:i32 = 2;
+	const NUMBER_POSITIVE:i32 = 4;
+	const NUMBER_NEGATIVE:i32 = 8;
 	getId():string;
 	setFrame(frame:view_frame);
 	getFrame():view_frame;
 	setBackgroundColor(a:f32,r:f32,g:f32,b:f32);
 	setVisiable(v:bool);
 	getType():view_type;
-	setBoardColor(color:argb_color);
-	setBoardWidth(width:f32);
+	setBoard(width:f32, color:argb_color);
 	setText(text:string);
 	getText():string;
 	setTextColor(color:argb_color);
 	setFontSize(size:i32);
+	setNumbernic(type:i32);
+	setMaxTextLen(length:i32);
 
 	getSubView(id:string):view_gen;
 	addSubViewById(id:string,type:view_type):view_gen;
@@ -136,7 +141,7 @@ view_gen = interface +j +o {
 	removeAllSubView();
 	addConstraint(constraint:view_constraint);
 
-	setEventHandler(handler:view_event_handler);
+	setEventHandler(event:view_event,handler:view_event_handler);
 }
 
 view_factory_gen = interface +j +o{
@@ -154,7 +159,7 @@ ui_manager_gen = interface +c{
 	removeView(id:string);
 }
 
-typer_convertor = interface +j +o {
+typer_convertor_dummy = interface +j +o {
 	convertUIColor(color:argb_color);
 	convertUIRect(rect:view_frame);
 	convertUIConstraintType(type:constraint_type);

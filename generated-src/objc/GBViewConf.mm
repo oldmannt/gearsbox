@@ -16,8 +16,9 @@
                               text:(nonnull NSString *)text
                        numericText:(BOOL)numericText
                       keyboardtype:(GBTextKeyboard)keyboardtype
+                         maxlength:(int32_t)maxlength
                        constraints:(nonnull NSArray<GBViewConstraint *> *)constraints
-                          subviews:(nonnull NSDictionary<NSString *, GBViewConf *> *)subviews
+                          subviews:(nonnull NSArray<GBViewConf *> *)subviews
 {
     if (self = [super init]) {
         _id = [id copy];
@@ -30,6 +31,7 @@
         _text = [text copy];
         _numericText = numericText;
         _keyboardtype = keyboardtype;
+        _maxlength = maxlength;
         _constraints = [constraints copy];
         _subviews = [subviews copy];
     }
@@ -46,8 +48,9 @@
                                   text:(nonnull NSString *)text
                            numericText:(BOOL)numericText
                           keyboardtype:(GBTextKeyboard)keyboardtype
+                             maxlength:(int32_t)maxlength
                            constraints:(nonnull NSArray<GBViewConstraint *> *)constraints
-                              subviews:(nonnull NSDictionary<NSString *, GBViewConf *> *)subviews
+                              subviews:(nonnull NSArray<GBViewConf *> *)subviews
 {
     return [[self alloc] initWithId:id
                                type:type
@@ -59,6 +62,7 @@
                                text:text
                         numericText:numericText
                        keyboardtype:keyboardtype
+                          maxlength:maxlength
                         constraints:constraints
                            subviews:subviews];
 }
@@ -83,7 +87,7 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@ %p id:%@ type:%@ frame:%@ bgcolor:%@ fontsize:%@ textalign:%@ textboarder:%@ text:%@ numericText:%@ keyboardtype:%@ constraints:%@ subviews:%@>", self.class, (void *)self, self.id, @(self.type), self.frame, self.bgcolor, @(self.fontsize), @(self.textalign), @(self.textboarder), self.text, @(self.numericText), @(self.keyboardtype), self.constraints, self.subviews];
+    return [NSString stringWithFormat:@"<%@ %p id:%@ type:%@ frame:%@ bgcolor:%@ fontsize:%@ textalign:%@ textboarder:%@ text:%@ numericText:%@ keyboardtype:%@ maxlength:%@ constraints:%@ subviews:%@>", self.class, (void *)self, self.id, @(self.type), self.frame, self.bgcolor, @(self.fontsize), @(self.textalign), @(self.textboarder), self.text, @(self.numericText), @(self.keyboardtype), @(self.maxlength), self.constraints, self.subviews];
 }
 
 @end

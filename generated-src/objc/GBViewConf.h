@@ -22,8 +22,9 @@
                               text:(nonnull NSString *)text
                        numericText:(BOOL)numericText
                       keyboardtype:(GBTextKeyboard)keyboardtype
+                         maxlength:(int32_t)maxlength
                        constraints:(nonnull NSArray<GBViewConstraint *> *)constraints
-                          subviews:(nonnull NSDictionary<NSString *, GBViewConf *> *)subviews;
+                          subviews:(nonnull NSArray<GBViewConf *> *)subviews;
 + (nonnull instancetype)viewConfWithId:(nonnull NSString *)id
                                   type:(GBViewType)type
                                  frame:(nonnull GBViewFrame *)frame
@@ -34,8 +35,9 @@
                                   text:(nonnull NSString *)text
                            numericText:(BOOL)numericText
                           keyboardtype:(GBTextKeyboard)keyboardtype
+                             maxlength:(int32_t)maxlength
                            constraints:(nonnull NSArray<GBViewConstraint *> *)constraints
-                              subviews:(nonnull NSDictionary<NSString *, GBViewConf *> *)subviews;
+                              subviews:(nonnull NSArray<GBViewConf *> *)subviews;
 
 + (GBViewFrame * __nonnull)noframe;
 + (GBArgbColor * __nonnull)nogbcolor;
@@ -59,9 +61,11 @@
 
 @property (nonatomic, readonly) GBTextKeyboard keyboardtype;
 
+@property (nonatomic, readonly) int32_t maxlength;
+
 @property (nonatomic, readonly, nonnull) NSArray<GBViewConstraint *> * constraints;
 
-@property (nonatomic, readonly, nonnull) NSDictionary<NSString *, GBViewConf *> * subviews;
+@property (nonatomic, readonly, nonnull) NSArray<GBViewConf *> * subviews;
 
 @end
 

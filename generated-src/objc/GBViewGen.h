@@ -4,12 +4,17 @@
 #import "GBArgbColor.h"
 #import "GBViewConf.h"
 #import "GBViewConstraint.h"
+#import "GBViewEvent.h"
 #import "GBViewFrame.h"
 #import "GBViewType.h"
 #import <Foundation/Foundation.h>
 @class GBViewEventHandler;
 @protocol GBViewGen;
 
+extern int32_t const GBViewGenNUMBERINT;
+extern int32_t const GBViewGenNUMBERFLOAT;
+extern int32_t const GBViewGenNUMBERPOSITIVE;
+extern int32_t const GBViewGenNUMBERNEGATIVE;
 
 @protocol GBViewGen
 
@@ -28,9 +33,8 @@
 
 - (GBViewType)getType;
 
-- (void)setBoardColor:(nonnull GBArgbColor *)color;
-
-- (void)setBoardWidth:(float)width;
+- (void)setBoard:(float)width
+           color:(nonnull GBArgbColor *)color;
 
 - (void)setText:(nonnull NSString *)text;
 
@@ -39,6 +43,10 @@
 - (void)setTextColor:(nonnull GBArgbColor *)color;
 
 - (void)setFontSize:(int32_t)size;
+
+- (void)setNumbernic:(int32_t)type;
+
+- (void)setMaxTextLen:(int32_t)length;
 
 - (nullable id<GBViewGen>)getSubView:(nonnull NSString *)id;
 
@@ -53,6 +61,7 @@
 
 - (void)addConstraint:(nonnull GBViewConstraint *)constraint;
 
-- (void)setEventHandler:(nullable GBViewEventHandler *)handler;
+- (void)setEventHandler:(GBViewEvent)event
+                handler:(nullable GBViewEventHandler *)handler;
 
 @end

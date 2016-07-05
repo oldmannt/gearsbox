@@ -12,7 +12,6 @@
 #include "view_type.hpp"
 #include <cstdint>
 #include <string>
-#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -35,8 +34,9 @@ struct ViewConfBase {
     std::string text;
     bool numericText;
     TextKeyboard keyboardtype;
+    int32_t maxlength;
     std::vector<ViewConstraint> constraints;
-    std::unordered_map<std::string, ViewConf> subviews;
+    std::vector<ViewConf> subviews;
 
     ViewConfBase(std::string id_,
                  ViewType type_,
@@ -48,8 +48,9 @@ struct ViewConfBase {
                  std::string text_,
                  bool numericText_,
                  TextKeyboard keyboardtype_,
+                 int32_t maxlength_,
                  std::vector<ViewConstraint> constraints_,
-                 std::unordered_map<std::string, ViewConf> subviews_)
+                 std::vector<ViewConf> subviews_)
     : id(std::move(id_))
     , type(std::move(type_))
     , frame(std::move(frame_))
@@ -60,6 +61,7 @@ struct ViewConfBase {
     , text(std::move(text_))
     , numericText(std::move(numericText_))
     , keyboardtype(std::move(keyboardtype_))
+    , maxlength(std::move(maxlength_))
     , constraints(std::move(constraints_))
     , subviews(std::move(subviews_))
     {}

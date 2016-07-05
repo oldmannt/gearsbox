@@ -8,6 +8,7 @@
 
 
 #include "json/json.h"
+#include "view_conf.hpp"
 
 // some stuff that belongs in the c++ stllib, but isn't
 namespace std_patch {
@@ -23,6 +24,7 @@ namespace std_patch {
 
 namespace gearsbox {
     bool readJson(const std::string& param, Json::Value& config);
+    //ViewConf emptyViewConf();
 }
 
 #endif

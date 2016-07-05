@@ -64,16 +64,11 @@ public:
             return ::djinni::Enum<::gearsbox::ViewType, GBViewType>::toCpp(r);
         }
     }
-    void setBoardColor(const ::gearsbox::ArgbColor & c_color) override
+    void setBoard(float c_width, const ::gearsbox::ArgbColor & c_color) override
     {
         @autoreleasepool {
-            [Handle::get() setBoardColor:(::djinni_generated::ArgbColor::fromCpp(c_color))];
-        }
-    }
-    void setBoardWidth(float c_width) override
-    {
-        @autoreleasepool {
-            [Handle::get() setBoardWidth:(::djinni::F32::fromCpp(c_width))];
+            [Handle::get() setBoard:(::djinni::F32::fromCpp(c_width))
+                              color:(::djinni_generated::ArgbColor::fromCpp(c_color))];
         }
     }
     void setText(const std::string & c_text) override
@@ -99,6 +94,18 @@ public:
     {
         @autoreleasepool {
             [Handle::get() setFontSize:(::djinni::I32::fromCpp(c_size))];
+        }
+    }
+    void setNumbernic(int32_t c_type) override
+    {
+        @autoreleasepool {
+            [Handle::get() setNumbernic:(::djinni::I32::fromCpp(c_type))];
+        }
+    }
+    void setMaxTextLen(int32_t c_length) override
+    {
+        @autoreleasepool {
+            [Handle::get() setMaxTextLen:(::djinni::I32::fromCpp(c_length))];
         }
     }
     std::shared_ptr<::gearsbox::ViewGen> getSubView(const std::string & c_id) override
@@ -142,10 +149,11 @@ public:
             [Handle::get() addConstraint:(::djinni_generated::ViewConstraint::fromCpp(c_constraint))];
         }
     }
-    void setEventHandler(const std::shared_ptr<::gearsbox::ViewEventHandler> & c_handler) override
+    void setEventHandler(::gearsbox::ViewEvent c_event, const std::shared_ptr<::gearsbox::ViewEventHandler> & c_handler) override
     {
         @autoreleasepool {
-            [Handle::get() setEventHandler:(::djinni_generated::ViewEventHandler::fromCpp(c_handler))];
+            [Handle::get() setEventHandler:(::djinni::Enum<::gearsbox::ViewEvent, GBViewEvent>::fromCpp(c_event))
+                                   handler:(::djinni_generated::ViewEventHandler::fromCpp(c_handler))];
         }
     }
 };

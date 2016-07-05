@@ -4,6 +4,7 @@ proto:
 djinni:gearsbox.djinni ui.djinni run_djinni.sh
 	-rm -rf generated-src
 	sh ./run_djinni.sh
+	@python record_include.py
 
 djinni_test:test.djinni run_djinni.sh
 	-rm -rf test/jni

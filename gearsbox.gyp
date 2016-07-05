@@ -15,7 +15,7 @@
       ],
       "include_dirs": [
         "./generated-src/cpp",
-        "./src",
+        "./src/cpp",
         "./interface",
         './src/ui',
       ],
@@ -23,7 +23,7 @@
         'include_dirs': [
           './generated-src/cpp',
           "./interface",
-          './src/ui',
+          './src/cpp/ui',
         ]
       },
       'cflags!': [
@@ -49,7 +49,7 @@
           './generated-src/objc',
           './generated-src/cpp',
           "./interface",
-          './src/ui',
+          './src/cpp/ui',
         ]
       },
       "defines": [
@@ -74,9 +74,9 @@
       "include_dirs": [
         "generated-src/jni",
         "generated-src/cpp",
-        "src",
+        "src/cpp",
         "./interface",
-        './src/ui',
+        './src/cpp/ui',
       ],
       "defines": [
         'ZF_LOG_USE_ANDROID_LOG',
@@ -88,7 +88,7 @@
         'include_dirs': [
           "./interface",
           './generated-src/cpp',
-          './src/ui',
+          './src/cpp/ui',
         ]
       },
     },

@@ -15,15 +15,15 @@ model {
 
         productFlavors {
 
-            create("x86-64") {
-                ndk.abiFilters.add("x86_64")
-            }
-
-            //create("arm7") {
-            //    ndk.abiFilters.add("armeabi-v7a")
+            //create("x86-64") {
+            //    ndk.abiFilters.add("x86_64")
             //}
 
-            //create("fat")
+            create("arm7") {
+                ndk.abiFilters.add("armeabi-v7a")
+            }
+
+            create("all")
         }
 
         /*
@@ -119,7 +119,8 @@ model {
             toolchainVersion = "4.9"
             moduleName = "gearsbox_jni"
             stl = "gnustl_shared"
-
+            abiFilters.addAll(['armeabi-v7a'])
+            //abiFilters.addAll(['armeabi-v7a', 'x86_64'])
             ldLibs.addAll(['android', 'log', 'dl'])
 
             CFlags.add("-std=c11")
@@ -138,6 +139,7 @@ model {
             cppFlags.add("-I${file("../../../deps/libuv/src")}".toString())
             cppFlags.add("-I${file("../../../deps/sqlite3")}".toString())
             cppFlags.add("-I${file("../../../src")}".toString())
+            cppFlags.add("-I${file("../../../src/cpp/ui")}".toString())
             cppFlags.add("-I${file("../../../interface")}".toString())
 
             CFlags.add("-I${file("../../../deps/djinni/support-lib")}".toString())

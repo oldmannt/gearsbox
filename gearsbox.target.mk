@@ -23,26 +23,26 @@ LOCAL_GENERATED_SOURCES :=
 GYP_COPIED_SOURCE_ORIGIN_DIRS :=
 
 LOCAL_SRC_FILES := \
-	generated-src/cpp/argb_color.cpp \
-	generated-src/cpp/log_gen.cpp \
-	generated-src/cpp/view_conf_base.cpp \
-	generated-src/cpp/view_constraint_base.cpp \
-	generated-src/cpp/view_gen.cpp \
-	src/cpp/async_loop_imp.cpp \
-	src/cpp/config_imp.cpp \
-	src/cpp/httprequest.cpp \
-	src/cpp/httprequestImp.cpp \
-	src/cpp/language_store_imp.cpp \
-	src/cpp/log.cpp \
-	src/cpp/log_imp.cpp \
-	src/cpp/platform_utility_imp.cpp \
-	src/cpp/timerImp.cpp \
-	src/cpp/utils.cpp \
-	src/cpp/json/jsoncpp.cpp \
-	src/cpp/ui/ui_conf_imp.cpp \
-	src/cpp/ui/ui_manager_imp.cpp \
-	src/cpp/ui/ui_value_checker_imp.cpp \
-	src/cpp/zf_log/zf_log.c
+	gearsbox/generated-src/cpp/argb_color.cpp \
+	gearsbox/generated-src/cpp/log_gen.cpp \
+	gearsbox/generated-src/cpp/view_conf_base.cpp \
+	gearsbox/generated-src/cpp/view_constraint_base.cpp \
+	gearsbox/generated-src/cpp/view_gen.cpp \
+	gearsbox/src/cpp/async_loop_imp.cpp \
+	gearsbox/src/cpp/config_imp.cpp \
+	gearsbox/src/cpp/httprequest.cpp \
+	gearsbox/src/cpp/httprequestImp.cpp \
+	gearsbox/src/cpp/language_store_imp.cpp \
+	gearsbox/src/cpp/log.cpp \
+	gearsbox/src/cpp/log_imp.cpp \
+	gearsbox/src/cpp/platform_utility_imp.cpp \
+	gearsbox/src/cpp/timerImp.cpp \
+	gearsbox/src/cpp/utils.cpp \
+	gearsbox/src/cpp/json/jsoncpp.cpp \
+	gearsbox/src/cpp/ui/ui_conf_imp.cpp \
+	gearsbox/src/cpp/ui/ui_manager_imp.cpp \
+	gearsbox/src/cpp/ui/ui_value_checker_imp.cpp \
+	gearsbox/src/cpp/zf_log/zf_log.c
 
 
 # Flags passed to both C and C++ files.
@@ -63,14 +63,14 @@ MY_DEFS_Debug := \
 
 # Include paths placed before CFLAGS/CPPFLAGS
 LOCAL_C_INCLUDES_Debug := \
-	$(LOCAL_PATH)/generated-src/cpp \
-	$(LOCAL_PATH)/src/cpp \
-	$(LOCAL_PATH)/interface \
-	$(LOCAL_PATH)/src/ui \
-	$(LOCAL_PATH)/deps/sqlite3 \
-	$(LOCAL_PATH)/deps/curl \
-	$(LOCAL_PATH)/deps/curl/curl \
-	$(LOCAL_PATH)/deps/libuv/include
+	$(LOCAL_PATH)/gearsbox/generated-src/cpp \
+	$(LOCAL_PATH)/gearsbox/src/cpp \
+	$(LOCAL_PATH)/gearsbox/interface \
+	$(LOCAL_PATH)/gearsbox/src/ui \
+	$(LOCAL_PATH)/gearsbox/deps/sqlite3 \
+	$(LOCAL_PATH)/gearsbox/deps/curl \
+	$(LOCAL_PATH)/gearsbox/deps/curl/curl \
+	$(LOCAL_PATH)/gearsbox/deps/libuv/include
 
 
 # Flags passed to only C++ (and not C) files.
@@ -101,14 +101,14 @@ MY_DEFS_Release := \
 
 # Include paths placed before CFLAGS/CPPFLAGS
 LOCAL_C_INCLUDES_Release := \
-	$(LOCAL_PATH)/generated-src/cpp \
-	$(LOCAL_PATH)/src/cpp \
-	$(LOCAL_PATH)/interface \
-	$(LOCAL_PATH)/src/ui \
-	$(LOCAL_PATH)/deps/sqlite3 \
-	$(LOCAL_PATH)/deps/curl \
-	$(LOCAL_PATH)/deps/curl/curl \
-	$(LOCAL_PATH)/deps/libuv/include
+	$(LOCAL_PATH)/gearsbox/generated-src/cpp \
+	$(LOCAL_PATH)/gearsbox/src/cpp \
+	$(LOCAL_PATH)/gearsbox/interface \
+	$(LOCAL_PATH)/gearsbox/src/ui \
+	$(LOCAL_PATH)/gearsbox/deps/sqlite3 \
+	$(LOCAL_PATH)/gearsbox/deps/curl \
+	$(LOCAL_PATH)/gearsbox/deps/curl/curl \
+	$(LOCAL_PATH)/gearsbox/deps/libuv/include
 
 
 # Flags passed to only C++ (and not C) files.

@@ -378,6 +378,93 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/PlatformUtilityGen;'
 ---
+name: gb_task_gen
+typedef: 'interface +c +o +j'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::TaskGen'
+  header: '"task_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBTaskGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBTaskGen'
+  header: '"GBTaskGen.h"'
+objcpp:
+  translator: '::djinni_generated::TaskGen'
+  header: '"GBTaskGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.TaskGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.TaskGen'
+jni:
+  translator: '::djinni_generated::NativeTaskGen'
+  header: '"NativeTaskGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/TaskGen;'
+---
+name: gb_task_info
+typedef: 'record'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::TaskInfo'
+  header: '"task_info.hpp"'
+  byValue: false
+objc:
+  typename: 'GBTaskInfo'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBTaskInfo'
+  header: '"GBTaskInfo.h"'
+objcpp:
+  translator: '::djinni_generated::TaskInfo'
+  header: '"GBTaskInfo+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.TaskInfo'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.TaskInfo'
+jni:
+  translator: '::djinni_generated::NativeTaskInfo'
+  header: '"NativeTaskInfo.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/TaskInfo;'
+---
+name: gb_task_manager_gen
+typedef: 'interface +c'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::TaskManagerGen'
+  header: '"task_manager_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBTaskManagerGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBTaskManagerGen'
+  header: '"GBTaskManagerGen.h"'
+objcpp:
+  translator: '::djinni_generated::TaskManagerGen'
+  header: '"GBTaskManagerGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.TaskManagerGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.TaskManagerGen'
+jni:
+  translator: '::djinni_generated::NativeTaskManagerGen'
+  header: '"NativeTaskManagerGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/TaskManagerGen;'
+---
 name: gb_text_align
 typedef: 'enum'
 params: []

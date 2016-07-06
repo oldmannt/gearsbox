@@ -98,3 +98,18 @@ language_store_gen = interface +c {
     getLanguage():lang_type;
     getString(type:string):string;
 }
+
+task_info = record {
+    delay:i64;
+    repeate:bool;
+}
+
+task_manager_gen = interface +c {
+    static instance():task_manager_gen;
+    addTask(task:task_gen);
+    addDelayTask(delay:i64, repeated:i64);
+}
+
+task_gen = interface +o +j +c {
+    excuse(info:task_info);
+}

@@ -78,6 +78,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
     
     private func createLabel(conf:GBViewConf)->UILabel{
         let label:UILabel = UILabel();
+        label.numberOfLines = 0;
         return label;
     }
     

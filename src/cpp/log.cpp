@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <list>
 #include <string.h>
+#include <stdarg.h>
 #include "ILog.h"
 
 #include "zf_log/zf_log.h"

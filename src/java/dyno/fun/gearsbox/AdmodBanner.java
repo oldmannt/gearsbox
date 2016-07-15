@@ -20,7 +20,7 @@ public class AdmodBanner {
     public AdmodBanner(Context context, View adview, String appid){
 
         int gps = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
-
+        gps = 0;
         if (gps != ConnectionResult.SERVICE_DISABLED &&
                 gps != ConnectionResult.SERVICE_INVALID &&
                 gps != ConnectionResult.SERVICE_MISSING){
@@ -36,9 +36,9 @@ public class AdmodBanner {
 
     }
 
-    public void loadRequest(){
+    public boolean loadRequest(){
         if (null == mAdView){
-            return;
+            return false;
         }
         // Create an ad request. Check your logcat output for the hashed device ID to
         // get test ads on a physical device. e.g.
@@ -49,6 +49,7 @@ public class AdmodBanner {
 
         // Start loading the ad in the background.
         mAdView.loadAd(adRequest);
+        return true;
     }
 
     public void setVisibility(int state){

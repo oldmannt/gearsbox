@@ -2,12 +2,12 @@
 
 base_dir=$(cd "`dirname "0"`" && pwd)
 
-djinni_file="gearsbox.djinni"
+djinni_file="djinni/gearsbox.djinni"
 generated_dir="generated-src"
 
 if [ "$1" = "test" ];then
    generated_dir="test"
-   djinni_file="test.djinni"
+   djinni_file="djinni/test.djinni"
    echo $generated_dir
 fi
 

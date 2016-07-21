@@ -1,0 +1,38 @@
+@import "../ui.djinni"
+
+camera_flash = enum {
+	On;
+	Off;
+	Auto;
+}
+
+camera_quality = enum {
+	Low;
+	Medium;
+	High;
+	PesetPhoto;
+}
+
+
+camera_controller_gen = interface +o +j {
+	initCamera(view:view_gen):bool;
+	startCamera():bool;
+	setFrameSize(width:i32, height:i32);
+	setFlash(mode:camera_flash);
+	setQuality(quality:camera_quality);
+	switchFront(front:bool);
+	isFront():bool;
+	getFlash():camera_flash;
+	getQuality():camera_quality;
+	getWidth():i32;
+	getHeight():i32;
+
+	setFousePoint(x:f32, y:f32);
+	captureOneFrame():i64;
+}
+
+video_writer_gen = interface +c {
+	static instance():video_writer_gen;
+
+
+}

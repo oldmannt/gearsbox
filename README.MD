@@ -24,7 +24,7 @@ this should be a sub folder in clent project, I will modify USNIT as as sample
 
 1. add gearsbox to clent, in root of client directory run the command below
 
-	git submodule add https://github.com/oldmannt/gearsbox_client.git gearsbox
+	git submodule add https://github.com/oldmannt/gearsbox.git gearsbox
 
 update the submodule of gearsbox
 

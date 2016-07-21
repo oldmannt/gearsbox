@@ -6,7 +6,9 @@ the third party codes and utilities used in projects
 3. zf_log  
 4. jsoncpp  
 5. sqlit3  
-6. protobuf
+6. ~~protobuf~~
+7. breakpad
+8. gtest
 
 ###interface for c++   
 1. IHttpRequest.h  
@@ -29,10 +31,16 @@ update the submodule of gearsbox
 	cd gearsbox
 	git submodule init
 	git submodule update
-2. protobuf as ui config
-	create .proto file, genrate protco c++ and python code, used pyton to write binary like config, read by c++.  
-	gearsbox use protobuf as ui config, let me think about that may be make a probability to build ui by server.
-	current version is protobuf-3.0.0-beta-3, compiler and tester code were detele
+	
+	git submodule add https://github.com/dropbox/djinni.git deps/djinni
+	git submodule add https://chromium.googlesource.com/external/gyp.git deps/gyp
+	cd deps/gyp
+	git checkout -q 0bb67471bca068996e15b56738fa4824dfa19de0
+	
+2. ~~protobuf as ui config~~
+	~~create .proto file, genrate protco c++ and python code, used pyton to write binary like config, read by c++.~~  
+	~~gearsbox use protobuf as ui config, let me think about that may be make a probability to build ui by server.~~
+	~~current version is protobuf-3.0.0-beta-3, compiler and tester code were detele~~
 
 2. create client.djinni, client.gyp, run_djinni.sh in clent
 	
@@ -47,7 +55,8 @@ update the submodule of gearsbox
 	build and test
 
 5. create a android studio project in android/usnit
-	use gradle-experimental builed client_jni.so
+	~~use gradle-experimental builed client_jni.so~~
+	use cmakelist to build ndk
 	config build.gradle, app/build.gradle gradle/wrapper/gradle-wrapper.properties
 	build and test
 

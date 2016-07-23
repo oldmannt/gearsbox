@@ -19,21 +19,20 @@ public class AdmodBanner {
     private AdView mAdView;
     public AdmodBanner(Context context, View adview, String appid){
 
-        int gps = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
-        gps = 0;
-        if (gps != ConnectionResult.SERVICE_DISABLED &&
+        /*int gps = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+        if (true || gps != ConnectionResult.SERVICE_DISABLED &&
                 gps != ConnectionResult.SERVICE_INVALID &&
                 gps != ConnectionResult.SERVICE_MISSING){
-            MobileAds.initialize(context, appid);
-            // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
-            // values/strings.xml.
-            mAdView = (AdView) adview;
         }
         else {
             LogGen.instance().logerrf("google service invalid:"+ GoogleApiAvailability.getInstance().getErrorString(gps));
             adview.setVisibility(View.GONE);
-        }
+        }*/
 
+        MobileAds.initialize(context, appid);
+        // Gets the ad view defined in layout/ad_fragment.xml with ad unit ID set in
+        // values/strings.xml.
+        mAdView = (AdView) adview;
     }
 
     public boolean loadRequest(){

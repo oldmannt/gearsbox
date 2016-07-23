@@ -13,6 +13,12 @@ camera_quality = enum {
 	PesetPhoto;
 }
 
+video_frame_gen = interface +o +j {
+	getData():i64;
+	getWidth():i32;
+	getHeight():i32;
+	getSize():i32;
+}
 
 camera_controller_gen = interface +o +j {
 	initCamera(view:view_gen):bool;
@@ -28,11 +34,16 @@ camera_controller_gen = interface +o +j {
 	getHeight():i32;
 
 	setFousePoint(x:f32, y:f32);
-	captureOneFrame():i64;
+	captureOneFrame():video_frame_gen;
 }
 
 video_writer_gen = interface +c {
 	static instance():video_writer_gen;
 
-
+	setFilePath(file:string);
+	setFrameSize(width:i32, height:i32);
+	setFPS(fps:i32);
+	setBitRate(rate:i32);
+	encodeFrame(frame:video_frame_gen);
+	saveNRlease();
 }

@@ -92,12 +92,15 @@ void ConfigImp::setValue(const std::string& key, const T& value){
 */
 
 void ConfigImp::save(){
+    if (m_config_path.empty())
+        return;
     Json::FastWriter writer;
     std::string str = writer.write(m_config);
     std::ofstream ofs;
     ofs.open(m_config_path);
     if (!ofs.is_open()){
         G_LOG_FC(LOG_ERROR, "open conf file failed: %s", m_config_path.c_str());
+        m_config_path = "";
         return;
     }
     ofs << str;

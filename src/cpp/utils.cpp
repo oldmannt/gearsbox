@@ -15,7 +15,8 @@ using namespace gearsbox;
 
 bool gearsbox::readJson(const std::string& param, Json::Value& config){
     Json::Reader reader;
-    if (std::string::npos != param.find(".json")){
+    const char* subfix = param.c_str()+param.size()-strlen(".json");
+    if (0==strcmp(subfix, ".json")){
         std::ifstream ifs(param);
         if (!ifs.is_open()){
             G_LOG_FC(LOG_ERROR, "open file failed %s", param.c_str());

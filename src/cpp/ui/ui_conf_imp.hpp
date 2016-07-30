@@ -41,10 +41,12 @@ private:
     
     class Reader {
     public:
+        bool read(const std::string& cfg, UiConfData& data);
         bool readFile(const std::string& cfg, UiConfData& data);
         bool readBuffer(const std::string& cfg, UiConfData& data);
     
     private:
+        bool readJson(const Json::Value& json_cfg, UiConfData& data);
         bool readConstraint(const Json::Value& cfg, ViewConstraint& constraint);
         bool readView(const Json::Value& cfg, ViewConf& view);
         bool readViewFrame(const Json::Value& cfg, ViewFrame& frame);

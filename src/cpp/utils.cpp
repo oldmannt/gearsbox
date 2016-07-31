@@ -36,6 +36,7 @@ bool gearsbox::readJson(const std::string& param, Json::Value& config){
     
     return true;
 }
+
 /*
 ViewConf gearsbox::emptyViewConf(){
     return std::move(ViewConf(""                     // std::string id_,

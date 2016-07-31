@@ -10,7 +10,7 @@
 #define TimerImp_hpp
 
 #include "timer_gen.hpp"
-#include "timer_handler_gen.hpp"
+#include "task_excuser_gen.hpp"
 #include "uv.h"
 
 namespace gearsbox {
@@ -23,7 +23,7 @@ public:
     virtual int64_t getTimePassed(){return m_timePassed;}
     virtual bool isRunning(){return m_running;}
     
-    TimerImp(int64_t timeout, int32_t repeat, std::shared_ptr<TimerHandlerGen> handler);
+    TimerImp(int64_t timeout, int32_t repeat, std::shared_ptr<TaskExcuserGen> handler);
     virtual ~TimerImp();
     void timerCallback();
     
@@ -33,7 +33,7 @@ private:
     int32_t m_repeatTimes;
     int32_t m_repeated;
     bool m_running;
-    std::shared_ptr<TimerHandlerGen> m_handler;
+    std::shared_ptr<TaskExcuserGen> m_handler;
     uv_timer_t* m_timer;
 };
     

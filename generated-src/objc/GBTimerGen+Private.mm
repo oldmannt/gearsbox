@@ -6,8 +6,8 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
+#import "GBTaskExcuserGen+Private.h"
 #import "GBTimerGen+Private.h"
-#import "GBTimerHandlerGen+Private.h"
 #include <exception>
 #include <utility>
 
@@ -33,11 +33,11 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 + (nullable GBTimerGen *)create:(int64_t)timeout
                     repeatTimes:(int32_t)repeatTimes
-                         hander:(nullable id<GBTimerHandlerGen>)hander {
+                         hander:(nullable id<GBTaskExcuserGen>)hander {
     try {
         auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(timeout),
                                               ::djinni::I32::toCpp(repeatTimes),
-                                              ::djinni_generated::TimerHandlerGen::toCpp(hander));
+                                              ::djinni_generated::TaskExcuserGen::toCpp(hander));
         return ::djinni_generated::TimerGen::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

@@ -3,21 +3,19 @@
 
 #pragma once
 
-#include <memory>
+#include <string>
 
 namespace gearsbox {
-
-class PlatformExecutorGen;
 
 class PlatformUtilityGen {
 public:
     virtual ~PlatformUtilityGen() {}
 
-    static std::shared_ptr<PlatformUtilityGen> instance();
+    virtual void endEniting(bool force) = 0;
 
-    virtual void setPlatofrmExcutor(const std::shared_ptr<PlatformExecutorGen> & excuser) = 0;
+    virtual std::string getRootDirectory() = 0;
 
-    virtual std::shared_ptr<PlatformExecutorGen> getExcutor() = 0;
+    virtual std::string getPackFilePath(const std::string & file) = 0;
 };
 
 }  // namespace gearsbox

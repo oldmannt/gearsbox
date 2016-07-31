@@ -3,52 +3,42 @@
 
 #import "GBPlatformUtilityGen+Private.h"
 #import "GBPlatformUtilityGen.h"
-#import "DJICppWrapperCache+Private.h"
-#import "DJIError.h"
-#import "GBPlatformExecutorGen+Private.h"
-#import "GBPlatformUtilityGen+Private.h"
-#include <exception>
-#include <utility>
+#import "DJIMarshal+Private.h"
+#import "DJIObjcWrapperCache+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-@interface GBPlatformUtilityGen ()
+namespace djinni_generated {
 
-- (id)initWithCpp:(const std::shared_ptr<::gearsbox::PlatformUtilityGen>&)cppRef;
-
-@end
-
-@implementation GBPlatformUtilityGen {
-    ::djinni::CppProxyCache::Handle<std::shared_ptr<::gearsbox::PlatformUtilityGen>> _cppRefHandle;
-}
-
-- (id)initWithCpp:(const std::shared_ptr<::gearsbox::PlatformUtilityGen>&)cppRef
+class PlatformUtilityGen::ObjcProxy final
+: public ::gearsbox::PlatformUtilityGen
+, public ::djinni::ObjcProxyCache::Handle<ObjcType>
 {
-    if (self = [super init]) {
-        _cppRefHandle.assign(cppRef);
+public:
+    using Handle::Handle;
+    void endEniting(bool c_force) override
+    {
+        @autoreleasepool {
+            [Handle::get() endEniting:(::djinni::Bool::fromCpp(c_force))];
+        }
     }
-    return self;
-}
+    std::string getRootDirectory() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getRootDirectory];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+    std::string getPackFilePath(const std::string & c_file) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getPackFilePath:(::djinni::String::fromCpp(c_file))];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+};
 
-+ (nullable GBPlatformUtilityGen *)instance {
-    try {
-        auto r = ::gearsbox::PlatformUtilityGen::instance();
-        return ::djinni_generated::PlatformUtilityGen::fromCpp(r);
-    } DJINNI_TRANSLATE_EXCEPTIONS()
-}
-
-- (void)setPlatofrmExcutor:(nullable id<GBPlatformExecutorGen>)excuser {
-    try {
-        _cppRefHandle.get()->setPlatofrmExcutor(::djinni_generated::PlatformExecutorGen::toCpp(excuser));
-    } DJINNI_TRANSLATE_EXCEPTIONS()
-}
-
-- (nullable id<GBPlatformExecutorGen>)getExcutor {
-    try {
-        auto r = _cppRefHandle.get()->getExcutor();
-        return ::djinni_generated::PlatformExecutorGen::fromCpp(r);
-    } DJINNI_TRANSLATE_EXCEPTIONS()
-}
+}  // namespace djinni_generated
 
 namespace djinni_generated {
 
@@ -57,7 +47,7 @@ auto PlatformUtilityGen::toCpp(ObjcType objc) -> CppType
     if (!objc) {
         return nullptr;
     }
-    return objc->_cppRefHandle.get();
+    return ::djinni::get_objc_proxy<ObjcProxy>(objc);
 }
 
 auto PlatformUtilityGen::fromCppOpt(const CppOptType& cpp) -> ObjcType
@@ -65,9 +55,7 @@ auto PlatformUtilityGen::fromCppOpt(const CppOptType& cpp) -> ObjcType
     if (!cpp) {
         return nil;
     }
-    return ::djinni::get_cpp_proxy<GBPlatformUtilityGen>(cpp);
+    return dynamic_cast<ObjcProxy&>(*cpp).Handle::get();
 }
 
 }  // namespace djinni_generated
-
-@end

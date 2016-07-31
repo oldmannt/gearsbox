@@ -5,10 +5,16 @@ package dyno.fun.gearsbox;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ *delay<0 immediately
+ *delay==0 next frame
+ */
 public abstract class TaskManagerGen {
-    public abstract void addTask(TaskGen task);
+    public abstract void addTask(int taskId, long delay, long repeated, TaskExcuserGen task);
 
-    public abstract void addDelayTask(long delay, long repeated);
+    public abstract void addTaskInfo(TaskInfo task, TaskExcuserGen taskExcuser);
+
+    public abstract void addTaskExcuser(TaskExcuserGen task);
 
     public static native TaskManagerGen instance();
 
@@ -36,19 +42,27 @@ public abstract class TaskManagerGen {
         }
 
         @Override
-        public void addTask(TaskGen task)
+        public void addTask(int taskId, long delay, long repeated, TaskExcuserGen task)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_addTask(this.nativeRef, task);
+            native_addTask(this.nativeRef, taskId, delay, repeated, task);
         }
-        private native void native_addTask(long _nativeRef, TaskGen task);
+        private native void native_addTask(long _nativeRef, int taskId, long delay, long repeated, TaskExcuserGen task);
 
         @Override
-        public void addDelayTask(long delay, long repeated)
+        public void addTaskInfo(TaskInfo task, TaskExcuserGen taskExcuser)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_addDelayTask(this.nativeRef, delay, repeated);
+            native_addTaskInfo(this.nativeRef, task, taskExcuser);
         }
-        private native void native_addDelayTask(long _nativeRef, long delay, long repeated);
+        private native void native_addTaskInfo(long _nativeRef, TaskInfo task, TaskExcuserGen taskExcuser);
+
+        @Override
+        public void addTaskExcuser(TaskExcuserGen task)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_addTaskExcuser(this.nativeRef, task);
+        }
+        private native void native_addTaskExcuser(long _nativeRef, TaskExcuserGen task);
     }
 }

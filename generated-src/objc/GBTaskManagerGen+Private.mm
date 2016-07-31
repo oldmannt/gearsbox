@@ -6,7 +6,8 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
-#import "GBTaskGen+Private.h"
+#import "GBTaskExcuserGen+Private.h"
+#import "GBTaskInfo+Private.h"
 #import "GBTaskManagerGen+Private.h"
 #include <exception>
 #include <utility>
@@ -38,17 +39,29 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (void)addTask:(nullable id<GBTaskGen>)task {
+- (void)addTask:(int32_t)taskId
+          delay:(int64_t)delay
+       repeated:(int64_t)repeated
+           task:(nullable id<GBTaskExcuserGen>)task {
     try {
-        _cppRefHandle.get()->addTask(::djinni_generated::TaskGen::toCpp(task));
+        _cppRefHandle.get()->addTask(::djinni::I32::toCpp(taskId),
+                                     ::djinni::I64::toCpp(delay),
+                                     ::djinni::I64::toCpp(repeated),
+                                     ::djinni_generated::TaskExcuserGen::toCpp(task));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (void)addDelayTask:(int64_t)delay
-            repeated:(int64_t)repeated {
+- (void)addTaskInfo:(nonnull GBTaskInfo *)task
+        taskExcuser:(nullable id<GBTaskExcuserGen>)taskExcuser {
     try {
-        _cppRefHandle.get()->addDelayTask(::djinni::I64::toCpp(delay),
-                                          ::djinni::I64::toCpp(repeated));
+        _cppRefHandle.get()->addTaskInfo(::djinni_generated::TaskInfo::toCpp(task),
+                                         ::djinni_generated::TaskExcuserGen::toCpp(taskExcuser));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)addTaskExcuser:(nullable id<GBTaskExcuserGen>)task {
+    try {
+        _cppRefHandle.get()->addTaskExcuser(::djinni_generated::TaskExcuserGen::toCpp(task));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

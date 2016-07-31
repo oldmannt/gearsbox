@@ -3,8 +3,8 @@
 
 #include "NativeTimerGen.hpp"  // my header
 #include "Marshal.hpp"
+#include "NativeTaskExcuserGen.hpp"
 #include "NativeTimerGen.hpp"
-#include "NativeTimerHandlerGen.hpp"
 
 namespace djinni_generated {
 
@@ -27,7 +27,7 @@ CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TimerGen_create(JNIEnv* jniEnv
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(jniEnv, j_timeout),
                                               ::djinni::I32::toCpp(jniEnv, j_repeatTimes),
-                                              ::djinni_generated::NativeTimerHandlerGen::toCpp(jniEnv, j_hander));
+                                              ::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_hander));
         return ::djinni::release(::djinni_generated::NativeTimerGen::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }

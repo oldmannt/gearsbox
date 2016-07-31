@@ -16,7 +16,7 @@ public abstract class TimerGen {
 
     public abstract boolean isRunning();
 
-    public static native TimerGen create(long timeout, int repeatTimes, TimerHandlerGen hander);
+    public static native TimerGen create(long timeout, int repeatTimes, TaskExcuserGen hander);
 
     private static final class CppProxy extends TimerGen
     {

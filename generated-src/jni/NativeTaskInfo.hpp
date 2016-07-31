@@ -25,9 +25,11 @@ private:
     friend ::djinni::JniClass<NativeTaskInfo>;
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/TaskInfo") };
-    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(JZ)V") };
+    const jmethodID jconstructor { ::djinni::jniGetMethodID(clazz.get(), "<init>", "(IJIJ)V") };
+    const jfieldID field_mTarskId { ::djinni::jniGetFieldID(clazz.get(), "mTarskId", "I") };
     const jfieldID field_mDelay { ::djinni::jniGetFieldID(clazz.get(), "mDelay", "J") };
-    const jfieldID field_mRepeate { ::djinni::jniGetFieldID(clazz.get(), "mRepeate", "Z") };
+    const jfieldID field_mRepeated { ::djinni::jniGetFieldID(clazz.get(), "mRepeated", "I") };
+    const jfieldID field_mElapsed { ::djinni::jniGetFieldID(clazz.get(), "mElapsed", "J") };
 };
 
 }  // namespace djinni_generated

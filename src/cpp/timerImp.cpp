@@ -8,11 +8,12 @@
 
 #include "TimerImp.hpp"
 #include "ILog.h"
+#include "task_info.hpp"
 #include <unordered_map>
 
 using namespace gearsbox;
 
-std::shared_ptr<TimerGen> TimerGen::create(int64_t timeout, int32_t repeat_times, const std::shared_ptr<TimerHandlerGen> & hander){
+std::shared_ptr<TimerGen> TimerGen::create(int64_t timeout, int32_t repeat_times, const std::shared_ptr<TaskExcuserGen> & hander){
     return std::make_shared<TimerImp>(timeout, repeat_times, hander);
 }
 
@@ -31,7 +32,7 @@ static void close_timer_cb(uv_handle_t* handle) {
     delete handle;
 }
 
-TimerImp::TimerImp(int64_t timeout, int32_t repeat, std::shared_ptr<TimerHandlerGen> handler)
+TimerImp::TimerImp(int64_t timeout, int32_t repeat, std::shared_ptr<TaskExcuserGen> handler)
 :m_timeout(timeout),
 m_timePassed(0),
 m_repeatTimes(repeat),
@@ -52,8 +53,9 @@ void TimerImp::timerCallback(){
     m_timePassed += m_timeout;
     ++m_repeated;
     
+    TaskInfo info(-1, m_timeout, m_repeated, m_repeated);
     if (m_handler)
-        m_handler->handler(m_timePassed, m_repeated);
+        m_handler->excuse(info);
     
     if (m_repeatTimes<0 || m_repeated<m_repeatTimes){
         return;

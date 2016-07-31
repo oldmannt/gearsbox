@@ -6,7 +6,7 @@
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
-@class GBPlatformUtilityGen;
+@protocol GBPlatformUtilityGen;
 
 namespace djinni_generated {
 
@@ -15,7 +15,7 @@ class PlatformUtilityGen
 public:
     using CppType = std::shared_ptr<::gearsbox::PlatformUtilityGen>;
     using CppOptType = std::shared_ptr<::gearsbox::PlatformUtilityGen>;
-    using ObjcType = GBPlatformUtilityGen*;
+    using ObjcType = id<GBPlatformUtilityGen>;
 
     using Boxed = PlatformUtilityGen;
 

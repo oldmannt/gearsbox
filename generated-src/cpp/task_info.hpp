@@ -9,13 +9,19 @@
 namespace gearsbox {
 
 struct TaskInfo final {
+    int32_t tarsk_id;
     int64_t delay;
-    bool repeate;
+    int32_t repeated;
+    int64_t elapsed;
 
-    TaskInfo(int64_t delay_,
-             bool repeate_)
-    : delay(std::move(delay_))
-    , repeate(std::move(repeate_))
+    TaskInfo(int32_t tarsk_id_,
+             int64_t delay_,
+             int32_t repeated_,
+             int64_t elapsed_)
+    : tarsk_id(std::move(tarsk_id_))
+    , delay(std::move(delay_))
+    , repeated(std::move(repeated_))
+    , elapsed(std::move(elapsed_))
     {}
 };
 

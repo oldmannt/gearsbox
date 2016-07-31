@@ -8,17 +8,24 @@
 
 namespace gearsbox {
 
-class TaskGen;
+class TaskExcuserGen;
+struct TaskInfo;
 
+/**
+ *delay<0 immediately
+ *delay==0 next frame
+ */
 class TaskManagerGen {
 public:
     virtual ~TaskManagerGen() {}
 
     static std::shared_ptr<TaskManagerGen> instance();
 
-    virtual void addTask(const std::shared_ptr<TaskGen> & task) = 0;
+    virtual void addTask(int32_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task) = 0;
 
-    virtual void addDelayTask(int64_t delay, int64_t repeated) = 0;
+    virtual void addTaskInfo(const TaskInfo & task, const std::shared_ptr<TaskExcuserGen> & task_excuser) = 0;
+
+    virtual void addTaskExcuser(const std::shared_ptr<TaskExcuserGen> & task) = 0;
 };
 
 }  // namespace gearsbox

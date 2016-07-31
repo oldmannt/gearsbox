@@ -3,14 +3,14 @@
 
 #import <Foundation/Foundation.h>
 @class GBTimerGen;
-@protocol GBTimerHandlerGen;
+@protocol GBTaskExcuserGen;
 
 
 @interface GBTimerGen : NSObject
 
 + (nullable GBTimerGen *)create:(int64_t)timeout
                     repeatTimes:(int32_t)repeatTimes
-                         hander:(nullable id<GBTimerHandlerGen>)hander;
+                         hander:(nullable id<GBTaskExcuserGen>)hander;
 
 - (BOOL)start;
 

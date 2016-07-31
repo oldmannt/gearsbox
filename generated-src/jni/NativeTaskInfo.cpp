@@ -13,18 +13,22 @@ NativeTaskInfo::~NativeTaskInfo() = default;
 auto NativeTaskInfo::fromCpp(JNIEnv* jniEnv, const CppType& c) -> ::djinni::LocalRef<JniType> {
     const auto& data = ::djinni::JniClass<NativeTaskInfo>::get();
     auto r = ::djinni::LocalRef<JniType>{jniEnv->NewObject(data.clazz.get(), data.jconstructor,
+                                                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c.tarsk_id)),
                                                            ::djinni::get(::djinni::I64::fromCpp(jniEnv, c.delay)),
-                                                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c.repeate)))};
+                                                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c.repeated)),
+                                                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c.elapsed)))};
     ::djinni::jniExceptionCheck(jniEnv);
     return r;
 }
 
 auto NativeTaskInfo::toCpp(JNIEnv* jniEnv, JniType j) -> CppType {
-    ::djinni::JniLocalScope jscope(jniEnv, 3);
+    ::djinni::JniLocalScope jscope(jniEnv, 5);
     assert(j != nullptr);
     const auto& data = ::djinni::JniClass<NativeTaskInfo>::get();
-    return {::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mDelay)),
-            ::djinni::Bool::toCpp(jniEnv, jniEnv->GetBooleanField(j, data.field_mRepeate))};
+    return {::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mTarskId)),
+            ::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mDelay)),
+            ::djinni::I32::toCpp(jniEnv, jniEnv->GetIntField(j, data.field_mRepeated)),
+            ::djinni::I64::toCpp(jniEnv, jniEnv->GetLongField(j, data.field_mElapsed))};
 }
 
 }  // namespace djinni_generated

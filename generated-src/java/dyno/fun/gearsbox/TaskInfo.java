@@ -6,30 +6,48 @@ package dyno.fun.gearsbox;
 public final class TaskInfo {
 
 
+    /*package*/ final int mTarskId;
+
     /*package*/ final long mDelay;
 
-    /*package*/ final boolean mRepeate;
+    /*package*/ final int mRepeated;
+
+    /*package*/ final long mElapsed;
 
     public TaskInfo(
+            int tarskId,
             long delay,
-            boolean repeate) {
+            int repeated,
+            long elapsed) {
+        this.mTarskId = tarskId;
         this.mDelay = delay;
-        this.mRepeate = repeate;
+        this.mRepeated = repeated;
+        this.mElapsed = elapsed;
+    }
+
+    public int getTarskId() {
+        return mTarskId;
     }
 
     public long getDelay() {
         return mDelay;
     }
 
-    public boolean getRepeate() {
-        return mRepeate;
+    public int getRepeated() {
+        return mRepeated;
+    }
+
+    public long getElapsed() {
+        return mElapsed;
     }
 
     @Override
     public String toString() {
         return "TaskInfo{" +
-                "mDelay=" + mDelay +
-                "," + "mRepeate=" + mRepeate +
+                "mTarskId=" + mTarskId +
+                "," + "mDelay=" + mDelay +
+                "," + "mRepeated=" + mRepeated +
+                "," + "mElapsed=" + mElapsed +
         "}";
     }
 

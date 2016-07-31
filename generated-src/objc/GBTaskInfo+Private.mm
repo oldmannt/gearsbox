@@ -10,14 +10,18 @@ namespace djinni_generated {
 auto TaskInfo::toCpp(ObjcType obj) -> CppType
 {
     assert(obj);
-    return {::djinni::I64::toCpp(obj.delay),
-            ::djinni::Bool::toCpp(obj.repeate)};
+    return {::djinni::I32::toCpp(obj.tarskId),
+            ::djinni::I64::toCpp(obj.delay),
+            ::djinni::I32::toCpp(obj.repeated),
+            ::djinni::I64::toCpp(obj.elapsed)};
 }
 
 auto TaskInfo::fromCpp(const CppType& cpp) -> ObjcType
 {
-    return [[GBTaskInfo alloc] initWithDelay:(::djinni::I64::fromCpp(cpp.delay))
-                                     repeate:(::djinni::Bool::fromCpp(cpp.repeate))];
+    return [[GBTaskInfo alloc] initWithTarskId:(::djinni::I32::fromCpp(cpp.tarsk_id))
+                                         delay:(::djinni::I64::fromCpp(cpp.delay))
+                                      repeated:(::djinni::I32::fromCpp(cpp.repeated))
+                                       elapsed:(::djinni::I64::fromCpp(cpp.elapsed))];
 }
 
 }  // namespace djinni_generated

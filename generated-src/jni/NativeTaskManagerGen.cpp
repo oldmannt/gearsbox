@@ -3,7 +3,8 @@
 
 #include "NativeTaskManagerGen.hpp"  // my header
 #include "Marshal.hpp"
-#include "NativeTaskGen.hpp"
+#include "NativeTaskExcuserGen.hpp"
+#include "NativeTaskInfo.hpp"
 #include "NativeTaskManagerGen.hpp"
 
 namespace djinni_generated {
@@ -30,22 +31,34 @@ CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_instance(JNIEnv
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addTask(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_task)
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addTask(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_taskId, jlong j_delay, jlong j_repeated, jobject j_task)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TaskManagerGen>(nativeRef);
-        ref->addTask(::djinni_generated::NativeTaskGen::toCpp(jniEnv, j_task));
+        ref->addTask(::djinni::I32::toCpp(jniEnv, j_taskId),
+                     ::djinni::I64::toCpp(jniEnv, j_delay),
+                     ::djinni::I64::toCpp(jniEnv, j_repeated),
+                     ::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_task));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addDelayTask(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jlong j_delay, jlong j_repeated)
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addTaskInfo(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_task, jobject j_taskExcuser)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TaskManagerGen>(nativeRef);
-        ref->addDelayTask(::djinni::I64::toCpp(jniEnv, j_delay),
-                          ::djinni::I64::toCpp(jniEnv, j_repeated));
+        ref->addTaskInfo(::djinni_generated::NativeTaskInfo::toCpp(jniEnv, j_task),
+                         ::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_taskExcuser));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addTaskExcuser(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_task)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TaskManagerGen>(nativeRef);
+        ref->addTaskExcuser(::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_task));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

@@ -18,6 +18,7 @@
         "./src/cpp",
         "./interface",
         './src/ui',
+        './deps/ffmpeg/include',
       ],
       'all_dependent_settings': {
         'include_dirs': [
@@ -39,6 +40,7 @@
       ],
       "sources": [
         "<!@(python ./deps/djinni/example/glob.py ./generated-src/objc  '*.h' '*.mm' '*.m')",
+        "<!@(python ./deps/djinni/example/glob.py src/objc  '*.h' '*.mm' '*.m')",
       ],
       "include_dirs": [
         "./generated-src/objc",

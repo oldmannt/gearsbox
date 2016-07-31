@@ -27,6 +27,24 @@ private:
     friend ::djinni::JniClass<NativePlatformUtilityGen>;
     friend ::djinni::JniInterface<::gearsbox::PlatformUtilityGen, NativePlatformUtilityGen>;
 
+    class JavaProxy final : ::djinni::JavaProxyHandle<JavaProxy>, public ::gearsbox::PlatformUtilityGen
+    {
+    public:
+        JavaProxy(JniType j);
+        ~JavaProxy();
+
+        void endEniting(bool force) override;
+        std::string getRootDirectory() override;
+        std::string getPackFilePath(const std::string & file) override;
+
+    private:
+        friend ::djinni::JniInterface<::gearsbox::PlatformUtilityGen, ::djinni_generated::NativePlatformUtilityGen>;
+    };
+
+    const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/PlatformUtilityGen") };
+    const jmethodID method_endEniting { ::djinni::jniGetMethodID(clazz.get(), "endEniting", "(Z)V") };
+    const jmethodID method_getRootDirectory { ::djinni::jniGetMethodID(clazz.get(), "getRootDirectory", "()Ljava/lang/String;") };
+    const jmethodID method_getPackFilePath { ::djinni::jniGetMethodID(clazz.get(), "getPackFilePath", "(Ljava/lang/String;)Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

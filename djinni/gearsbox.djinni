@@ -1,5 +1,14 @@
 
 @import "ui.djinni"
+@import "camera.djinni"
+
+instance_getter_gen = interface +c {
+    static getCameraController():camera_controller_gen;
+    static setCameraController(camera:camera_controller_gen);
+
+    static getPlatformUtility():platform_utility_gen;
+    static setPlatformUtility(mgr:platform_utility_gen);
+}
 
 callback_http_gen = interface +j +o{
     callback(id:i64, result:bool, data:string): bool;
@@ -32,19 +41,6 @@ async_loop_gen = interface +c {
     process(elapse:i64);
 }
 
-timer_handler_gen = interface +c +o +j {
-    handler(time_passed:i64, repeated:i32);
-}
-
-timer_gen = interface +c {
-    static create(timeout:i64, repeat_times:i32, hander:timer_handler_gen):timer_gen;
-    start():bool;
-    stop();
-    getRepeated():i32;
-    getTimePassed():i64;
-    isRunning():bool;
-}
-
 crash_handler_gen = interface +c +o{
     header(path:string, url:string);
 }
@@ -56,14 +52,10 @@ breakpad_gen = interface +c +o {
     setHandler(hander:crash_handler_gen);
 }
 
-platform_executor_gen = interface +o +j{
+platform_utility_gen = interface +o +j {
     endEniting(force:bool);
-}
-
-platform_utility_gen = interface +c {
-    static instance():platform_utility_gen;
-    setPlatofrmExcutor(excuser:platform_executor_gen);
-    getExcutor():platform_executor_gen;
+    getRootDirectory():string;
+    getPackFilePath(file:string):string;
 }
 
 config_gen = interface +c {
@@ -100,16 +92,30 @@ language_store_gen = interface +c {
 }
 
 task_info = record {
+    tarsk_id:i32;
     delay:i64;
-    repeate:bool;
+    repeated:i32;
+    elapsed:i64;
 }
 
+#delay<0 immediately
+#delay==0 next frame
 task_manager_gen = interface +c {
     static instance():task_manager_gen;
-    addTask(task:task_gen);
-    addDelayTask(delay:i64, repeated:i64);
+    addTask(task_id:i32, delay:i64, repeated:i64, task:task_excuser_gen);
+    addTaskInfo(task:task_info, task_excuser:task_excuser_gen);
+    addTaskExcuser(task:task_excuser_gen);
 }
 
-task_gen = interface +o +j +c {
+task_excuser_gen = interface +o +j +c {
     excuse(info:task_info);
+}
+
+timer_gen = interface +c {
+    static create(timeout:i64, repeat_times:i32, hander:task_excuser_gen):timer_gen;
+    start():bool;
+    stop();
+    getRepeated():i32;
+    getTimePassed():i64;
+    isRunning():bool;
 }

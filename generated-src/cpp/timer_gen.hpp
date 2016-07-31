@@ -8,13 +8,13 @@
 
 namespace gearsbox {
 
-class TimerHandlerGen;
+class TaskExcuserGen;
 
 class TimerGen {
 public:
     virtual ~TimerGen() {}
 
-    static std::shared_ptr<TimerGen> create(int64_t timeout, int32_t repeat_times, const std::shared_ptr<TimerHandlerGen> & hander);
+    static std::shared_ptr<TimerGen> create(int64_t timeout, int32_t repeat_times, const std::shared_ptr<TaskExcuserGen> & hander);
 
     virtual bool start() = 0;
 

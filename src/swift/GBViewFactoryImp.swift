@@ -64,6 +64,11 @@ class GBViewFactoryImp: GBViewFactoryGen {
         return createView(view_conf)
     }
     
+    internal func addIOSViewToUIMgr(view:UIView, id:String, constroller: ViewController){
+        let view_imp = GBViewImp(id:id, view: view, constroller: constroller)
+        GBUiManagerGen.instance()?.addView(view_imp)
+    }
+    
     private func confView(view_imp: GBViewImp, conf:GBViewConf)->Bool{
         setBaseConf(view_imp, conf: conf)
         createSubViews(view_imp, subviews: conf.subviews)

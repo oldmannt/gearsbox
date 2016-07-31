@@ -38,6 +38,7 @@ private:
         ::gearsbox::ViewFrame getFrame() override;
         void setBackgroundColor(float a, float r, float g, float b) override;
         void setVisiable(bool v) override;
+        void becomeFirstResponder() override;
         ::gearsbox::ViewType getType() override;
         void setBoard(float width, const ::gearsbox::ArgbColor & color) override;
         void setText(const std::string & text) override;
@@ -64,6 +65,7 @@ private:
     const jmethodID method_getFrame { ::djinni::jniGetMethodID(clazz.get(), "getFrame", "()Ldyno/fun/gearsbox/ViewFrame;") };
     const jmethodID method_setBackgroundColor { ::djinni::jniGetMethodID(clazz.get(), "setBackgroundColor", "(FFFF)V") };
     const jmethodID method_setVisiable { ::djinni::jniGetMethodID(clazz.get(), "setVisiable", "(Z)V") };
+    const jmethodID method_becomeFirstResponder { ::djinni::jniGetMethodID(clazz.get(), "becomeFirstResponder", "()V") };
     const jmethodID method_getType { ::djinni::jniGetMethodID(clazz.get(), "getType", "()Ldyno/fun/gearsbox/ViewType;") };
     const jmethodID method_setBoard { ::djinni::jniGetMethodID(clazz.get(), "setBoard", "(FLdyno/fun/gearsbox/ArgbColor;)V") };
     const jmethodID method_setText { ::djinni::jniGetMethodID(clazz.get(), "setText", "(Ljava/lang/String;)V") };

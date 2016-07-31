@@ -31,6 +31,8 @@ extern int32_t const GBViewGenNUMBERNEGATIVE;
 
 - (void)setVisiable:(BOOL)v;
 
+- (void)becomeFirstResponder;
+
 - (GBViewType)getType;
 
 - (void)setBoard:(float)width

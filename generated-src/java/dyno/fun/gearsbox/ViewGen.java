@@ -22,6 +22,8 @@ public abstract class ViewGen {
 
     public abstract void setVisiable(boolean v);
 
+    public abstract void becomeFirstResponder();
+
     public abstract ViewType getType();
 
     public abstract void setBoard(float width, ArgbColor color);

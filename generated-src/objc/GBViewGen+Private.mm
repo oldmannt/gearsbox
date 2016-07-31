@@ -57,6 +57,12 @@ public:
             [Handle::get() setVisiable:(::djinni::Bool::fromCpp(c_v))];
         }
     }
+    void becomeFirstResponder() override
+    {
+        @autoreleasepool {
+            [Handle::get() becomeFirstResponder];
+        }
+    }
     ::gearsbox::ViewType getType() override
     {
         @autoreleasepool {

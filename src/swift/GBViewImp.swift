@@ -140,6 +140,10 @@ class GBViewImp: GBViewGen {
         m_view.hidden = !v
     }
     
+    @objc public func becomeFirstResponder(){
+        m_view.becomeFirstResponder()
+    }
+    
     @objc public func getSubView(id: String) -> GBViewGen?{
         return m_subView[id]
     }

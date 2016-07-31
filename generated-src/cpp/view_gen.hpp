@@ -39,6 +39,8 @@ public:
 
     virtual void setVisiable(bool v) = 0;
 
+    virtual void becomeFirstResponder() = 0;
+
     virtual ViewType getType() = 0;
 
     virtual void setBoard(float width, const ArgbColor & color) = 0;

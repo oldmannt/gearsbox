@@ -65,6 +65,13 @@ void NativeViewGen::JavaProxy::setVisiable(bool c_v) {
                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_v)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
+void NativeViewGen::JavaProxy::becomeFirstResponder() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_becomeFirstResponder);
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 ::gearsbox::ViewType NativeViewGen::JavaProxy::getType() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

@@ -55,34 +55,14 @@ ViewConf UiConfImp::getViewConf(const std::string &name) const{
     return m_conf.viewconfs.at(name);
 }
     
-bool UiConfImp::Reader::readFile(const std::string &cfg, UiConfData& data){
-    std::ifstream ifs(cfg);
-    if (!ifs.is_open()){
-        G_LOG_FC(LOG_ERROR, "open cfg failed %s", cfg.c_str());
-        return false;
-    }
-    
-    std::string buffer;
-    std::getline(ifs, buffer, (char)EOF);
-    return readBuffer(buffer, data);
-}
-
-bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
-    Json::Value json_cfg;
-    Json::Reader json_reader;
-    if (!json_reader.parse(buffer, json_cfg)){
-        std::string err = json_reader.getFormatedErrorMessages();
-        G_LOG_FC(LOG_ERROR, "parse cfg failed err:%s", json_reader.getFormatedErrorMessages().c_str());
-        return false;
-    }
-    
+bool UiConfImp::Reader::readJson(const Json::Value& json_cfg, UiConfData& data) {
     try {
-        Json::Value& constraints_json = json_cfg["constraints"];
+        const Json::Value& constraints_json = json_cfg["constraints"];
         Json::Value::Members mem = constraints_json.getMemberNames();
         Json::Value::Members::iterator it(mem.begin());
         for (; it!=mem.end(); ++it){
             std::string predef_name = *it;
-            Json::Value& constraint_array_json = constraints_json[predef_name];
+            const Json::Value& constraint_array_json = constraints_json[predef_name];
             
             if (constraint_array_json.type()!=Json::ValueType::arrayValue){
                 G_LOG_FC(LOG_ERROR, "parse constraints failed [%s] is not array", predef_name.c_str());
@@ -101,7 +81,7 @@ bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
             //G_LOG_FC(LOG_INFO, "parse array [%s] %d constraints ", predef_name.c_str(), vec_consttraints.size());
         }
         
-        Json::Value& views_json = json_cfg["views"];
+        const Json::Value& views_json = json_cfg["views"];
         if (views_json.type()!=Json::ValueType::arrayValue){
             G_LOG_FC(LOG_ERROR, "parse views failed is not array");
         }
@@ -115,13 +95,38 @@ bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
             }
             
         }
-
+        
     } catch (std::exception& ex) {
         G_LOG_FC(LOG_ERROR, "read json::Value exception:%s", ex.what());
         return false;
     }
     
     return true;
+}
+    
+bool UiConfImp::Reader::readFile(const std::string &cfg, UiConfData& data){
+    /*
+    std::ifstream ifs(cfg);
+    if (!ifs.is_open()){
+        G_LOG_FC(LOG_ERROR, "open cfg failed %s", cfg.c_str());
+        return false;
+    }
+    
+    std::string buffer;
+    std::getline(ifs, buffer, (char)EOF);
+    return readBuffer(buffer, data);
+     */
+    Json::Value json_cfg;
+    if (!gearsbox::readJson(cfg, json_cfg))
+        return false;
+    return this->readJson(json_cfg, data);
+}
+
+bool UiConfImp::Reader::readBuffer(const std::string& buffer, UiConfData& data){
+    Json::Value json_cfg;
+    if (!gearsbox::readJson(buffer, json_cfg))
+        return false;
+    return this->readJson(json_cfg, data);
 }
 
     ConstraintType getConstraintType(const std::string& str){

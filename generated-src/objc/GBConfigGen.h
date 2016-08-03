@@ -31,4 +31,6 @@
 - (void)setI64:(nonnull NSString *)type
          value:(int64_t)value;
 
+- (nullable GBConfigGen *)getSubConfig:(nonnull NSString *)key;
+
 @end

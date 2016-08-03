@@ -22,10 +22,10 @@ public:
             [Handle::get() endEniting:(::djinni::Bool::fromCpp(c_force))];
         }
     }
-    std::string getRootDirectory() override
+    std::string getHomeDirectory() override
     {
         @autoreleasepool {
-            auto r = [Handle::get() getRootDirectory];
+            auto r = [Handle::get() getHomeDirectory];
             return ::djinni::String::toCpp(r);
         }
     }
@@ -33,6 +33,20 @@ public:
     {
         @autoreleasepool {
             auto r = [Handle::get() getPackFilePath:(::djinni::String::fromCpp(c_file))];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+    std::string getPackFileBuffer(const std::string & c_file) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getPackFileBuffer:(::djinni::String::fromCpp(c_file))];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+    std::string getPackFileToHomePath(const std::string & c_file) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getPackFileToHomePath:(::djinni::String::fromCpp(c_file))];
             return ::djinni::String::toCpp(r);
         }
     }

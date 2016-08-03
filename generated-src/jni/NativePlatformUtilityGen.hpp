@@ -34,8 +34,10 @@ private:
         ~JavaProxy();
 
         void endEniting(bool force) override;
-        std::string getRootDirectory() override;
+        std::string getHomeDirectory() override;
         std::string getPackFilePath(const std::string & file) override;
+        std::string getPackFileBuffer(const std::string & file) override;
+        std::string getPackFileToHomePath(const std::string & file) override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::PlatformUtilityGen, ::djinni_generated::NativePlatformUtilityGen>;
@@ -43,8 +45,10 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/PlatformUtilityGen") };
     const jmethodID method_endEniting { ::djinni::jniGetMethodID(clazz.get(), "endEniting", "(Z)V") };
-    const jmethodID method_getRootDirectory { ::djinni::jniGetMethodID(clazz.get(), "getRootDirectory", "()Ljava/lang/String;") };
+    const jmethodID method_getHomeDirectory { ::djinni::jniGetMethodID(clazz.get(), "getHomeDirectory", "()Ljava/lang/String;") };
     const jmethodID method_getPackFilePath { ::djinni::jniGetMethodID(clazz.get(), "getPackFilePath", "(Ljava/lang/String;)Ljava/lang/String;") };
+    const jmethodID method_getPackFileBuffer { ::djinni::jniGetMethodID(clazz.get(), "getPackFileBuffer", "(Ljava/lang/String;)Ljava/lang/String;") };
+    const jmethodID method_getPackFileToHomePath { ::djinni::jniGetMethodID(clazz.get(), "getPackFileToHomePath", "(Ljava/lang/String;)Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

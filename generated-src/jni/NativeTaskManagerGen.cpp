@@ -31,12 +31,12 @@ CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_instance(JNIEnv
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addTask(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_taskId, jlong j_delay, jlong j_repeated, jobject j_task)
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addTask(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jlong j_taskId, jlong j_delay, jlong j_repeated, jobject j_task)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TaskManagerGen>(nativeRef);
-        ref->addTask(::djinni::I32::toCpp(jniEnv, j_taskId),
+        ref->addTask(::djinni::I64::toCpp(jniEnv, j_taskId),
                      ::djinni::I64::toCpp(jniEnv, j_delay),
                      ::djinni::I64::toCpp(jniEnv, j_repeated),
                      ::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_task));

@@ -13,9 +13,15 @@ public:
 
     virtual void endEniting(bool force) = 0;
 
-    virtual std::string getRootDirectory() = 0;
+    /**ios home directory */
+    virtual std::string getHomeDirectory() = 0;
 
     virtual std::string getPackFilePath(const std::string & file) = 0;
+
+    virtual std::string getPackFileBuffer(const std::string & file) = 0;
+
+    /**copy pack file to home directory and return path in home directory */
+    virtual std::string getPackFileToHomePath(const std::string & file) = 0;
 };
 
 }  // namespace gearsbox

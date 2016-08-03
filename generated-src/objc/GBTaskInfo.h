@@ -4,16 +4,16 @@
 #import <Foundation/Foundation.h>
 
 @interface GBTaskInfo : NSObject
-- (nonnull instancetype)initWithTarskId:(int32_t)tarskId
+- (nonnull instancetype)initWithTarskId:(int64_t)tarskId
                                   delay:(int64_t)delay
                                repeated:(int32_t)repeated
                                 elapsed:(int64_t)elapsed;
-+ (nonnull instancetype)taskInfoWithTarskId:(int32_t)tarskId
++ (nonnull instancetype)taskInfoWithTarskId:(int64_t)tarskId
                                       delay:(int64_t)delay
                                    repeated:(int32_t)repeated
                                     elapsed:(int64_t)elapsed;
 
-@property (nonatomic, readonly) int32_t tarskId;
+@property (nonatomic, readonly) int64_t tarskId;
 
 @property (nonatomic, readonly) int64_t delay;
 

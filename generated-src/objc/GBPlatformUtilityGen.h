@@ -8,8 +8,14 @@
 
 - (void)endEniting:(BOOL)force;
 
-- (nonnull NSString *)getRootDirectory;
+/**ios home directory */
+- (nonnull NSString *)getHomeDirectory;
 
 - (nonnull NSString *)getPackFilePath:(nonnull NSString *)file;
+
+- (nonnull NSString *)getPackFileBuffer:(nonnull NSString *)file;
+
+/**copy pack file to home directory and return path in home directory */
+- (nonnull NSString *)getPackFileToHomePath:(nonnull NSString *)file;
 
 @end

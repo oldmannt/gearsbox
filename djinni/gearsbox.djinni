@@ -8,6 +8,8 @@ instance_getter_gen = interface +c {
 
     static getPlatformUtility():platform_utility_gen;
     static setPlatformUtility(mgr:platform_utility_gen);
+
+    static getConfig(id:string):config_gen;
 }
 
 callback_http_gen = interface +j +o{
@@ -54,8 +56,12 @@ breakpad_gen = interface +c +o {
 
 platform_utility_gen = interface +o +j {
     endEniting(force:bool);
-    getRootDirectory():string;
+    #ios home directory
+    getHomeDirectory():string; 
     getPackFilePath(file:string):string;
+    getPackFileBuffer(file:string):string; 
+    #copy pack file to home directory and return path in home directory
+    getPackFileToHomePath(file:string):string;
 }
 
 config_gen = interface +c {
@@ -71,10 +77,7 @@ config_gen = interface +c {
     setInt(type:string, value:i32);
     setFloat(type:string, value:f32);
     setI64(type:string, value:i64);
-}
-
-user_config_gen = interface +c {
-    static instance():config_gen;
+    getSubConfig(key:string):config_gen;
 }
 
 lang_type = enum{
@@ -92,7 +95,7 @@ language_store_gen = interface +c {
 }
 
 task_info = record {
-    tarsk_id:i32;
+    tarsk_id:i64;
     delay:i64;
     repeated:i32;
     elapsed:i64;
@@ -102,7 +105,7 @@ task_info = record {
 #delay==0 next frame
 task_manager_gen = interface +c {
     static instance():task_manager_gen;
-    addTask(task_id:i32, delay:i64, repeated:i64, task:task_excuser_gen);
+    addTask(task_id:i64, delay:i64, repeated:i64, task:task_excuser_gen);
     addTaskInfo(task:task_info, task_excuser:task_excuser_gen);
     addTaskExcuser(task:task_excuser_gen);
 }
@@ -112,9 +115,14 @@ task_excuser_gen = interface +o +j +c {
 }
 
 timer_gen = interface +c {
-    static create(timeout:i64, repeat_times:i32, hander:task_excuser_gen):timer_gen;
+    static create(task_id:i64, interval:i64, repeat_times:i32, hander:task_excuser_gen):timer_gen;
+    static currentTick():i64;
     start():bool;
     stop();
+    pause();
+    resume();
+    setInterval(interval:i64);
+    getInterval():i64;
     getRepeated():i32;
     getTimePassed():i64;
     isRunning():bool;

@@ -18,6 +18,14 @@ public abstract class VideoWriterGen {
 
     public abstract void encodeFrame(VideoFrameGen frame);
 
+    public abstract void start(long interval);
+
+    public abstract void pause();
+
+    public abstract void resume();
+
+    public abstract boolean isRunning();
+
     public abstract void saveNRlease();
 
     public static native VideoWriterGen create();
@@ -92,6 +100,38 @@ public abstract class VideoWriterGen {
             native_encodeFrame(this.nativeRef, frame);
         }
         private native void native_encodeFrame(long _nativeRef, VideoFrameGen frame);
+
+        @Override
+        public void start(long interval)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_start(this.nativeRef, interval);
+        }
+        private native void native_start(long _nativeRef, long interval);
+
+        @Override
+        public void pause()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_pause(this.nativeRef);
+        }
+        private native void native_pause(long _nativeRef);
+
+        @Override
+        public void resume()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_resume(this.nativeRef);
+        }
+        private native void native_resume(long _nativeRef);
+
+        @Override
+        public boolean isRunning()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_isRunning(this.nativeRef);
+        }
+        private native boolean native_isRunning(long _nativeRef);
 
         @Override
         public void saveNRlease()

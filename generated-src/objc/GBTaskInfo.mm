@@ -6,7 +6,7 @@
 
 @implementation GBTaskInfo
 
-- (nonnull instancetype)initWithTarskId:(int32_t)tarskId
+- (nonnull instancetype)initWithTarskId:(int64_t)tarskId
                                   delay:(int64_t)delay
                                repeated:(int32_t)repeated
                                 elapsed:(int64_t)elapsed
@@ -20,7 +20,7 @@
     return self;
 }
 
-+ (nonnull instancetype)taskInfoWithTarskId:(int32_t)tarskId
++ (nonnull instancetype)taskInfoWithTarskId:(int64_t)tarskId
                                       delay:(int64_t)delay
                                    repeated:(int32_t)repeated
                                     elapsed:(int64_t)elapsed

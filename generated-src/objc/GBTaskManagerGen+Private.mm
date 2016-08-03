@@ -39,12 +39,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (void)addTask:(int32_t)taskId
+- (void)addTask:(int64_t)taskId
           delay:(int64_t)delay
        repeated:(int64_t)repeated
            task:(nullable id<GBTaskExcuserGen>)task {
     try {
-        _cppRefHandle.get()->addTask(::djinni::I32::toCpp(taskId),
+        _cppRefHandle.get()->addTask(::djinni::I64::toCpp(taskId),
                                      ::djinni::I64::toCpp(delay),
                                      ::djinni::I64::toCpp(repeated),
                                      ::djinni_generated::TaskExcuserGen::toCpp(task));

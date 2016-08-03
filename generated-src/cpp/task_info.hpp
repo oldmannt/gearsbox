@@ -9,12 +9,12 @@
 namespace gearsbox {
 
 struct TaskInfo final {
-    int32_t tarsk_id;
+    int64_t tarsk_id;
     int64_t delay;
     int32_t repeated;
     int64_t elapsed;
 
-    TaskInfo(int32_t tarsk_id_,
+    TaskInfo(int64_t tarsk_id_,
              int64_t delay_,
              int32_t repeated_,
              int64_t elapsed_)

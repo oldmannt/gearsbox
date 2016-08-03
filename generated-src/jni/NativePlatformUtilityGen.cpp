@@ -22,11 +22,11 @@ void NativePlatformUtilityGen::JavaProxy::endEniting(bool c_force) {
                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_force)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
-std::string NativePlatformUtilityGen::JavaProxy::getRootDirectory() {
+std::string NativePlatformUtilityGen::JavaProxy::getHomeDirectory() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
-    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getRootDirectory);
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getHomeDirectory);
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);
 }
@@ -35,6 +35,24 @@ std::string NativePlatformUtilityGen::JavaProxy::getPackFilePath(const std::stri
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
     auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getPackFilePath,
+                                                  ::djinni::get(::djinni::String::fromCpp(jniEnv, c_file)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::String::toCpp(jniEnv, jret);
+}
+std::string NativePlatformUtilityGen::JavaProxy::getPackFileBuffer(const std::string & c_file) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getPackFileBuffer,
+                                                  ::djinni::get(::djinni::String::fromCpp(jniEnv, c_file)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::String::toCpp(jniEnv, jret);
+}
+std::string NativePlatformUtilityGen::JavaProxy::getPackFileToHomePath(const std::string & c_file) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getPackFileToHomePath,
                                                   ::djinni::get(::djinni::String::fromCpp(jniEnv, c_file)));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);

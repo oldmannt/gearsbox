@@ -10,13 +10,23 @@ public abstract class TimerGen {
 
     public abstract void stop();
 
+    public abstract void pause();
+
+    public abstract void resume();
+
+    public abstract void setInterval(long interval);
+
+    public abstract long getInterval();
+
     public abstract int getRepeated();
 
     public abstract long getTimePassed();
 
     public abstract boolean isRunning();
 
-    public static native TimerGen create(long timeout, int repeatTimes, TaskExcuserGen hander);
+    public static native TimerGen create(long taskId, long interval, int repeatTimes, TaskExcuserGen hander);
+
+    public static native long currentTick();
 
     private static final class CppProxy extends TimerGen
     {
@@ -56,6 +66,38 @@ public abstract class TimerGen {
             native_stop(this.nativeRef);
         }
         private native void native_stop(long _nativeRef);
+
+        @Override
+        public void pause()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_pause(this.nativeRef);
+        }
+        private native void native_pause(long _nativeRef);
+
+        @Override
+        public void resume()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_resume(this.nativeRef);
+        }
+        private native void native_resume(long _nativeRef);
+
+        @Override
+        public void setInterval(long interval)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setInterval(this.nativeRef, interval);
+        }
+        private native void native_setInterval(long _nativeRef, long interval);
+
+        @Override
+        public long getInterval()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getInterval(this.nativeRef);
+        }
+        private native long native_getInterval(long _nativeRef);
 
         @Override
         public int getRepeated()

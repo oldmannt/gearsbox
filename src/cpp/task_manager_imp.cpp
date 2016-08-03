@@ -86,7 +86,7 @@ TaskManagerImp::~TaskManagerImp(){
     uv_close((uv_handle_t*) &m_idle_handle,close_idel_cb);
 }
 
-void TaskManagerImp::addTask(int32_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task){
+void TaskManagerImp::addTask(int64_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task){
     std::shared_ptr<TaskInfo> info = std::make_shared<TaskInfo>(task_id, delay, repeated, uv_now(uv_default_loop()));
     if (delay<0){
         listTaskExcuser(info);

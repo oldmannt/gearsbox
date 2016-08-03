@@ -53,5 +53,9 @@ video_writer_gen = interface +c {
 	setFPS(fps:i32);
 	setBitRate(rate:i32);
 	encodeFrame(frame:video_frame_gen);
+	start(interval:i64);
+	pause();
+	resume();
+	isRunning():bool;
 	saveNRlease();
 }

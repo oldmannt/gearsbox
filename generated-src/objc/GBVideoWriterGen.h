@@ -23,6 +23,14 @@
 
 - (void)encodeFrame:(nullable id<GBVideoFrameGen>)frame;
 
+- (void)start:(int64_t)interval;
+
+- (void)pause;
+
+- (void)resume;
+
+- (BOOL)isRunning;
+
 - (void)saveNRlease;
 
 @end

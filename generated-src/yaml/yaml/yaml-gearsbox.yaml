@@ -784,35 +784,6 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/UiValueCheckerGen;'
 ---
-name: gb_user_config_gen
-typedef: 'interface +c'
-params: []
-prefix: gb_
-cpp:
-  typename: '::gearsbox::UserConfigGen'
-  header: '"user_config_gen.hpp"'
-  byValue: false
-objc:
-  typename: 'GBUserConfigGen'
-  pointer: true
-  hash: '%s.hash'
-  boxed: 'GBUserConfigGen'
-  header: '"GBUserConfigGen.h"'
-objcpp:
-  translator: '::djinni_generated::UserConfigGen'
-  header: '"GBUserConfigGen+Private.h"'
-java:
-  reference: true
-  typename: 'dyno.fun.gearsbox.UserConfigGen'
-  generic: true
-  hash: '%s.hashCode()'
-  boxed: 'dyno.fun.gearsbox.UserConfigGen'
-jni:
-  translator: '::djinni_generated::NativeUserConfigGen'
-  header: '"NativeUserConfigGen.hpp"'
-  typename: jobject
-  typeSignature: 'Ldyno/fun/gearsbox/UserConfigGen;'
----
 name: gb_video_frame_gen
 typedef: 'interface +o +j'
 params: []

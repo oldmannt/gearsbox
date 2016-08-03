@@ -4,10 +4,12 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 namespace gearsbox {
 
 class CameraControllerGen;
+class ConfigGen;
 class PlatformUtilityGen;
 
 class InstanceGetterGen {
@@ -21,6 +23,8 @@ public:
     static std::shared_ptr<PlatformUtilityGen> getPlatformUtility();
 
     static void setPlatformUtility(const std::shared_ptr<PlatformUtilityGen> & mgr);
+
+    static std::shared_ptr<ConfigGen> getConfig(const std::string & id);
 };
 
 }  // namespace gearsbox

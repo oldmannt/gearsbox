@@ -29,6 +29,14 @@ public:
 
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame) = 0;
 
+    virtual void start(int64_t interval) = 0;
+
+    virtual void pause() = 0;
+
+    virtual void resume() = 0;
+
+    virtual bool isRunning() = 0;
+
     virtual void saveNRlease() = 0;
 };
 

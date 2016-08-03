@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *delay==0 next frame
  */
 public abstract class TaskManagerGen {
-    public abstract void addTask(int taskId, long delay, long repeated, TaskExcuserGen task);
+    public abstract void addTask(long taskId, long delay, long repeated, TaskExcuserGen task);
 
     public abstract void addTaskInfo(TaskInfo task, TaskExcuserGen taskExcuser);
 
@@ -42,12 +42,12 @@ public abstract class TaskManagerGen {
         }
 
         @Override
-        public void addTask(int taskId, long delay, long repeated, TaskExcuserGen task)
+        public void addTask(long taskId, long delay, long repeated, TaskExcuserGen task)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
             native_addTask(this.nativeRef, taskId, delay, repeated, task);
         }
-        private native void native_addTask(long _nativeRef, int taskId, long delay, long repeated, TaskExcuserGen task);
+        private native void native_addTask(long _nativeRef, long taskId, long delay, long repeated, TaskExcuserGen task);
 
         @Override
         public void addTaskInfo(TaskInfo task, TaskExcuserGen taskExcuser)

@@ -5,7 +5,9 @@
 #import "GBInstanceGetterGen.h"
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
+#import "DJIMarshal+Private.h"
 #import "GBCameraControllerGen+Private.h"
+#import "GBConfigGen+Private.h"
 #import "GBPlatformUtilityGen+Private.h"
 #include <exception>
 #include <utility>
@@ -53,6 +55,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 + (void)setPlatformUtility:(nullable id<GBPlatformUtilityGen>)mgr {
     try {
         ::gearsbox::InstanceGetterGen::setPlatformUtility(::djinni_generated::PlatformUtilityGen::toCpp(mgr));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (nullable GBConfigGen *)getConfig:(nonnull NSString *)id {
+    try {
+        auto r = ::gearsbox::InstanceGetterGen::getConfig(::djinni::String::toCpp(id));
+        return ::djinni_generated::ConfigGen::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

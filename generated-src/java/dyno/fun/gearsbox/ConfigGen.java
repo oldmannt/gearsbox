@@ -24,6 +24,8 @@ public abstract class ConfigGen {
 
     public abstract void setI64(String type, long value);
 
+    public abstract ConfigGen getSubConfig(String key);
+
     public static native ConfigGen create();
 
     private static final class CppProxy extends ConfigGen
@@ -120,5 +122,13 @@ public abstract class ConfigGen {
             native_setI64(this.nativeRef, type, value);
         }
         private native void native_setI64(long _nativeRef, String type, long value);
+
+        @Override
+        public ConfigGen getSubConfig(String key)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getSubConfig(this.nativeRef, key);
+        }
+        private native ConfigGen native_getSubConfig(long _nativeRef, String key);
     }
 }

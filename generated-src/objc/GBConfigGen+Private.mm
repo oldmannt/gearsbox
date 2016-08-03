@@ -104,6 +104,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (nullable GBConfigGen *)getSubConfig:(nonnull NSString *)key {
+    try {
+        auto r = _cppRefHandle.get()->getSubConfig(::djinni::String::toCpp(key));
+        return ::djinni_generated::ConfigGen::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 namespace djinni_generated {
 
 auto ConfigGen::toCpp(ObjcType objc) -> CppType

@@ -8,13 +8,24 @@
 
 @interface GBTimerGen : NSObject
 
-+ (nullable GBTimerGen *)create:(int64_t)timeout
++ (nullable GBTimerGen *)create:(int64_t)taskId
+                       interval:(int64_t)interval
                     repeatTimes:(int32_t)repeatTimes
                          hander:(nullable id<GBTaskExcuserGen>)hander;
+
++ (int64_t)currentTick;
 
 - (BOOL)start;
 
 - (void)stop;
+
+- (void)pause;
+
+- (void)resume;
+
+- (void)setInterval:(int64_t)interval;
+
+- (int64_t)getInterval;
 
 - (int32_t)getRepeated;
 

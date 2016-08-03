@@ -6,7 +6,13 @@ package dyno.fun.gearsbox;
 public abstract class PlatformUtilityGen {
     public abstract void endEniting(boolean force);
 
-    public abstract String getRootDirectory();
+    /**ios home directory */
+    public abstract String getHomeDirectory();
 
     public abstract String getPackFilePath(String file);
+
+    public abstract String getPackFileBuffer(String file);
+
+    /**copy pack file to home directory and return path in home directory */
+    public abstract String getPackFileToHomePath(String file);
 }

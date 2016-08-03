@@ -21,14 +21,24 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_nativeDest
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TimerGen_create(JNIEnv* jniEnv, jobject /*this*/, jlong j_timeout, jint j_repeatTimes, jobject j_hander)
+CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TimerGen_create(JNIEnv* jniEnv, jobject /*this*/, jlong j_taskId, jlong j_interval, jint j_repeatTimes, jobject j_hander)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(jniEnv, j_timeout),
+        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(jniEnv, j_taskId),
+                                              ::djinni::I64::toCpp(jniEnv, j_interval),
                                               ::djinni::I32::toCpp(jniEnv, j_repeatTimes),
                                               ::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_hander));
         return ::djinni::release(::djinni_generated::NativeTimerGen::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
+CJNIEXPORT jlong JNICALL Java_dyno_fun_gearsbox_TimerGen_currentTick(JNIEnv* jniEnv, jobject /*this*/)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        auto r = ::gearsbox::TimerGen::currentTick();
+        return ::djinni::release(::djinni::I64::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
@@ -49,6 +59,43 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_native_1st
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TimerGen>(nativeRef);
         ref->stop();
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_native_1pause(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TimerGen>(nativeRef);
+        ref->pause();
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_native_1resume(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TimerGen>(nativeRef);
+        ref->resume();
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_native_1setInterval(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jlong j_interval)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TimerGen>(nativeRef);
+        ref->setInterval(::djinni::I64::toCpp(jniEnv, j_interval));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT jlong JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_native_1getInterval(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TimerGen>(nativeRef);
+        auto r = ref->getInterval();
+        return ::djinni::release(::djinni::I64::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
 CJNIEXPORT jint JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_native_1getRepeated(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)

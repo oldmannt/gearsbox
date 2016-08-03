@@ -32,6 +32,8 @@ public:
     virtual void setFloat(const std::string & type, float value) = 0;
 
     virtual void setI64(const std::string & type, int64_t value) = 0;
+
+    virtual std::shared_ptr<ConfigGen> getSubConfig(const std::string & key) = 0;
 };
 
 }  // namespace gearsbox

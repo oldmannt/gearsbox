@@ -119,4 +119,14 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_ConfigGen_00024CppProxy_native_1s
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_ConfigGen_00024CppProxy_native_1getSubConfig(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jstring j_key)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::ConfigGen>(nativeRef);
+        auto r = ref->getSubConfig(::djinni::String::toCpp(jniEnv, j_key));
+        return ::djinni::release(::djinni_generated::NativeConfigGen::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
 }  // namespace djinni_generated

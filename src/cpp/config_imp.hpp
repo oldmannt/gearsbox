@@ -17,7 +17,13 @@ namespace gearsbox {
 class ConfigImp:public ConfigGen {
 public:
     ConfigImp();
-    virtual ~ConfigImp() {}
+    ConfigImp(ConfigImp* parent);
+    virtual ~ConfigImp();
+    
+    bool initialize(Json::Value* node){
+        m_config = node;
+        return m_config->isObject();
+    }
        
     virtual bool initialize(const std::string & param);
     
@@ -36,16 +42,20 @@ public:
     virtual void setFloat(const std::string & type, float value);
     
     virtual void setI64(const std::string & type, int64_t value);
+    
+    virtual std::shared_ptr<ConfigGen> getSubConfig(const std::string & key);
+
 private:
     //template<typename T>
     //void setValue(const std::string& key, const T& value);
     void save();
 private:
-    typedef std::map<std::string, std::string> MAP_STR;
+    typedef std::map<std::string, std::shared_ptr<ConfigImp> > MAP_CONFIG;
     
-    MAP_STR m_str_config;
-    Json::Value m_config;
+    ConfigImp* m_parent;
+    Json::Value* m_config;
     std::string m_config_path;
+    MAP_CONFIG m_subNode;
 };
     
 }  // namespace gearsbox

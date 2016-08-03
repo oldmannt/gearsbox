@@ -11,6 +11,8 @@
 
 #include <string>
 #include "video_writer_gen.hpp"
+#include "timer_gen.hpp"
+#include "task_excuser_gen.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,7 +31,7 @@ namespace gearsbox {
     
 class VideoFrameGen;
 
-class VideoWriterImp : public VideoWriterGen{
+class VideoWriterImp : public VideoWriterGen, public gearsbox::TaskExcuserGen, public std::enable_shared_from_this<VideoWriterImp>{
 public:
     virtual ~VideoWriterImp() {}
     
@@ -38,6 +40,10 @@ public:
         
     }
     
+    //TaskExcuserGen
+    virtual void excuse(const TaskInfo & info);
+    
+    //VideoWriterGen
     virtual void setFilePath(const std::string & file);
     
     virtual void setFrameSize(int32_t width, int32_t height);
@@ -50,9 +56,18 @@ public:
     
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame);
     
+    virtual void start(int64_t interval);
+    
+    virtual void pause();
+    
+    virtual void resume();
+    
+    virtual bool isRunning();
+    
     virtual void saveNRlease();
     
 private:
+    std::shared_ptr<gearsbox::TimerGen> m_writting_timer;
     std::string m_file_path;
     int32_t m_width;
     int32_t m_height;

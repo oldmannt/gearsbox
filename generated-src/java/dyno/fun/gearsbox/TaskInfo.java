@@ -6,7 +6,7 @@ package dyno.fun.gearsbox;
 public final class TaskInfo {
 
 
-    /*package*/ final int mTarskId;
+    /*package*/ final long mTarskId;
 
     /*package*/ final long mDelay;
 
@@ -15,7 +15,7 @@ public final class TaskInfo {
     /*package*/ final long mElapsed;
 
     public TaskInfo(
-            int tarskId,
+            long tarskId,
             long delay,
             int repeated,
             long elapsed) {
@@ -25,7 +25,7 @@ public final class TaskInfo {
         this.mElapsed = elapsed;
     }
 
-    public int getTarskId() {
+    public long getTarskId() {
         return mTarskId;
     }
 

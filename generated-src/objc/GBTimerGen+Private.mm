@@ -31,14 +31,23 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-+ (nullable GBTimerGen *)create:(int64_t)timeout
++ (nullable GBTimerGen *)create:(int64_t)taskId
+                       interval:(int64_t)interval
                     repeatTimes:(int32_t)repeatTimes
                          hander:(nullable id<GBTaskExcuserGen>)hander {
     try {
-        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(timeout),
+        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(taskId),
+                                              ::djinni::I64::toCpp(interval),
                                               ::djinni::I32::toCpp(repeatTimes),
                                               ::djinni_generated::TaskExcuserGen::toCpp(hander));
         return ::djinni_generated::TimerGen::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
++ (int64_t)currentTick {
+    try {
+        auto r = ::gearsbox::TimerGen::currentTick();
+        return ::djinni::I64::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -52,6 +61,31 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (void)stop {
     try {
         _cppRefHandle.get()->stop();
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)pause {
+    try {
+        _cppRefHandle.get()->pause();
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)resume {
+    try {
+        _cppRefHandle.get()->resume();
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)setInterval:(int64_t)interval {
+    try {
+        _cppRefHandle.get()->setInterval(::djinni::I64::toCpp(interval));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (int64_t)getInterval {
+    try {
+        auto r = _cppRefHandle.get()->getInterval();
+        return ::djinni::I64::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

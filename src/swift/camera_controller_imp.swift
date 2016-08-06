@@ -74,16 +74,17 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
         if m_quality == quality {
             return
         }
-        var sessionPreset = AVCaptureSessionPresetLow
+        var sessionPreset = AVCaptureSessionPreset640x480
         switch (quality) {
-        case GBCameraQuality.Low:
-            sessionPreset = AVCaptureSessionPresetLow
-        case GBCameraQuality.Medium:
-            sessionPreset = AVCaptureSessionPresetMedium
-        case GBCameraQuality.High:
-            sessionPreset = AVCaptureSessionPresetHigh
-        case GBCameraQuality.PesetPhoto:
-            sessionPreset = AVCaptureSessionPresetPhoto
+        case GBCameraQuality.P288:
+            sessionPreset = AVCaptureSessionPreset352x288
+        case GBCameraQuality.P480:
+            sessionPreset = AVCaptureSessionPreset640x480
+        case GBCameraQuality.P720:
+            sessionPreset = AVCaptureSessionPreset1280x720
+        case GBCameraQuality.P1080:
+            sessionPreset = AVCaptureSessionPreset1920x1080
+        default: break
         }
         m_captureSession.beginConfiguration()
         m_captureSession.sessionPreset = sessionPreset
@@ -161,6 +162,10 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
         return ObjcUtility.toVideoFrame(m_cmbuffer!)
     }
     
+    public func rotate(){
+        m_previewLayer?.frame = UIScreen.mainScreen().bounds
+    }
+    
     private func requestCamera(type: AVCaptureDevicePosition, addinput:Bool) -> Bool {
         for device in AVCaptureDevice.devices() {
             if (device.hasMediaType(AVMediaTypeVideo)) {
@@ -191,7 +196,7 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
         //[[previewLayer connection] setVideoOrientation:AVCaptureVideoOrientationPortrait]; // 设置视频的朝向
         
         m_stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-        m_captureSession.sessionPreset = AVCaptureSessionPresetHigh
+        m_captureSession.sessionPreset = AVCaptureSessionPreset640x480
         
         if m_captureSession.canAddOutput(m_stillImageOutput) {
             m_captureSession.addOutput(m_stillImageOutput)
@@ -199,7 +204,8 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
         
         m_previewLayer = AVCaptureVideoPreviewLayer(session: m_captureSession)
         m_previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-        m_previewLayer?.frame = CGRectMake(0, 0, view.frame.width, view.frame.height)
+        m_previewLayer?.frame = UIScreen.mainScreen().bounds
+        m_previewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
         view.layer.addSublayer(m_previewLayer!)
     }
     
@@ -232,7 +238,7 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
     private var m_cmbuffer:CMSampleBuffer?
     private var m_isfront:Bool = false
     private var m_flash:GBCameraFlash = GBCameraFlash.Auto
-    private var m_quality:GBCameraQuality = GBCameraQuality.PesetPhoto
+    private var m_quality:GBCameraQuality = GBCameraQuality.P480
     private var m_zoom: Float32 = 0.0
     private var m_iso: Int32 = 0
     private var m_shutter: Int32 = 0

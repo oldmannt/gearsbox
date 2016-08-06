@@ -39,25 +39,6 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_nati
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setFrameSize(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_width, jint j_height)
-{
-    try {
-        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
-        ref->setFrameSize(::djinni::I32::toCpp(jniEnv, j_width),
-                          ::djinni::I32::toCpp(jniEnv, j_height));
-    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
-}
-
-CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setResolution(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_shortOne)
-{
-    try {
-        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
-        ref->setResolution(::djinni::I32::toCpp(jniEnv, j_shortOne));
-    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
-}
-
 CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setFPS(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_fps)
 {
     try {

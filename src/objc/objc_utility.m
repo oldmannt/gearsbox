@@ -28,6 +28,13 @@
     size_t bytesrow2 = CVPixelBufferGetBytesPerRowOfPlane(imageBuffer,2);
     UInt8 *yuv420_data = (UInt8 *)malloc(width * height *3/ 2); // buffer to store YUV with layout YYYYYYYYUUVV
     
+    GBVideoFrameImp* video_frame = [[GBVideoFrameImp alloc] init];
+    video_frame.m_data =(int64_t)yuv420_data;
+    video_frame.m_size = (int64_t)buffeSize;
+    video_frame.m_width = (int32_t)width;
+    video_frame.m_height = (int32_t)height;
+
+    
     /* convert NV12 data to YUV420*/
     UInt8 *pY = bufferPtr ;
     UInt8 *pUV = bufferPtr1;
@@ -44,12 +51,6 @@
         pUV+=bytesrow1;
     }
 
-    GBVideoFrameImp* video_frame = [[GBVideoFrameImp alloc] init];
-    video_frame.m_data =(int64_t)yuv420_data;
-    video_frame.m_size = (int64_t)buffeSize;
-    video_frame.m_width = (int32_t)width;
-    video_frame.m_height = (int32_t)height;
-    
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     return video_frame;
 }

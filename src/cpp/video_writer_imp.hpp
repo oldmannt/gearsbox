@@ -46,10 +46,6 @@ public:
     //VideoWriterGen
     virtual void setFilePath(const std::string & file);
     
-    virtual void setFrameSize(int32_t width, int32_t height);
-                             
-    virtual void setResolution(int32_t short_one);
-    
     virtual void setFPS(int32_t fps);
     
     virtual void setBitRate(int32_t rate);

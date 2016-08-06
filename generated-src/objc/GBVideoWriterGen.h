@@ -12,11 +12,6 @@
 
 - (void)setFilePath:(nonnull NSString *)file;
 
-- (void)setFrameSize:(int32_t)width
-              height:(int32_t)height;
-
-- (void)setResolution:(int32_t)shortOne;
-
 - (void)setFPS:(int32_t)fps;
 
 - (void)setBitRate:(int32_t)rate;

@@ -4,9 +4,10 @@
 package dyno.fun.gearsbox;
 
 public enum CameraQuality {
-    LOW,
-    MEDIUM,
-    HIGH,
-    PESETPHOTO,
+    P288,
+    P480,
+    P720,
+    P1080,
+    P1920,
     ;
 }

@@ -8,10 +8,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class VideoWriterGen {
     public abstract void setFilePath(String file);
 
-    public abstract void setFrameSize(int width, int height);
-
-    public abstract void setResolution(int shortOne);
-
     public abstract void setFPS(int fps);
 
     public abstract void setBitRate(int rate);
@@ -60,22 +56,6 @@ public abstract class VideoWriterGen {
             native_setFilePath(this.nativeRef, file);
         }
         private native void native_setFilePath(long _nativeRef, String file);
-
-        @Override
-        public void setFrameSize(int width, int height)
-        {
-            assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_setFrameSize(this.nativeRef, width, height);
-        }
-        private native void native_setFrameSize(long _nativeRef, int width, int height);
-
-        @Override
-        public void setResolution(int shortOne)
-        {
-            assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_setResolution(this.nativeRef, shortOne);
-        }
-        private native void native_setResolution(long _nativeRef, int shortOne);
 
         @Override
         public void setFPS(int fps)

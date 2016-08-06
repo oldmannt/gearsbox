@@ -7,10 +7,11 @@ camera_flash = enum {
 }
 
 camera_quality = enum {
-	Low;
-	Medium;
-	High;
-	PesetPhoto;
+	P288;
+	P480;
+	P720;
+	P1080;
+	P1920;
 }
 
 video_frame_gen = interface +o +j {
@@ -48,8 +49,6 @@ video_writer_gen = interface +c {
 	static create():video_writer_gen;
 
 	setFilePath(file:string);
-	setFrameSize(width:i32, height:i32);
-	setResolution(short_one:i32);
 	setFPS(fps:i32);
 	setBitRate(rate:i32);
 	encodeFrame(frame:video_frame_gen);

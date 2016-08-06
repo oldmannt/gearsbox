@@ -8,7 +8,7 @@
 
 #include "video_writer_imp.hpp"
 #include "video_frame_gen.hpp"
-#include "ilog.h"
+#include "macro.h"
 #include "camera_controller_gen.hpp"
 #include "instance_getter_gen.hpp"
 
@@ -20,14 +20,6 @@ std::shared_ptr<VideoWriterGen> VideoWriterGen::create(){
 
 void VideoWriterImp::setFilePath(const std::string & file){
     m_file_path = file;
-}
-
-void VideoWriterImp::setFrameSize(int32_t width, int32_t height){
-    m_width = width, m_height = height;
-}
-
-void VideoWriterImp::setResolution(int32_t short_one){
-    m_resolution = short_one;
 }
 
 void VideoWriterImp::setFPS(int32_t fps){
@@ -42,6 +34,7 @@ void VideoWriterImp::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
     this->initialize(frame);
     
     //Read raw YUV data
+    CHECK_RT(frame->getData()!=0,"VideoFrameGen data null");
     uint8_t* picture_buf = (uint8_t*)frame->getData();
     m_av_frame->data[0] = picture_buf;              // Y
     m_av_frame->data[1] = picture_buf+ m_ysize;      // U
@@ -54,7 +47,7 @@ void VideoWriterImp::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
     // Encode
     m_av_frame->width = m_width;
     m_av_frame->height = m_height;
-    m_av_frame->format = AV_PIX_FMT_YUV420P16LE;
+    m_av_frame->format = AV_PIX_FMT_YUV420P;
     
     int ret = avcodec_encode_video2(m_video_stream->codec, &m_av_packet, m_av_frame, &got_picture);
     if(ret < 0) {
@@ -161,6 +154,9 @@ void VideoWriterImp::saveNRlease(){
     m_ysize = 0;
     m_writting_timer->stop();
     m_writting_timer = nullptr;
+    m_width = 0;
+    m_height = 0;
+    m_resolution = 0;
 }
 
 bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){
@@ -168,12 +164,9 @@ bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){
         return false;
     
     m_frame_counter = 0;
-    if (m_width==0 && m_height==0 && m_resolution!=0){
+    if (m_width==0 || m_height==0){
         m_width = frame->getWidth();
         m_height = frame->getHeight();
-        
-        m_height = m_height * m_resolution/m_width;
-        m_width = m_resolution;
     }
     
     /* initialize libavcodec, and register all codecs and formats */

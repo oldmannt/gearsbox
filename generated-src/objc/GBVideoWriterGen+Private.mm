@@ -44,20 +44,6 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (void)setFrameSize:(int32_t)width
-              height:(int32_t)height {
-    try {
-        _cppRefHandle.get()->setFrameSize(::djinni::I32::toCpp(width),
-                                          ::djinni::I32::toCpp(height));
-    } DJINNI_TRANSLATE_EXCEPTIONS()
-}
-
-- (void)setResolution:(int32_t)shortOne {
-    try {
-        _cppRefHandle.get()->setResolution(::djinni::I32::toCpp(shortOne));
-    } DJINNI_TRANSLATE_EXCEPTIONS()
-}
-
 - (void)setFPS:(int32_t)fps {
     try {
         _cppRefHandle.get()->setFPS(::djinni::I32::toCpp(fps));

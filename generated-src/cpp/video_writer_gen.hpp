@@ -19,10 +19,6 @@ public:
 
     virtual void setFilePath(const std::string & file) = 0;
 
-    virtual void setFrameSize(int32_t width, int32_t height) = 0;
-
-    virtual void setResolution(int32_t short_one) = 0;
-
     virtual void setFPS(int32_t fps) = 0;
 
     virtual void setBitRate(int32_t rate) = 0;

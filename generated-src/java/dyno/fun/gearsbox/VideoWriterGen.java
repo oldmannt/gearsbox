@@ -12,6 +12,8 @@ public abstract class VideoWriterGen {
 
     public abstract void setBitRate(int rate);
 
+    public abstract void setVideoEncoder(VideoEncoderGen encoder);
+
     public abstract void encodeFrame(VideoFrameGen frame);
 
     public abstract void start(long interval);
@@ -72,6 +74,14 @@ public abstract class VideoWriterGen {
             native_setBitRate(this.nativeRef, rate);
         }
         private native void native_setBitRate(long _nativeRef, int rate);
+
+        @Override
+        public void setVideoEncoder(VideoEncoderGen encoder)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setVideoEncoder(this.nativeRef, encoder);
+        }
+        private native void native_setVideoEncoder(long _nativeRef, VideoEncoderGen encoder);
 
         @Override
         public void encodeFrame(VideoFrameGen frame)

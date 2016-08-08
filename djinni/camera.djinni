@@ -51,10 +51,17 @@ video_writer_gen = interface +c {
 	setFilePath(file:string);
 	setFPS(fps:i32);
 	setBitRate(rate:i32);
+	setVideoEncoder(encoder:video_encoder_gen);
 	encodeFrame(frame:video_frame_gen);
 	start(interval:i64);
 	pause();
 	resume();
 	isRunning():bool;
 	saveNRlease();
+}
+
+video_encoder_gen = interface +c +j +o {
+	initialize(filepath:string, fps:i32, bitrate:i32, width:i32, height:i32):bool;
+	encodeFrame(frame:video_frame_gen);
+	saveNRelease();
 }

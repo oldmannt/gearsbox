@@ -6,6 +6,7 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
+#import "GBVideoEncoderGen+Private.h"
 #import "GBVideoFrameGen+Private.h"
 #import "GBVideoWriterGen+Private.h"
 #include <exception>
@@ -53,6 +54,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (void)setBitRate:(int32_t)rate {
     try {
         _cppRefHandle.get()->setBitRate(::djinni::I32::toCpp(rate));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)setVideoEncoder:(nullable id<GBVideoEncoderGen>)encoder {
+    try {
+        _cppRefHandle.get()->setVideoEncoder(::djinni_generated::VideoEncoderGen::toCpp(encoder));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

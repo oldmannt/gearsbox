@@ -3,6 +3,7 @@
 
 #include "NativeVideoWriterGen.hpp"  // my header
 #include "Marshal.hpp"
+#include "NativeVideoEncoderGen.hpp"
 #include "NativeVideoFrameGen.hpp"
 #include "NativeVideoWriterGen.hpp"
 
@@ -54,6 +55,15 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_nati
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
         ref->setBitRate(::djinni::I32::toCpp(jniEnv, j_rate));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setVideoEncoder(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_encoder)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
+        ref->setVideoEncoder(::djinni_generated::NativeVideoEncoderGen::toCpp(jniEnv, j_encoder));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

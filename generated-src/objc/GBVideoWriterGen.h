@@ -3,6 +3,7 @@
 
 #import <Foundation/Foundation.h>
 @class GBVideoWriterGen;
+@protocol GBVideoEncoderGen;
 @protocol GBVideoFrameGen;
 
 
@@ -15,6 +16,8 @@
 - (void)setFPS:(int32_t)fps;
 
 - (void)setBitRate:(int32_t)rate;
+
+- (void)setVideoEncoder:(nullable id<GBVideoEncoderGen>)encoder;
 
 - (void)encodeFrame:(nullable id<GBVideoFrameGen>)frame;
 

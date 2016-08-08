@@ -13,6 +13,7 @@
 #include "video_writer_gen.hpp"
 #include "timer_gen.hpp"
 #include "task_excuser_gen.hpp"
+#include "video_encoder_gen.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,10 +34,11 @@ class VideoFrameGen;
 
 class VideoWriterImp : public VideoWriterGen, public gearsbox::TaskExcuserGen, public std::enable_shared_from_this<VideoWriterImp>{
 public:
-    virtual ~VideoWriterImp() {}
+    virtual ~VideoWriterImp() {
+        m_video_encoder = nullptr;
+    }
     
-    VideoWriterImp():m_width(0),m_height(0),m_resolution(0),m_fps(0),m_bitrate(0),
-        m_init(false), m_format_ctx(0),m_video_stream(0),m_av_frame(0),m_ysize(0){
+    VideoWriterImp():m_video_encoder(nullptr),m_fps(0),m_bitrate(0),m_init(false){
         
     }
     
@@ -49,6 +51,10 @@ public:
     virtual void setFPS(int32_t fps);
     
     virtual void setBitRate(int32_t rate);
+    
+    virtual void setVideoEncoder(const std::shared_ptr<VideoEncoderGen> & encoder){
+        m_video_encoder = encoder;
+    }
     
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame);
     
@@ -64,21 +70,11 @@ public:
     
 private:
     std::shared_ptr<gearsbox::TimerGen> m_writting_timer;
+    std::shared_ptr<gearsbox::VideoEncoderGen> m_video_encoder;
     std::string m_file_path;
-    int32_t m_width;
-    int32_t m_height;
-    int32_t m_resolution;
     int32_t m_fps;
     int32_t m_bitrate;
     bool m_init;
-    
-    AVFormatContext *m_format_ctx;
-    AVStream* m_video_stream;
-    AVFrame* m_av_frame;
-    int64_t m_ysize;
-    int32_t m_frame_counter;
-    
-    AVPacket m_av_packet;
     
     bool initialize(const std::shared_ptr<VideoFrameGen> & frame);
 };

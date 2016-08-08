@@ -784,6 +784,35 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/UiValueCheckerGen;'
 ---
+name: gb_video_encoder_gen
+typedef: 'interface +c +o +j'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::VideoEncoderGen'
+  header: '"video_encoder_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBVideoEncoderGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBVideoEncoderGen'
+  header: '"GBVideoEncoderGen.h"'
+objcpp:
+  translator: '::djinni_generated::VideoEncoderGen'
+  header: '"GBVideoEncoderGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.VideoEncoderGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.VideoEncoderGen'
+jni:
+  translator: '::djinni_generated::NativeVideoEncoderGen'
+  header: '"NativeVideoEncoderGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/VideoEncoderGen;'
+---
 name: gb_video_frame_gen
 typedef: 'interface +o +j'
 params: []

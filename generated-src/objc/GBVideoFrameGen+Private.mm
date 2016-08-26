@@ -44,6 +44,43 @@ public:
             return ::djinni::I64::toCpp(r);
         }
     }
+    int32_t getLineSize() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getLineSize];
+            return ::djinni::I32::toCpp(r);
+        }
+    }
+    void setData(int64_t c_data) override
+    {
+        @autoreleasepool {
+            [Handle::get() setData:(::djinni::I64::fromCpp(c_data))];
+        }
+    }
+    void setWidth(int32_t c_width) override
+    {
+        @autoreleasepool {
+            [Handle::get() setWidth:(::djinni::I32::fromCpp(c_width))];
+        }
+    }
+    void setHeight(int32_t c_height) override
+    {
+        @autoreleasepool {
+            [Handle::get() setHeight:(::djinni::I32::fromCpp(c_height))];
+        }
+    }
+    void setSize(int64_t c_size) override
+    {
+        @autoreleasepool {
+            [Handle::get() setSize:(::djinni::I64::fromCpp(c_size))];
+        }
+    }
+    void setLineSize(int32_t c_linesize) override
+    {
+        @autoreleasepool {
+            [Handle::get() setLineSize:(::djinni::I32::fromCpp(c_linesize))];
+        }
+    }
 };
 
 }  // namespace djinni_generated

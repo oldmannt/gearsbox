@@ -1,4 +1,3 @@
-#@import "ui.djinni"
 
 camera_flash = enum {
 	On;
@@ -19,6 +18,13 @@ video_frame_gen = interface +o +j {
 	getWidth():i32;
 	getHeight():i32;
 	getSize():i64;
+	getLineSize():i32;
+
+	setData(data:i64);
+	setWidth(width:i32);
+	setHeight(height:i32);
+	setSize(size:i64);
+	setLineSize(linesize:i32);
 }
 
 camera_controller_gen = interface +o +j {
@@ -49,6 +55,7 @@ video_writer_gen = interface +c {
 	static create():video_writer_gen;
 
 	setFilePath(file:string);
+	getFilePath():string;
 	setFPS(fps:i32);
 	setBitRate(rate:i32);
 	setVideoEncoder(encoder:video_encoder_gen);
@@ -64,4 +71,18 @@ video_encoder_gen = interface +c +j +o {
 	initialize(filepath:string, fps:i32, bitrate:i32, width:i32, height:i32):bool;
 	encodeFrame(frame:video_frame_gen);
 	saveNRelease();
+}
+
+video_info_gen = interface +c {
+	# create at fist time, return after second time
+	static getVideoInfo(path:string, out_width:i32, out_height:i32):video_info_gen;
+	getName():string;
+	getPath():string;
+	getFPS():i32;
+	getWidth():i32;
+	getHeight():i32;
+	getFrameAmount():i64;
+	#by second
+	getDuration():i64; 
+	getVideoFrame():video_frame_gen;
 }

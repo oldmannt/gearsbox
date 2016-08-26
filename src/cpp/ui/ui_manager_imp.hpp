@@ -24,6 +24,8 @@ public:
     virtual std::shared_ptr<ViewGen> getView(const std::string & id);
     virtual bool addView(const std::shared_ptr<ViewGen> & view);
     virtual void removeView(const std::string & id);
+    /**view controller in ios, activity in android */
+    virtual void showViewController(const std::string & id, bool animated);
     
 private:
     typedef std::map<std::string, std::shared_ptr<ViewGen>> MapView;

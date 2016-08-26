@@ -46,5 +46,53 @@ int64_t NativeVideoFrameGen::JavaProxy::getSize() {
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::I64::toCpp(jniEnv, jret);
 }
+int32_t NativeVideoFrameGen::JavaProxy::getLineSize() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallIntMethod(Handle::get().get(), data.method_getLineSize);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I32::toCpp(jniEnv, jret);
+}
+void NativeVideoFrameGen::JavaProxy::setData(int64_t c_data) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setData,
+                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_data)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setWidth(int32_t c_width) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setWidth,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_width)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setHeight(int32_t c_height) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setHeight,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_height)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setSize(int64_t c_size) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setSize,
+                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_size)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setLineSize(int32_t c_linesize) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setLineSize,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_linesize)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 
 }  // namespace djinni_generated

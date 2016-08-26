@@ -5,6 +5,8 @@
 #import "GBPlatformUtilityGen.h"
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
+#import "GBFileInfoGen+Private.h"
+#import "GBVideoFrameGen+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -20,6 +22,13 @@ public:
     {
         @autoreleasepool {
             [Handle::get() endEniting:(::djinni::Bool::fromCpp(c_force))];
+        }
+    }
+    ::gearsbox::LangType getLanguage() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getLanguage];
+            return ::djinni::Enum<::gearsbox::LangType, GBLangType>::toCpp(r);
         }
     }
     std::string getHomeDirectory() override
@@ -48,6 +57,48 @@ public:
         @autoreleasepool {
             auto r = [Handle::get() getPackFileToHomePath:(::djinni::String::fromCpp(c_file))];
             return ::djinni::String::toCpp(r);
+        }
+    }
+    std::unordered_set<std::string> getFilesFromPathBySuffix(const std::string & c_path, const std::string & c_suffix) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFilesFromPathBySuffix:(::djinni::String::fromCpp(c_path))
+                                                      suffix:(::djinni::String::fromCpp(c_suffix))];
+            return ::djinni::Set<::djinni::String>::toCpp(r);
+        }
+    }
+    std::string getSubDirInHome(const std::string & c_sub_dir) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getSubDirInHome:(::djinni::String::fromCpp(c_sub_dir))];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+    std::string getFileNameFromPath(const std::string & c_path) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFileNameFromPath:(::djinni::String::fromCpp(c_path))];
+            return ::djinni::String::toCpp(r);
+        }
+    }
+    std::shared_ptr<::gearsbox::FileInfoGen> getFileInfo(const std::string & c_path_name) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFileInfo:(::djinni::String::fromCpp(c_path_name))];
+            return ::djinni_generated::FileInfoGen::toCpp(r);
+        }
+    }
+    void playVideo(const std::string & c_file) override
+    {
+        @autoreleasepool {
+            [Handle::get() playVideo:(::djinni::String::fromCpp(c_file))];
+        }
+    }
+    std::shared_ptr<::gearsbox::VideoFrameGen> createVideoFrame() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() createVideoFrame];
+            return ::djinni_generated::VideoFrameGen::toCpp(r);
         }
     }
 };

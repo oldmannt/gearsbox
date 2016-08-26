@@ -35,8 +35,7 @@ bool ConfigImp::initialize(const std::string & param){
     if (m_config!=nullptr)
         return false;
     m_config = new Json::Value();
-    if (!readJson(param, *m_config))
-        return false;
+    CHECK_RTF(readJson(param, *m_config), "readJson failed param:%s", param.c_str());
     m_config_path = param;
     G_LOG_C(LOG_INFO, "read config %d items, %s", (*m_config).size(), param.c_str());
     return true;

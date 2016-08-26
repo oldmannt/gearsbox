@@ -7,6 +7,8 @@
 //
 
 #import "objc_utility.h"
+#import "GBVideoInfoGen.h"
+#import <UIKit/UIKit.h>
 
 @implementation ObjcUtility
 
@@ -53,6 +55,47 @@
 
     CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
     return video_frame;
+}
+
++(UIImage* _Nullable)VideoFram2UIImage:(GBVideoFrameImp* _Nonnull)gbVideoFrame{
+    int32_t width = [gbVideoFrame getWidth];
+    int32_t height = [gbVideoFrame getHeight];
+    int32_t linesize = [gbVideoFrame getLineSize];
+    UInt8*  buffer = [gbVideoFrame getData];
+    
+    
+    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+    CFDataRef data = CFDataCreateWithBytesNoCopy(kCFAllocatorDefault, buffer, linesize*height,kCFAllocatorNull);
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData(data);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGImageRef cgImage = CGImageCreate(width,
+                                       height,
+                                       8,
+                                       24,
+                                       linesize,
+                                       colorSpace,
+                                       bitmapInfo,
+                                       provider,
+                                       NULL,
+                                       NO,
+                                       kCGRenderingIntentDefault);
+    CGColorSpaceRelease(colorSpace);
+    UIImage *image = [UIImage imageWithCGImage:cgImage];
+    CGImageRelease(cgImage);
+    CGDataProviderRelease(provider);
+    CFRelease(data);
+    
+    return image;
+
+}
+
++(UIImage* _Nullable)VideoReview2UIImage:(NSString* _Nonnull)video_path{
+    GBVideoInfoGen *video_info = [GBVideoInfoGen getVideoInfo:video_path outWidth:0 outHeight:0];
+    if (NULL == video_info){
+        return NULL;
+    }
+    
+    return [ObjcUtility VideoFram2UIImage:[video_info getVideoFrame]];
 }
 
 @end

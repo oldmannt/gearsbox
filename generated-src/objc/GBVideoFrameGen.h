@@ -14,4 +14,16 @@
 
 - (int64_t)getSize;
 
+- (int32_t)getLineSize;
+
+- (void)setData:(int64_t)data;
+
+- (void)setWidth:(int32_t)width;
+
+- (void)setHeight:(int32_t)height;
+
+- (void)setSize:(int64_t)size;
+
+- (void)setLineSize:(int32_t)linesize;
+
 @end

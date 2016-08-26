@@ -22,4 +22,8 @@
 
 - (void)removeView:(nonnull NSString *)id;
 
+/**view controller in ios, activity in android */
+- (void)showViewController:(nonnull NSString *)id
+                  animated:(BOOL)animated;
+
 @end

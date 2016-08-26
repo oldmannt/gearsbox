@@ -36,6 +36,7 @@ private:
         std::shared_ptr<::gearsbox::ViewGen> createView(const ::gearsbox::ViewConf & conf) override;
         std::shared_ptr<::gearsbox::ViewGen> createViewById(const std::string & id, ::gearsbox::ViewType type) override;
         bool injectView(const std::shared_ptr<::gearsbox::ViewGen> & view) override;
+        void showViewController(const std::string & id, bool animated) override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::ViewFactoryGen, ::djinni_generated::NativeViewFactoryGen>;
@@ -45,6 +46,7 @@ private:
     const jmethodID method_createView { ::djinni::jniGetMethodID(clazz.get(), "createView", "(Ldyno/fun/gearsbox/ViewConf;)Ldyno/fun/gearsbox/ViewGen;") };
     const jmethodID method_createViewById { ::djinni::jniGetMethodID(clazz.get(), "createViewById", "(Ljava/lang/String;Ldyno/fun/gearsbox/ViewType;)Ldyno/fun/gearsbox/ViewGen;") };
     const jmethodID method_injectView { ::djinni::jniGetMethodID(clazz.get(), "injectView", "(Ldyno/fun/gearsbox/ViewGen;)Z") };
+    const jmethodID method_showViewController { ::djinni::jniGetMethodID(clazz.get(), "showViewController", "(Ljava/lang/String;Z)V") };
 };
 
 }  // namespace djinni_generated

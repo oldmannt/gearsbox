@@ -40,6 +40,16 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_nati
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT jstring JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1getFilePath(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
+        auto r = ref->getFilePath();
+        return ::djinni::release(::djinni::String::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
 CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setFPS(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_fps)
 {
     try {

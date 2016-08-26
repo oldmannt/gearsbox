@@ -21,6 +21,8 @@ public:
     virtual std::shared_ptr<ViewGen> createViewById(const std::string & id, ViewType type) = 0;
 
     virtual bool injectView(const std::shared_ptr<ViewGen> & view) = 0;
+
+    virtual void showViewController(const std::string & id, bool animated) = 0;
 };
 
 }  // namespace gearsbox

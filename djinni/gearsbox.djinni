@@ -54,14 +54,35 @@ breakpad_gen = interface +c +o {
     setHandler(hander:crash_handler_gen);
 }
 
+file_info_gen = interface +o +j {
+    initialize(path:string):bool;
+    getSize():i64;
+    getCreateDate():date;
+    getName():string;
+    getSuffix():string;
+    getPrefix():string;
+    getPath():string;
+}
+
 platform_utility_gen = interface +o +j {
     endEniting(force:bool);
+
+    getLanguage():lang_type;
+
     #ios home directory
     getHomeDirectory():string; 
     getPackFilePath(file:string):string;
     getPackFileBuffer(file:string):string; 
     #copy pack file to home directory and return path in home directory
     getPackFileToHomePath(file:string):string;
+    getFilesFromPathBySuffix(path:string, suffix:string):set<string>;
+    getSubDirInHome(sub_dir:string):string;
+    getFileNameFromPath(path:string):string;
+    getFileInfo(path_name:string):file_info_gen;
+
+    playVideo(file:string);
+
+    createVideoFrame():video_frame_gen;
 }
 
 config_gen = interface +c {
@@ -94,24 +115,40 @@ language_store_gen = interface +c {
     getString(type:string):string;
 }
 
-task_info = record {
-    tarsk_id:i64;
-    delay:i64;
-    repeated:i32;
-    elapsed:i64;
+task_info_gen = interface +c +j +o {
+    getTaskId():i64;
+    getDelay():i64;
+    getRepeated():i32;
+    getAssignTick():i64;
+    getData():string;
+    getValue(key:string):string;
+    getIValue(key:string):i64;
+    getFValue(key:string):f64;
+
+    setTaskId(id:i64);
+    setDelay(delay:i64);
+    setRepeated(repeated:i32);
+    setAssignTick(assign:i64);
+    setData(data:string);
+    setValue(key:string,value:string);
+    setIValue(key:string,value:i64);
+    setFValue(key:string,value:f64);
 }
 
 #delay<0 immediately
 #delay==0 next frame
 task_manager_gen = interface +c {
     static instance():task_manager_gen;
+    static create(task_id:i64, delay:i64, repeated:i32):task_info_gen;
     addTask(task_id:i64, delay:i64, repeated:i64, task:task_excuser_gen);
-    addTaskInfo(task:task_info, task_excuser:task_excuser_gen);
+    addTaskI(task_id:i64, task:task_excuser_gen);
+    addTaskInfo(task:task_info_gen, task_excuser:task_excuser_gen);
     addTaskExcuser(task:task_excuser_gen);
+    removeTask(task_id:i64);
 }
 
 task_excuser_gen = interface +o +j +c {
-    excuse(info:task_info);
+    excuse(info:task_info_gen);
 }
 
 timer_gen = interface +c {

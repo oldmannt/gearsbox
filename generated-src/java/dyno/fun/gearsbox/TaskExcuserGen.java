@@ -6,7 +6,7 @@ package dyno.fun.gearsbox;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class TaskExcuserGen {
-    public abstract void excuse(TaskInfo info);
+    public abstract void excuse(TaskInfoGen info);
 
     private static final class CppProxy extends TaskExcuserGen
     {
@@ -32,11 +32,11 @@ public abstract class TaskExcuserGen {
         }
 
         @Override
-        public void excuse(TaskInfo info)
+        public void excuse(TaskInfoGen info)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
             native_excuse(this.nativeRef, info);
         }
-        private native void native_excuse(long _nativeRef, TaskInfo info);
+        private native void native_excuse(long _nativeRef, TaskInfoGen info);
     }
 }

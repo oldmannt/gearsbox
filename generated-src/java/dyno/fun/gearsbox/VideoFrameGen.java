@@ -11,4 +11,16 @@ public abstract class VideoFrameGen {
     public abstract int getHeight();
 
     public abstract long getSize();
+
+    public abstract int getLineSize();
+
+    public abstract void setData(long data);
+
+    public abstract void setWidth(int width);
+
+    public abstract void setHeight(int height);
+
+    public abstract void setSize(long size);
+
+    public abstract void setLineSize(int linesize);
 }

@@ -52,6 +52,7 @@
           './generated-src/cpp',
           "./interface",
           './src/cpp/ui',
+          './src/objc',
         ]
       },
       "defines": [

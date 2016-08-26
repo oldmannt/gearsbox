@@ -3,8 +3,12 @@
 
 package dyno.fun.gearsbox;
 
+import java.util.HashSet;
+
 public abstract class PlatformUtilityGen {
     public abstract void endEniting(boolean force);
+
+    public abstract LangType getLanguage();
 
     /**ios home directory */
     public abstract String getHomeDirectory();
@@ -15,4 +19,16 @@ public abstract class PlatformUtilityGen {
 
     /**copy pack file to home directory and return path in home directory */
     public abstract String getPackFileToHomePath(String file);
+
+    public abstract HashSet<String> getFilesFromPathBySuffix(String path, String suffix);
+
+    public abstract String getSubDirInHome(String subDir);
+
+    public abstract String getFileNameFromPath(String path);
+
+    public abstract FileInfoGen getFileInfo(String pathName);
+
+    public abstract void playVideo(String file);
+
+    public abstract VideoFrameGen createVideoFrame();
 }

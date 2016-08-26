@@ -45,6 +45,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (nonnull NSString *)getFilePath {
+    try {
+        auto r = _cppRefHandle.get()->getFilePath();
+        return ::djinni::String::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 - (void)setFPS:(int32_t)fps {
     try {
         _cppRefHandle.get()->setFPS(::djinni::I32::toCpp(fps));

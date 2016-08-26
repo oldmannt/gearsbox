@@ -26,6 +26,9 @@ public:
     virtual bool addView(const std::shared_ptr<ViewGen> & view) = 0;
 
     virtual void removeView(const std::string & id) = 0;
+
+    /**view controller in ios, activity in android */
+    virtual void showViewController(const std::string & id, bool animated) = 0;
 };
 
 }  // namespace gearsbox

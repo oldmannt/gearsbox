@@ -83,7 +83,8 @@ static bool open_video(AVFormatContext *oc, AVCodec *codec, OutputStream *ost, A
 /* Add an output stream. */
 static bool add_stream(OutputStream *ost, AVFormatContext *format_context,
                        AVCodec **codec,
-                       enum AVCodecID codec_id, int fps, enum AVPixelFormat pix_fmt, int width, int height)
+                       enum AVCodecID codec_id, int fps, enum AVPixelFormat pix_fmt,
+                       int width, int height, int bitrate)
 {
     AVCodecContext *av_codec_context;
     int i;
@@ -138,7 +139,7 @@ static bool add_stream(OutputStream *ost, AVFormatContext *format_context,
         case AVMEDIA_TYPE_VIDEO:
             av_codec_context->codec_id = codec_id;
             
-            av_codec_context->bit_rate = 400000;
+            av_codec_context->bit_rate = bitrate;
             /* Resolution must be a multiple of two. */
             av_codec_context->width    = width;
             av_codec_context->height   = height;
@@ -194,7 +195,7 @@ bool VideoEncoderImp_ffmp4::initialize(const std::string & filepath, int32_t fps
     /* Add the audio and video streams using the default format codecs
      * and initialize the codecs. */
     if (fmt->video_codec != AV_CODEC_ID_NONE) {
-        add_stream(&m_video_steam, m_format_ctx, &video_codec, fmt->video_codec, fps, AV_PIX_FMT_YUV420P, width, height);
+        add_stream(&m_video_steam, m_format_ctx, &video_codec, fmt->video_codec, fps, AV_PIX_FMT_YUV420P, width, height, bitrate);
         have_video = 1;
         encode_video = 1;
     }
@@ -257,40 +258,7 @@ static int write_frame(AVFormatContext *fmt_ctx, const AVRational *time_base, AV
     return av_interleaved_write_frame(fmt_ctx, pkt);
 }
 
-int flush_encoder(AVFormatContext *fmt_ctx,unsigned int stream_index)
-{
-    int ret;
-    int got_frame;
-    AVPacket enc_pkt;
-    if (!(fmt_ctx->streams[stream_index]->codec->codec->capabilities &
-          CODEC_CAP_DELAY))
-        return 0;
-    
-    while (true) {
-        enc_pkt.data = NULL;
-        enc_pkt.size = 0;
-        av_init_packet(&enc_pkt);
-        ret = avcodec_encode_video2 (fmt_ctx->streams[stream_index]->codec, &enc_pkt,
-                                     NULL, &got_frame);
-        av_frame_free(NULL);
-        if (ret < 0)
-            break;
-        if (!got_frame){
-            ret=0;
-            break;
-        }
-        G_LOG_FC(LOG_ERROR,"Flush Encoder: Succeed to encode 1 frame!\tsize:%5d",enc_pkt.size);
-        /* mux encoded frame */
-        ret = av_write_frame(fmt_ctx, &enc_pkt);
-        if (ret < 0)
-            break;
-    }
-    if (ret<0)
-        G_LOG_FC(LOG_ERROR,"Flushing encoder failed");
-    return ret;
-}
-
-static bool write_video_frame(AVFormatContext *format_context, OutputStream *output_stream)
+static int write_video_frame(AVFormatContext *format_context, OutputStream *output_stream)
 {
     int ret;
     AVCodecContext *codec_context;
@@ -308,7 +276,7 @@ static bool write_video_frame(AVFormatContext *format_context, OutputStream *out
     ret = avcodec_encode_video2(codec_context, &pkt, frame, &got_packet);
     if (ret < 0) {
         G_LOG_FC(LOG_ERROR, "Error encoding video frame: %s", av_err2str(ret));
-        return false;
+        return ret;
     }
     
     if (got_packet) {
@@ -319,9 +287,50 @@ static bool write_video_frame(AVFormatContext *format_context, OutputStream *out
     
     if (ret < 0) {
         G_LOG_FC(LOG_ERROR,"Error while writing video frame: %s", av_err2str(ret));
-        return false;
+        return ret;
     }
+    return got_packet;
+}
+
+int flush_encoder(AVFormatContext *fmt_ctx,OutputStream* ost)
+{
+    int i =100;
+    AVFrame* save_frame = ost->frame;
+    ost->frame = NULL;
+    while (true && --i) {
+        if (write_video_frame(fmt_ctx, ost)<=0){
+            break;
+        }
+    }
+    
+    ost->frame = save_frame;
     return true;
+    int ret = 0;
+    int got_packet = 0;
+    AVPacket enc_pkt = {0};
+    
+    if (!(ost->enc->codec->capabilities & CODEC_CAP_DELAY))
+        return 0;
+
+    while (true) {
+        av_init_packet(&enc_pkt);
+        ret = avcodec_encode_video2 (ost->st->codec, &enc_pkt, NULL, &got_packet);
+        av_frame_free(NULL);
+        if (ret < 0)
+            break;
+        if (!got_packet){
+            ret=0;
+            break;
+        }
+        G_LOG_FC(LOG_INFO,"Flush Encoder: Succeed to encode 1 frame!\tsize:%5d",enc_pkt.size);
+        // mux encoded frame
+        ret = av_write_frame(fmt_ctx, &enc_pkt);
+        if (ret < 0)
+            break;
+    }
+    if (ret<0)
+        G_LOG_FC(LOG_ERROR,"Flushing encoder failed");
+    return ret;
 }
 
 void VideoEncoderImp_ffmp4::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
@@ -353,7 +362,7 @@ static void close_stream(AVFormatContext *format_ctx, OutputStream *output_strea
 
 void VideoEncoderImp_ffmp4::saveNRelease(){
     CHECK_RT(m_format_ctx!=nullptr,"needt to initialize");
-    //flush_encoder(m_format_ctx, 0);
+    flush_encoder(m_format_ctx,&m_video_steam);
     av_write_trailer(m_format_ctx);
     
     close_stream(m_format_ctx, &m_video_steam);

@@ -20,6 +20,8 @@ public:
 
     virtual void setFilePath(const std::string & file) = 0;
 
+    virtual std::string getFilePath() = 0;
+
     virtual void setFPS(int32_t fps) = 0;
 
     virtual void setBitRate(int32_t rate) = 0;

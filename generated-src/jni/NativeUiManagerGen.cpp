@@ -80,4 +80,14 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_UiManagerGen_00024CppProxy_native
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_UiManagerGen_00024CppProxy_native_1showViewController(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jstring j_id, jboolean j_animated)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::UiManagerGen>(nativeRef);
+        ref->showViewController(::djinni::String::toCpp(jniEnv, j_id),
+                                ::djinni::Bool::toCpp(jniEnv, j_animated));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
 }  // namespace djinni_generated

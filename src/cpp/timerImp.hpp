@@ -11,7 +11,7 @@
 
 #include "timer_gen.hpp"
 #include "task_excuser_gen.hpp"
-#include "task_info.hpp"
+#include "task_info_gen.hpp"
 #include "uv.h"
 
 namespace gearsbox {
@@ -40,7 +40,7 @@ private:
     bool m_running;
     std::shared_ptr<TaskExcuserGen> m_handler;
     uv_timer_t* m_timer;
-    TaskInfo m_handleinfo;
+    std::shared_ptr<TaskInfoGen> m_handleinfo;
 };
     
 }

@@ -74,6 +74,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (void)showViewController:(nonnull NSString *)id
+                  animated:(BOOL)animated {
+    try {
+        _cppRefHandle.get()->showViewController(::djinni::String::toCpp(id),
+                                                ::djinni::Bool::toCpp(animated));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 namespace djinni_generated {
 
 auto UiManagerGen::toCpp(ObjcType objc) -> CppType

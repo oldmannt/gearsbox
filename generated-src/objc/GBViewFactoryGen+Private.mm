@@ -40,6 +40,13 @@ public:
             return ::djinni::Bool::toCpp(r);
         }
     }
+    void showViewController(const std::string & c_id, bool c_animated) override
+    {
+        @autoreleasepool {
+            [Handle::get() showViewController:(::djinni::String::fromCpp(c_id))
+                                     animated:(::djinni::Bool::fromCpp(c_animated))];
+        }
+    }
 };
 
 }  // namespace djinni_generated

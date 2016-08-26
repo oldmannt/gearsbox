@@ -12,6 +12,8 @@
 #include "camera_controller_gen.hpp"
 #include "instance_getter_gen.hpp"
 #include "video_encoder_imp_ffmp4.hpp"
+#include "task_info_gen.hpp"
+#include "uv.h"
 
 using namespace gearsbox;
 
@@ -39,11 +41,14 @@ void VideoWriterImp::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
     m_video_encoder->encodeFrame(frame);
 }
 
-void VideoWriterImp::excuse(const TaskInfo & info){
+void VideoWriterImp::excuse(const std::shared_ptr<TaskInfoGen> & info){
+    static int frame = 0;
+    G_LOG_C(LOG_INFO,"VideoWriterImp::excuse frame:%d %d",++frame,uv_now(uv_default_loop()));
     this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
 }
 
 void VideoWriterImp::start(int64_t interval){
+    G_LOG_C(LOG_INFO,"VideoWriterImp::start %d",uv_now(uv_default_loop()));
     if (m_writting_timer==nullptr){
         m_writting_timer = TimerGen::create((int64_t)this, interval, -1, shared_from_this());
     }
@@ -51,6 +56,9 @@ void VideoWriterImp::start(int64_t interval){
         m_writting_timer->start();
     else
         m_writting_timer->setInterval(interval);
+    
+    // encode the first frame
+    this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
 }
 
 void VideoWriterImp::pause(){
@@ -72,12 +80,17 @@ bool VideoWriterImp::isRunning(){
 }
 
 void VideoWriterImp::saveNRlease(){
-    
     CHECK_RTF(m_video_encoder!=nullptr, "saveNRlease m_video_encoder null");
-    m_video_encoder->saveNRelease();
+    if (m_video_encoder){
+        m_video_encoder->saveNRelease();
+        m_video_encoder = nullptr;
+    }
     m_init = false;
-    m_writting_timer->stop();
-    m_writting_timer = nullptr;
+    if (m_writting_timer){
+        m_writting_timer->stop();
+        m_writting_timer = nullptr;
+
+    }
 }
 
 bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){

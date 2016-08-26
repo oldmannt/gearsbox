@@ -43,10 +43,12 @@ public:
     }
     
     //TaskExcuserGen
-    virtual void excuse(const TaskInfo & info);
+    virtual void excuse(const std::shared_ptr<TaskInfoGen> & info);
     
     //VideoWriterGen
     virtual void setFilePath(const std::string & file);
+    
+    virtual std::string getFilePath(){return m_file_path;}
     
     virtual void setFPS(int32_t fps);
     

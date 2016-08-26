@@ -291,6 +291,35 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/CrashHandlerGen;'
 ---
+name: gb_file_info_gen
+typedef: 'interface +o +j'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::FileInfoGen'
+  header: '"file_info_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBFileInfoGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBFileInfoGen'
+  header: '"GBFileInfoGen.h"'
+objcpp:
+  translator: '::djinni_generated::FileInfoGen'
+  header: '"GBFileInfoGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.FileInfoGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.FileInfoGen'
+jni:
+  translator: '::djinni_generated::NativeFileInfoGen'
+  header: '"NativeFileInfoGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/FileInfoGen;'
+---
 name: gb_http_request_gen
 typedef: 'interface +c'
 params: []
@@ -494,34 +523,34 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/TaskExcuserGen;'
 ---
-name: gb_task_info
-typedef: 'record'
+name: gb_task_info_gen
+typedef: 'interface +c +o +j'
 params: []
 prefix: gb_
 cpp:
-  typename: '::gearsbox::TaskInfo'
-  header: '"task_info.hpp"'
+  typename: '::gearsbox::TaskInfoGen'
+  header: '"task_info_gen.hpp"'
   byValue: false
 objc:
-  typename: 'GBTaskInfo'
+  typename: 'GBTaskInfoGen'
   pointer: true
   hash: '%s.hash'
-  boxed: 'GBTaskInfo'
-  header: '"GBTaskInfo.h"'
+  boxed: 'GBTaskInfoGen'
+  header: '"GBTaskInfoGen.h"'
 objcpp:
-  translator: '::djinni_generated::TaskInfo'
-  header: '"GBTaskInfo+Private.h"'
+  translator: '::djinni_generated::TaskInfoGen'
+  header: '"GBTaskInfoGen+Private.h"'
 java:
   reference: true
-  typename: 'dyno.fun.gearsbox.TaskInfo'
+  typename: 'dyno.fun.gearsbox.TaskInfoGen'
   generic: true
   hash: '%s.hashCode()'
-  boxed: 'dyno.fun.gearsbox.TaskInfo'
+  boxed: 'dyno.fun.gearsbox.TaskInfoGen'
 jni:
-  translator: '::djinni_generated::NativeTaskInfo'
-  header: '"NativeTaskInfo.hpp"'
+  translator: '::djinni_generated::NativeTaskInfoGen'
+  header: '"NativeTaskInfoGen.hpp"'
   typename: jobject
-  typeSignature: 'Ldyno/fun/gearsbox/TaskInfo;'
+  typeSignature: 'Ldyno/fun/gearsbox/TaskInfoGen;'
 ---
 name: gb_task_manager_gen
 typedef: 'interface +c'
@@ -841,6 +870,35 @@ jni:
   header: '"NativeVideoFrameGen.hpp"'
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/VideoFrameGen;'
+---
+name: gb_video_info_gen
+typedef: 'interface +c'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::VideoInfoGen'
+  header: '"video_info_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBVideoInfoGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBVideoInfoGen'
+  header: '"GBVideoInfoGen.h"'
+objcpp:
+  translator: '::djinni_generated::VideoInfoGen'
+  header: '"GBVideoInfoGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.VideoInfoGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.VideoInfoGen'
+jni:
+  translator: '::djinni_generated::NativeVideoInfoGen'
+  header: '"NativeVideoInfoGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/VideoInfoGen;'
 ---
 name: gb_video_writer_gen
 typedef: 'interface +c'

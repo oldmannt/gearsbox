@@ -7,6 +7,7 @@
 //
 
 #include "TimerImp.hpp"
+#include "task_manager_gen.hpp"
 #include "ILog.h"
 #include <unordered_map>
 
@@ -41,11 +42,11 @@ m_timePassed(0),
 m_repeatTimes(repeat),
 m_repeated(0),
 m_running(false),
-m_handler(handler),
-m_handleinfo(task_id, interval, repeat, repeat){
+m_handler(handler){
     m_timer = new uv_timer_t();
     m_timer->data = this;
     uv_timer_init(uv_default_loop(), m_timer);
+    m_handleinfo = TaskManagerGen::create(task_id, interval, repeat);
 }
 
 TimerImp::~TimerImp() {
@@ -59,9 +60,8 @@ void TimerImp::timerCallback(){
         return;
     ++m_repeated;
     
-    m_handleinfo.delay = m_interval;
-    m_handleinfo.elapsed = m_timePassed;
-    m_handleinfo.repeated = m_repeated;
+    m_handleinfo->setDelay(m_interval);
+    m_handleinfo->setRepeated(m_repeated);
     if (m_handler)
         m_handler->excuse(m_handleinfo);
     
@@ -82,6 +82,7 @@ bool TimerImp::start(){
     m_timePassed = 0;
     m_repeated = 0;
     m_running = true;
+    m_handleinfo->setAssignTick(uv_now(uv_default_loop()));
     return true;
 }
 

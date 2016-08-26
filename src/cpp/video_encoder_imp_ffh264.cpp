@@ -41,6 +41,12 @@ bool VideoEncoderImp_ffh264::initialize(const std::string & filepath, int32_t fp
     m_video_stream->time_base.num = 1;
     m_video_stream->time_base.den = 15;
     
+    m_video_stream->codecpar->codec_type;
+    m_video_stream->nb_frames;
+    m_video_stream->time_base;
+    m_video_stream->codec->width;
+    m_video_stream->codec->height;
+    
     // Param that must set
     AVCodecContext* av_codec_context = m_video_stream->codec;
     av_codec_context->codec_id = fmt->video_codec;

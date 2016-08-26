@@ -3,15 +3,17 @@
 
 #pragma once
 
+#include <memory>
+
 namespace gearsbox {
 
-struct TaskInfo;
+class TaskInfoGen;
 
 class TaskExcuserGen {
 public:
     virtual ~TaskExcuserGen() {}
 
-    virtual void excuse(const TaskInfo & info) = 0;
+    virtual void excuse(const std::shared_ptr<TaskInfoGen> & info) = 0;
 };
 
 }  // namespace gearsbox

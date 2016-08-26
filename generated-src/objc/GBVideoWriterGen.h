@@ -13,6 +13,8 @@
 
 - (void)setFilePath:(nonnull NSString *)file;
 
+- (nonnull NSString *)getFilePath;
+
 - (void)setFPS:(int32_t)fps;
 
 - (void)setBitRate:(int32_t)rate;

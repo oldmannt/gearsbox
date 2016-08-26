@@ -3,6 +3,9 @@
 
 #include "NativePlatformUtilityGen.hpp"  // my header
 #include "Marshal.hpp"
+#include "NativeFileInfoGen.hpp"
+#include "NativeLangType.hpp"
+#include "NativeVideoFrameGen.hpp"
 
 namespace djinni_generated {
 
@@ -21,6 +24,14 @@ void NativePlatformUtilityGen::JavaProxy::endEniting(bool c_force) {
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_endEniting,
                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_force)));
     ::djinni::jniExceptionCheck(jniEnv);
+}
+::gearsbox::LangType NativePlatformUtilityGen::JavaProxy::getLanguage() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_getLanguage);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni_generated::NativeLangType::toCpp(jniEnv, jret);
 }
 std::string NativePlatformUtilityGen::JavaProxy::getHomeDirectory() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
@@ -56,6 +67,59 @@ std::string NativePlatformUtilityGen::JavaProxy::getPackFileToHomePath(const std
                                                   ::djinni::get(::djinni::String::fromCpp(jniEnv, c_file)));
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::String::toCpp(jniEnv, jret);
+}
+std::unordered_set<std::string> NativePlatformUtilityGen::JavaProxy::getFilesFromPathBySuffix(const std::string & c_path, const std::string & c_suffix) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_getFilesFromPathBySuffix,
+                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_path)),
+                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_suffix)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::Set<::djinni::String>::toCpp(jniEnv, jret);
+}
+std::string NativePlatformUtilityGen::JavaProxy::getSubDirInHome(const std::string & c_sub_dir) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getSubDirInHome,
+                                                  ::djinni::get(::djinni::String::fromCpp(jniEnv, c_sub_dir)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::String::toCpp(jniEnv, jret);
+}
+std::string NativePlatformUtilityGen::JavaProxy::getFileNameFromPath(const std::string & c_path) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getFileNameFromPath,
+                                                  ::djinni::get(::djinni::String::fromCpp(jniEnv, c_path)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::String::toCpp(jniEnv, jret);
+}
+std::shared_ptr<::gearsbox::FileInfoGen> NativePlatformUtilityGen::JavaProxy::getFileInfo(const std::string & c_path_name) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_getFileInfo,
+                                         ::djinni::get(::djinni::String::fromCpp(jniEnv, c_path_name)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni_generated::NativeFileInfoGen::toCpp(jniEnv, jret);
+}
+void NativePlatformUtilityGen::JavaProxy::playVideo(const std::string & c_file) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_playVideo,
+                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c_file)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+std::shared_ptr<::gearsbox::VideoFrameGen> NativePlatformUtilityGen::JavaProxy::createVideoFrame() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_createVideoFrame);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni_generated::NativeVideoFrameGen::toCpp(jniEnv, jret);
 }
 
 }  // namespace djinni_generated

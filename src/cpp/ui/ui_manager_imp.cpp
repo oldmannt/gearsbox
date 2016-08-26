@@ -12,6 +12,7 @@
 #include "view_factory_gen.hpp"
 #include "view_gen.hpp"
 #include "ILog.h"
+#include "macro.h"
 
 using namespace gearsbox;
 
@@ -77,6 +78,11 @@ void UiManagerImp::removeView(const std::string &id){
         G_LOG_FC(LOG_ERROR, "id dont' exist, nothing to remove");
     }
     m_mapView.erase(it);
+}
+
+void UiManagerImp::showViewController(const std::string & id, bool animated){
+    CHECK_RT(m_viewFactory!=nullptr,"m_viewFactory null");
+    m_viewFactory->showViewController(id, animated);
 }
 
 std::shared_ptr<ViewGen> UiManagerImp::getView(const std::string &id){

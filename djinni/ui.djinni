@@ -149,6 +149,8 @@ view_factory_gen = interface +j +o{
 	createView(conf:view_conf):view_gen;
 	createViewById(id:string, type:view_type):view_gen;
 	injectView(view:view_gen):bool;
+
+	showViewController(id:string, animated:bool);
 }
 
 ui_manager_gen = interface +c{
@@ -158,6 +160,8 @@ ui_manager_gen = interface +c{
 	getView(id:string):view_gen;
 	addView(view:view_gen):bool;
 	removeView(id:string);
+	#view controller in ios, activity in android
+	showViewController(id:string, animated:bool);
 }
 
 typer_convertor_dummy = interface +j +o {

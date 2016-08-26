@@ -33,14 +33,14 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
-        void excuse(const ::gearsbox::TaskInfo & info) override;
+        void excuse(const std::shared_ptr<::gearsbox::TaskInfoGen> & info) override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::TaskExcuserGen, ::djinni_generated::NativeTaskExcuserGen>;
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/TaskExcuserGen") };
-    const jmethodID method_excuse { ::djinni::jniGetMethodID(clazz.get(), "excuse", "(Ldyno/fun/gearsbox/TaskInfo;)V") };
+    const jmethodID method_excuse { ::djinni::jniGetMethodID(clazz.get(), "excuse", "(Ldyno/fun/gearsbox/TaskInfoGen;)V") };
 };
 
 }  // namespace djinni_generated

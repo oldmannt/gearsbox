@@ -6,7 +6,7 @@
 #import "DJICppWrapperCache+Private.h"
 #import "DJIError.h"
 #import "DJIObjcWrapperCache+Private.h"
-#import "GBTaskInfo+Private.h"
+#import "GBTaskInfoGen+Private.h"
 #include <exception>
 #include <utility>
 
@@ -30,9 +30,9 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-- (void)excuse:(nonnull GBTaskInfo *)info {
+- (void)excuse:(nullable id<GBTaskInfoGen>)info {
     try {
-        _cppRefHandle.get()->excuse(::djinni_generated::TaskInfo::toCpp(info));
+        _cppRefHandle.get()->excuse(::djinni_generated::TaskInfoGen::toCpp(info));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -44,10 +44,10 @@ class TaskExcuserGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    void excuse(const ::gearsbox::TaskInfo & c_info) override
+    void excuse(const std::shared_ptr<::gearsbox::TaskInfoGen> & c_info) override
     {
         @autoreleasepool {
-            [Handle::get() excuse:(::djinni_generated::TaskInfo::fromCpp(c_info))];
+            [Handle::get() excuse:(::djinni_generated::TaskInfoGen::fromCpp(c_info))];
         }
     }
 };

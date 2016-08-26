@@ -8,11 +8,25 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 public class GBPlatformUtilityImp: GBPlatformUtilityGen {
+    static let sharedInstance = GBPlatformUtilityImp()
+    
+    private init(){}
     
     @objc public func endEniting(force: Bool){
         UIApplication.sharedApplication().keyWindow?.endEditing(force)
+    }
+    
+    @objc public func getLanguage() -> GBLangType{
+        let strlangId = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
+        if strlangId.rangeOfString("zh")==nil {
+            return GBLangType.LANGENG
+        }
+        else{
+            return GBLangType.LANGCHS
+        }
     }
     
     /**ios home directory */
@@ -65,4 +79,84 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         
         return doc_path
     }
+    
+    @objc public func getFilesFromPathBySuffix(path: String, suffix: String) -> Set<String>{
+        var rt:Set<String> = Set<String>()
+        do {
+            let url:NSURL = NSURL(fileURLWithPath:path)
+            // Get the directory contents urls (including subfolders urls)
+            let directoryContents = try NSFileManager.defaultManager().contentsOfDirectoryAtURL( url, includingPropertiesForKeys: nil, options: [])
+            
+            // if you want to filter the directory contents you can do like this:
+            let files = directoryContents.filter{ $0.pathExtension == suffix }
+        
+            for item in files {
+                rt.insert(item.path!)
+            }
+            return rt
+            
+        } catch let error as NSError {
+            GBLogGen.instance()?.logerrf("getFilesFromPathBySuffix path:\(path) suffix:\(suffix) failed err:\(error)")
+        }
+        
+        return rt
+    }
+    
+    @objc public func getSubDirInHome(subDir: String) -> String{
+        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
+        let documentsDirectory: AnyObject = paths[0]
+        let sub_dir = documentsDirectory.stringByAppendingPathComponent(subDir)
+        
+        if NSFileManager.defaultManager().fileExistsAtPath(sub_dir){
+            return sub_dir
+        }
+        do {
+            try NSFileManager.defaultManager().createDirectoryAtPath(sub_dir, withIntermediateDirectories: false, attributes: nil)
+        } catch let error as NSError {
+            GBLogGen.instance()?.logerrf("createPathInHome path:\(sub_dir) failed err:\(error)")
+            return ""
+        }
+        
+        return sub_dir
+    }
+    
+    @objc public func getFileNameFromPath(path: String) -> String{
+        let theFileName = (path as NSString).lastPathComponent
+        return theFileName
+    }
+    
+    @objc public func getFileInfo(pathName: String) -> GBFileInfoGen?{
+        let info = GBFileInfoImp()
+        if info.initialize(pathName){
+            return info
+        }
+        
+        return nil
+    }
+    
+    @objc public func playVideo(file: String){
+        let player = AVPlayerViewController()
+        let url:NSURL = NSURL(fileURLWithPath:file)
+        player.player = AVPlayer(URL: url)
+        
+        getTopViewController()!.presentViewController(player, animated: false, completion: nil)
+    }
+    
+    @objc public func createVideoFrame() -> GBVideoFrameGen?{
+        let rt:GBVideoFrameGen = GBVideoFrameImp()
+        return rt
+    }
+    
+    func getTopViewController() -> UIViewController? {
+        var top = UIApplication.sharedApplication().keyWindow?.rootViewController
+        while let presentedViewController = top!.presentedViewController {
+            top = presentedViewController
+        }
+        if nil==top{
+            GBLogGen.instance()?.logerrf("getTopViewController null")
+            return nil
+        }
+        return top
+    }
+    
 }

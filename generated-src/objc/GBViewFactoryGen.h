@@ -16,4 +16,7 @@
 
 - (BOOL)injectView:(nullable id<GBViewGen>)view;
 
+- (void)showViewController:(nonnull NSString *)id
+                  animated:(BOOL)animated;
+
 @end

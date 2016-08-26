@@ -34,10 +34,17 @@ private:
         ~JavaProxy();
 
         void endEniting(bool force) override;
+        ::gearsbox::LangType getLanguage() override;
         std::string getHomeDirectory() override;
         std::string getPackFilePath(const std::string & file) override;
         std::string getPackFileBuffer(const std::string & file) override;
         std::string getPackFileToHomePath(const std::string & file) override;
+        std::unordered_set<std::string> getFilesFromPathBySuffix(const std::string & path, const std::string & suffix) override;
+        std::string getSubDirInHome(const std::string & sub_dir) override;
+        std::string getFileNameFromPath(const std::string & path) override;
+        std::shared_ptr<::gearsbox::FileInfoGen> getFileInfo(const std::string & path_name) override;
+        void playVideo(const std::string & file) override;
+        std::shared_ptr<::gearsbox::VideoFrameGen> createVideoFrame() override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::PlatformUtilityGen, ::djinni_generated::NativePlatformUtilityGen>;
@@ -45,10 +52,17 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/PlatformUtilityGen") };
     const jmethodID method_endEniting { ::djinni::jniGetMethodID(clazz.get(), "endEniting", "(Z)V") };
+    const jmethodID method_getLanguage { ::djinni::jniGetMethodID(clazz.get(), "getLanguage", "()Ldyno/fun/gearsbox/LangType;") };
     const jmethodID method_getHomeDirectory { ::djinni::jniGetMethodID(clazz.get(), "getHomeDirectory", "()Ljava/lang/String;") };
     const jmethodID method_getPackFilePath { ::djinni::jniGetMethodID(clazz.get(), "getPackFilePath", "(Ljava/lang/String;)Ljava/lang/String;") };
     const jmethodID method_getPackFileBuffer { ::djinni::jniGetMethodID(clazz.get(), "getPackFileBuffer", "(Ljava/lang/String;)Ljava/lang/String;") };
     const jmethodID method_getPackFileToHomePath { ::djinni::jniGetMethodID(clazz.get(), "getPackFileToHomePath", "(Ljava/lang/String;)Ljava/lang/String;") };
+    const jmethodID method_getFilesFromPathBySuffix { ::djinni::jniGetMethodID(clazz.get(), "getFilesFromPathBySuffix", "(Ljava/lang/String;Ljava/lang/String;)Ljava/util/HashSet;") };
+    const jmethodID method_getSubDirInHome { ::djinni::jniGetMethodID(clazz.get(), "getSubDirInHome", "(Ljava/lang/String;)Ljava/lang/String;") };
+    const jmethodID method_getFileNameFromPath { ::djinni::jniGetMethodID(clazz.get(), "getFileNameFromPath", "(Ljava/lang/String;)Ljava/lang/String;") };
+    const jmethodID method_getFileInfo { ::djinni::jniGetMethodID(clazz.get(), "getFileInfo", "(Ljava/lang/String;)Ldyno/fun/gearsbox/FileInfoGen;") };
+    const jmethodID method_playVideo { ::djinni::jniGetMethodID(clazz.get(), "playVideo", "(Ljava/lang/String;)V") };
+    const jmethodID method_createVideoFrame { ::djinni::jniGetMethodID(clazz.get(), "createVideoFrame", "()Ldyno/fun/gearsbox/VideoFrameGen;") };
 };
 
 }  // namespace djinni_generated

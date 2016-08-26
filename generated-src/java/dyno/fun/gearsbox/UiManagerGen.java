@@ -16,6 +16,9 @@ public abstract class UiManagerGen {
 
     public abstract void removeView(String id);
 
+    /**view controller in ios, activity in android */
+    public abstract void showViewController(String id, boolean animated);
+
     public static native UiManagerGen instance();
 
     private static final class CppProxy extends UiManagerGen
@@ -80,5 +83,13 @@ public abstract class UiManagerGen {
             native_removeView(this.nativeRef, id);
         }
         private native void native_removeView(long _nativeRef, String id);
+
+        @Override
+        public void showViewController(String id, boolean animated)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_showViewController(this.nativeRef, id, animated);
+        }
+        private native void native_showViewController(long _nativeRef, String id, boolean animated);
     }
 }

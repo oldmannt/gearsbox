@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class VideoWriterGen {
     public abstract void setFilePath(String file);
 
+    public abstract String getFilePath();
+
     public abstract void setFPS(int fps);
 
     public abstract void setBitRate(int rate);
@@ -58,6 +60,14 @@ public abstract class VideoWriterGen {
             native_setFilePath(this.nativeRef, file);
         }
         private native void native_setFilePath(long _nativeRef, String file);
+
+        @Override
+        public String getFilePath()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getFilePath(this.nativeRef);
+        }
+        private native String native_getFilePath(long _nativeRef);
 
         @Override
         public void setFPS(int fps)

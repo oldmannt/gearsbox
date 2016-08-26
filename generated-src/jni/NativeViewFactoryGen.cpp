@@ -45,5 +45,14 @@ bool NativeViewFactoryGen::JavaProxy::injectView(const std::shared_ptr<::gearsbo
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::Bool::toCpp(jniEnv, jret);
 }
+void NativeViewFactoryGen::JavaProxy::showViewController(const std::string & c_id, bool c_animated) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeViewFactoryGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_showViewController,
+                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c_id)),
+                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_animated)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 
 }  // namespace djinni_generated

@@ -8,12 +8,13 @@
 
 #include <fstream>
 
-#include "ilog.h"
+#include "macro.h"
 #include "utils.hpp"
 
 using namespace gearsbox;
 
 bool gearsbox::readJson(const std::string& param, Json::Value& config){
+    CHECK_RTF(param.size()>0, "param size 0");
     Json::Reader reader;
     const char* subfix = param.c_str()+param.size()-strlen(".json");
     if (0==strcmp(subfix, ".json")){

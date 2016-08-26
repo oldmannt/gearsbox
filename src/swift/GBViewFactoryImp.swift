@@ -64,6 +64,17 @@ class GBViewFactoryImp: GBViewFactoryGen {
         return createView(view_conf)
     }
     
+    @objc internal func showViewController(id: String, animated: Bool){
+        let current_vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+        if nil==current_vc{
+            GBLogGen.instance()?.logerrf("showViewController current_vc null")
+            return
+        }
+        
+        let next_vc = current_vc?.storyboard?.instantiateViewControllerWithIdentifier(id)
+        current_vc?.presentViewController(next_vc!, animated: false, completion: nil)
+    }
+    
     internal func addIOSViewToUIMgr(view:UIView, id:String, constroller: ViewController){
         let view_imp = GBViewImp(id:id, view: view, constroller: constroller)
         GBUiManagerGen.instance()?.addView(view_imp)

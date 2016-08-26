@@ -7,7 +7,7 @@
 #import "DJIError.h"
 #import "DJIMarshal+Private.h"
 #import "GBTaskExcuserGen+Private.h"
-#import "GBTaskInfo+Private.h"
+#import "GBTaskInfoGen+Private.h"
 #import "GBTaskManagerGen+Private.h"
 #include <exception>
 #include <utility>
@@ -39,6 +39,17 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
++ (nullable id<GBTaskInfoGen>)create:(int64_t)taskId
+                               delay:(int64_t)delay
+                            repeated:(int32_t)repeated {
+    try {
+        auto r = ::gearsbox::TaskManagerGen::create(::djinni::I64::toCpp(taskId),
+                                                    ::djinni::I64::toCpp(delay),
+                                                    ::djinni::I32::toCpp(repeated));
+        return ::djinni_generated::TaskInfoGen::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 - (void)addTask:(int64_t)taskId
           delay:(int64_t)delay
        repeated:(int64_t)repeated
@@ -51,10 +62,18 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (void)addTaskInfo:(nonnull GBTaskInfo *)task
+- (void)addTaskI:(int64_t)taskId
+            task:(nullable id<GBTaskExcuserGen>)task {
+    try {
+        _cppRefHandle.get()->addTaskI(::djinni::I64::toCpp(taskId),
+                                      ::djinni_generated::TaskExcuserGen::toCpp(task));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)addTaskInfo:(nullable id<GBTaskInfoGen>)task
         taskExcuser:(nullable id<GBTaskExcuserGen>)taskExcuser {
     try {
-        _cppRefHandle.get()->addTaskInfo(::djinni_generated::TaskInfo::toCpp(task),
+        _cppRefHandle.get()->addTaskInfo(::djinni_generated::TaskInfoGen::toCpp(task),
                                          ::djinni_generated::TaskExcuserGen::toCpp(taskExcuser));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -62,6 +81,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (void)addTaskExcuser:(nullable id<GBTaskExcuserGen>)task {
     try {
         _cppRefHandle.get()->addTaskExcuser(::djinni_generated::TaskExcuserGen::toCpp(task));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)removeTask:(int64_t)taskId {
+    try {
+        _cppRefHandle.get()->removeTask(::djinni::I64::toCpp(taskId));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

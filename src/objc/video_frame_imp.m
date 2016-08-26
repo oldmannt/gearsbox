@@ -13,6 +13,7 @@
 @synthesize m_size;
 @synthesize m_width;
 @synthesize m_height;
+@synthesize m_linesize;
 
 -(id)init{
     m_data = 0;
@@ -38,8 +39,33 @@
     return m_size;
 }
 
+- (int32_t)getLineSize{
+    return m_linesize;
+}
+
+- (void)setData:(int64_t)data{
+    m_data = data;
+}
+
+- (void)setWidth:(int32_t)width{
+    m_width = width;
+}
+
+- (void)setHeight:(int32_t)height{
+    m_height = height;
+}
+
+- (void)setSize:(int64_t)size{
+    m_size = size;
+}
+
+- (void)setLineSize:(int32_t)linesize{
+    m_linesize = linesize;
+}
+
 - (void)dealloc{
     void* ptr = (void*)m_data;
     free(ptr);
 }
+
 @end

@@ -3,7 +3,6 @@
 
 package dyno.fun.gearsbox;
 
-/**@import "ui.djinni" */
 public enum CameraFlash {
     ON,
     OFF,

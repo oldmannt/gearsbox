@@ -12,11 +12,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class TaskManagerGen {
     public abstract void addTask(long taskId, long delay, long repeated, TaskExcuserGen task);
 
-    public abstract void addTaskInfo(TaskInfo task, TaskExcuserGen taskExcuser);
+    public abstract void addTaskI(long taskId, TaskExcuserGen task);
+
+    public abstract void addTaskInfo(TaskInfoGen task, TaskExcuserGen taskExcuser);
 
     public abstract void addTaskExcuser(TaskExcuserGen task);
 
+    public abstract void removeTask(long taskId);
+
     public static native TaskManagerGen instance();
+
+    public static native TaskInfoGen create(long taskId, long delay, int repeated);
 
     private static final class CppProxy extends TaskManagerGen
     {
@@ -50,12 +56,20 @@ public abstract class TaskManagerGen {
         private native void native_addTask(long _nativeRef, long taskId, long delay, long repeated, TaskExcuserGen task);
 
         @Override
-        public void addTaskInfo(TaskInfo task, TaskExcuserGen taskExcuser)
+        public void addTaskI(long taskId, TaskExcuserGen task)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_addTaskI(this.nativeRef, taskId, task);
+        }
+        private native void native_addTaskI(long _nativeRef, long taskId, TaskExcuserGen task);
+
+        @Override
+        public void addTaskInfo(TaskInfoGen task, TaskExcuserGen taskExcuser)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
             native_addTaskInfo(this.nativeRef, task, taskExcuser);
         }
-        private native void native_addTaskInfo(long _nativeRef, TaskInfo task, TaskExcuserGen taskExcuser);
+        private native void native_addTaskInfo(long _nativeRef, TaskInfoGen task, TaskExcuserGen taskExcuser);
 
         @Override
         public void addTaskExcuser(TaskExcuserGen task)
@@ -64,5 +78,13 @@ public abstract class TaskManagerGen {
             native_addTaskExcuser(this.nativeRef, task);
         }
         private native void native_addTaskExcuser(long _nativeRef, TaskExcuserGen task);
+
+        @Override
+        public void removeTask(long taskId)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_removeTask(this.nativeRef, taskId);
+        }
+        private native void native_removeTask(long _nativeRef, long taskId);
     }
 }

@@ -196,7 +196,7 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
         //[[previewLayer connection] setVideoOrientation:AVCaptureVideoOrientationPortrait]; // 设置视频的朝向
         
         m_stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-        m_captureSession.sessionPreset = AVCaptureSessionPreset640x480
+        m_captureSession.sessionPreset = AVCaptureSessionPreset1280x720
         
         if m_captureSession.canAddOutput(m_stillImageOutput) {
             m_captureSession.addOutput(m_stillImageOutput)
@@ -238,7 +238,7 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
     private var m_cmbuffer:CMSampleBuffer?
     private var m_isfront:Bool = false
     private var m_flash:GBCameraFlash = GBCameraFlash.Auto
-    private var m_quality:GBCameraQuality = GBCameraQuality.P480
+    private var m_quality:GBCameraQuality = GBCameraQuality.P720
     private var m_zoom: Float32 = 0.0
     private var m_iso: Int32 = 0
     private var m_shutter: Int32 = 0

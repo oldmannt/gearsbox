@@ -4,6 +4,7 @@
 package dyno.fun.gearsbox;
 
 public enum CameraFlash {
+    NONE,
     ON,
     OFF,
     AUTO,

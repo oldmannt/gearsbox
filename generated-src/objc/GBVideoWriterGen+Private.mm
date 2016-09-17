@@ -58,6 +58,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (int32_t)getFPS {
+    try {
+        auto r = _cppRefHandle.get()->getFPS();
+        return ::djinni::I32::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 - (void)setBitRate:(int32_t)rate {
     try {
         _cppRefHandle.get()->setBitRate(::djinni::I32::toCpp(rate));
@@ -98,6 +105,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         auto r = _cppRefHandle.get()->isRunning();
         return ::djinni::Bool::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)setInterval:(int64_t)interval {
+    try {
+        _cppRefHandle.get()->setInterval(::djinni::I64::toCpp(interval));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

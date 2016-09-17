@@ -5,6 +5,7 @@
 #import "GBCameraControllerGen.h"
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
+#import "GBCameraCaptureHandler+Private.h"
 #import "GBVideoFrameGen+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -29,18 +30,6 @@ public:
             [Handle::get() stopCamera];
         }
     }
-    void setFlash(::gearsbox::CameraFlash c_mode) override
-    {
-        @autoreleasepool {
-            [Handle::get() setFlash:(::djinni::Enum<::gearsbox::CameraFlash, GBCameraFlash>::fromCpp(c_mode))];
-        }
-    }
-    void setQuality(::gearsbox::CameraQuality c_quality) override
-    {
-        @autoreleasepool {
-            [Handle::get() setQuality:(::djinni::Enum<::gearsbox::CameraQuality, GBCameraQuality>::fromCpp(c_quality))];
-        }
-    }
     void switchFront(bool c_front) override
     {
         @autoreleasepool {
@@ -54,11 +43,23 @@ public:
             return ::djinni::Bool::toCpp(r);
         }
     }
-    ::gearsbox::CameraFlash getFlash() override
+    void setFlashMode(::gearsbox::CameraFlash c_mode) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() getFlash];
+            [Handle::get() setFlashMode:(::djinni::Enum<::gearsbox::CameraFlash, GBCameraFlash>::fromCpp(c_mode))];
+        }
+    }
+    ::gearsbox::CameraFlash getFlashMode() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFlashMode];
             return ::djinni::Enum<::gearsbox::CameraFlash, GBCameraFlash>::toCpp(r);
+        }
+    }
+    void setQuality(::gearsbox::CameraQuality c_quality) override
+    {
+        @autoreleasepool {
+            [Handle::get() setQuality:(::djinni::Enum<::gearsbox::CameraQuality, GBCameraQuality>::fromCpp(c_quality))];
         }
     }
     ::gearsbox::CameraQuality getQuality() override
@@ -68,30 +69,77 @@ public:
             return ::djinni::Enum<::gearsbox::CameraQuality, GBCameraQuality>::toCpp(r);
         }
     }
-    void setFousePoint(int32_t c_x, int32_t c_y) override
+    void setExposureMode(::gearsbox::CameraExposureMode c_mode) override
     {
         @autoreleasepool {
-            [Handle::get() setFousePoint:(::djinni::I32::fromCpp(c_x))
-                                       y:(::djinni::I32::fromCpp(c_y))];
+            [Handle::get() setExposureMode:(::djinni::Enum<::gearsbox::CameraExposureMode, GBCameraExposureMode>::fromCpp(c_mode))];
         }
     }
-    void setExposurePoint(int32_t c_x, int32_t c_y) override
+    ::gearsbox::CameraExposureMode getExposureMode() override
     {
         @autoreleasepool {
-            [Handle::get() setExposurePoint:(::djinni::I32::fromCpp(c_x))
-                                          y:(::djinni::I32::fromCpp(c_y))];
+            auto r = [Handle::get() getExposureMode];
+            return ::djinni::Enum<::gearsbox::CameraExposureMode, GBCameraExposureMode>::toCpp(r);
         }
     }
-    void setZoom(float c_zoom) override
+    void setExposurePoint(float c_x, float c_y) override
     {
         @autoreleasepool {
-            [Handle::get() setZoom:(::djinni::F32::fromCpp(c_zoom))];
+            [Handle::get() setExposurePoint:(::djinni::F32::fromCpp(c_x))
+                                          y:(::djinni::F32::fromCpp(c_y))];
         }
     }
-    float getZoom() override
+    void setExposureEv(float c_ev) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() getZoom];
+            [Handle::get() setExposureEv:(::djinni::F32::fromCpp(c_ev))];
+        }
+    }
+    float getExposureEv() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getExposureEv];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getExposureMaxEv() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getExposureMaxEv];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getExposureMinEv() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getExposureMinEv];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    void setExposureDuration(float c_seconds) override
+    {
+        @autoreleasepool {
+            [Handle::get() setExposureDuration:(::djinni::F32::fromCpp(c_seconds))];
+        }
+    }
+    float getExposureDuration() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getExposureDuration];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getExposureMinDuration() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getExposureMinDuration];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getExposureMaxDuration() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getExposureMaxDuration];
             return ::djinni::F32::toCpp(r);
         }
     }
@@ -108,30 +156,111 @@ public:
             return ::djinni::I32::toCpp(r);
         }
     }
-    void setShutter(int32_t c_shutter) override
+    int32_t getISOMax() override
     {
         @autoreleasepool {
-            [Handle::get() setShutter:(::djinni::I32::fromCpp(c_shutter))];
-        }
-    }
-    int32_t getShutter() override
-    {
-        @autoreleasepool {
-            auto r = [Handle::get() getShutter];
+            auto r = [Handle::get() getISOMax];
             return ::djinni::I32::toCpp(r);
         }
     }
-    void setAperture(float c_f) override
+    int32_t getISOMin() override
     {
         @autoreleasepool {
-            [Handle::get() setAperture:(::djinni::F32::fromCpp(c_f))];
+            auto r = [Handle::get() getISOMin];
+            return ::djinni::I32::toCpp(r);
         }
     }
-    float getAperture() override
+    void setFocusMode(::gearsbox::CameraFocusMode c_mode) override
     {
         @autoreleasepool {
-            auto r = [Handle::get() getAperture];
+            [Handle::get() setFocusMode:(::djinni::Enum<::gearsbox::CameraFocusMode, GBCameraFocusMode>::fromCpp(c_mode))];
+        }
+    }
+    ::gearsbox::CameraFocusMode getFocusMode() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFocusMode];
+            return ::djinni::Enum<::gearsbox::CameraFocusMode, GBCameraFocusMode>::toCpp(r);
+        }
+    }
+    void setFocusLens(float c_lens) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFocusLens:(::djinni::F32::fromCpp(c_lens))];
+        }
+    }
+    float getFocusLens() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFocusLens];
             return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getFocusMax() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFocusMax];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getFocusMin() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFocusMin];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    void setFocusPoint(float c_x, float c_y) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFocusPoint:(::djinni::F32::fromCpp(c_x))
+                                       y:(::djinni::F32::fromCpp(c_y))];
+        }
+    }
+    void setFocusAutoRange(::gearsbox::CameraFocusRange c_range) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFocusAutoRange:(::djinni::Enum<::gearsbox::CameraFocusRange, GBCameraFocusRange>::fromCpp(c_range))];
+        }
+    }
+    ::gearsbox::CameraFocusRange getFocusAutoRange() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFocusAutoRange];
+            return ::djinni::Enum<::gearsbox::CameraFocusRange, GBCameraFocusRange>::toCpp(r);
+        }
+    }
+    void setZoom(float c_zoom) override
+    {
+        @autoreleasepool {
+            [Handle::get() setZoom:(::djinni::F32::fromCpp(c_zoom))];
+        }
+    }
+    float getZoom() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getZoom];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getZoomMax() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getZoomMax];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getZoomMin() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getZoomMin];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    void setFramePhoto(bool c_flag) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFramePhoto:(::djinni::Bool::fromCpp(c_flag))];
         }
     }
     std::shared_ptr<::gearsbox::VideoFrameGen> captureOneFrame() override
@@ -139,6 +268,24 @@ public:
         @autoreleasepool {
             auto r = [Handle::get() captureOneFrame];
             return ::djinni_generated::VideoFrameGen::toCpp(r);
+        }
+    }
+    void asnyOneFrame() override
+    {
+        @autoreleasepool {
+            [Handle::get() asnyOneFrame];
+        }
+    }
+    void asnyOnePicture() override
+    {
+        @autoreleasepool {
+            [Handle::get() asnyOnePicture];
+        }
+    }
+    void setCaptureHandler(const std::shared_ptr<::gearsbox::CameraCaptureHandler> & c_handler) override
+    {
+        @autoreleasepool {
+            [Handle::get() setCaptureHandler:(::djinni_generated::CameraCaptureHandler::fromCpp(c_handler))];
         }
     }
 };

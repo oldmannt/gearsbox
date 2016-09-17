@@ -14,6 +14,8 @@
 #include "timer_gen.hpp"
 #include "task_excuser_gen.hpp"
 #include "video_encoder_gen.hpp"
+#include "camera_capture_handler.hpp"
+#include "instance_getter_gen.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,7 +34,7 @@ namespace gearsbox {
     
 class VideoFrameGen;
 
-class VideoWriterImp : public VideoWriterGen, public gearsbox::TaskExcuserGen, public std::enable_shared_from_this<VideoWriterImp>{
+class VideoWriterImp : public VideoWriterGen, public TaskExcuserGen, public CameraCaptureHandler, public std::enable_shared_from_this<VideoWriterImp>{
 public:
     virtual ~VideoWriterImp() {
         m_video_encoder = nullptr;
@@ -41,6 +43,9 @@ public:
     VideoWriterImp():m_video_encoder(nullptr),m_fps(0),m_bitrate(0),m_init(false){
         
     }
+    
+    // CameraCaptureHandler
+    virtual void captureOutput(const std::shared_ptr<VideoFrameGen> & picture, const std::string & error);
     
     //TaskExcuserGen
     virtual void excuse(const std::shared_ptr<TaskInfoGen> & info);
@@ -52,6 +57,8 @@ public:
     
     virtual void setFPS(int32_t fps);
     
+    virtual int32_t getFPS();
+    
     virtual void setBitRate(int32_t rate);
     
     virtual void setVideoEncoder(const std::shared_ptr<VideoEncoderGen> & encoder){
@@ -61,6 +68,8 @@ public:
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame);
     
     virtual void start(int64_t interval);
+    
+    virtual void setInterval(int64_t interval);
     
     virtual void pause();
     

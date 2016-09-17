@@ -5,7 +5,8 @@
 
 typedef NS_ENUM(NSInteger, GBCameraQuality)
 {
-    GBCameraQualityP288,
+    GBCameraQualityNone,
+    GBCameraQualityP360,
     GBCameraQualityP480,
     GBCameraQualityP720,
     GBCameraQualityP1080,

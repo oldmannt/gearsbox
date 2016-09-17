@@ -159,4 +159,15 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return top
     }
     
+    func getViewController(id:String) -> UIViewController? {
+        let current_vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+        if nil==current_vc{
+            GBLogGen.instance()?.logerrf("getViewController current_vc null")
+            return nil
+        }
+        
+        let vc = current_vc?.storyboard?.instantiateViewControllerWithIdentifier(id)
+        return vc
+    }
+    
 }

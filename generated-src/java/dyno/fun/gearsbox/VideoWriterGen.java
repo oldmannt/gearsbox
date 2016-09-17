@@ -12,6 +12,8 @@ public abstract class VideoWriterGen {
 
     public abstract void setFPS(int fps);
 
+    public abstract int getFPS();
+
     public abstract void setBitRate(int rate);
 
     public abstract void setVideoEncoder(VideoEncoderGen encoder);
@@ -25,6 +27,8 @@ public abstract class VideoWriterGen {
     public abstract void resume();
 
     public abstract boolean isRunning();
+
+    public abstract void setInterval(long interval);
 
     public abstract void saveNRlease();
 
@@ -76,6 +80,14 @@ public abstract class VideoWriterGen {
             native_setFPS(this.nativeRef, fps);
         }
         private native void native_setFPS(long _nativeRef, int fps);
+
+        @Override
+        public int getFPS()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getFPS(this.nativeRef);
+        }
+        private native int native_getFPS(long _nativeRef);
 
         @Override
         public void setBitRate(int rate)
@@ -132,6 +144,14 @@ public abstract class VideoWriterGen {
             return native_isRunning(this.nativeRef);
         }
         private native boolean native_isRunning(long _nativeRef);
+
+        @Override
+        public void setInterval(long interval)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setInterval(this.nativeRef, interval);
+        }
+        private native void native_setInterval(long _nativeRef, long interval);
 
         @Override
         public void saveNRlease()

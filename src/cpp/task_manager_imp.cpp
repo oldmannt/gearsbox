@@ -18,7 +18,7 @@ std::shared_ptr<TaskManagerGen> TaskManagerGen::instance(){
     return s_ptr;
 }
 
-std::shared_ptr<TaskInfoGen> TaskManagerGen::create(int64_t task_id, int64_t delay, int32_t repeated){
+std::shared_ptr<TaskInfoGen> TaskManagerGen::create_info(int64_t task_id, int64_t delay, int32_t repeated){
     return std::make_shared<TaskInfoImp>(task_id,delay,repeated);
 }
 
@@ -81,12 +81,12 @@ TaskManagerImp::~TaskManagerImp(){
 }
 
 void TaskManagerImp::addTask(int64_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task){
-    std::shared_ptr<TaskInfoGen> info = TaskManagerGen::create(task_id, delay, repeated);
+    std::shared_ptr<TaskInfoGen> info = TaskManagerGen::create_info(task_id, delay, repeated);
     this->addTaskInfo(info, task);
 }
 
 void TaskManagerImp::addTaskI(int64_t task_id, const std::shared_ptr<TaskExcuserGen> & task){
-    this->addTask(task_id, 0, 0, task);
+    this->addTask(task_id, -1, 0, task);
 }
 
 void TaskManagerImp::addTaskInfo(const std::shared_ptr<TaskInfoGen> & task, const std::shared_ptr<TaskExcuserGen> & task_excuser){
@@ -94,7 +94,10 @@ void TaskManagerImp::addTaskInfo(const std::shared_ptr<TaskInfoGen> & task, cons
         return;
     task->setAssignTick(uv_now(uv_default_loop()));
     if (task->getDelay()<0){
-        listTaskExcuser(task);
+        if (task_excuser!=nullptr)
+            task_excuser->excuse(task);
+        else
+            listTaskExcuser(task);
         return;
     }
     m_map_task[task] = task_excuser;

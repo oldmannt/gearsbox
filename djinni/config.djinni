@@ -1,0 +1,16 @@
+
+config_gen = interface +c {
+    static create():config_gen;
+    initialize(param:string):bool;
+
+    getString(type:string):string;
+    getInt(type:string):i32;
+    getFloat(type:string):f32;
+    getI64(type:string):i64;
+
+    setString(type:string, value:string);
+    setInt(type:string, value:i32);
+    setFloat(type:string, value:f32);
+    setI64(type:string, value:i64);
+    getSubConfig(key:string):config_gen;
+}

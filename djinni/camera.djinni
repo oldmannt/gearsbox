@@ -1,12 +1,15 @@
+@import "config.djinni"
 
 camera_flash = enum {
+	None;
 	On;
 	Off;
 	Auto;
 }
 
 camera_quality = enum {
-	P288;
+	None;
+	P360;
 	P480;
 	P720;
 	P1080;
@@ -27,28 +30,103 @@ video_frame_gen = interface +o +j {
 	setLineSize(linesize:i32);
 }
 
+camera_capture_handler = interface +c +o +j {
+	captureOutput(picture:video_frame_gen, error:string);
+}
+
+camera_exposure_mode = enum {
+	None;
+	# ios Indicates that the exposure should be locked at its current value.
+	Locked;
+	# ios Indicates that the device should automatically adjust exposure once and then change the exposure mode to Locked.
+	AutoExpose;
+	# ios Indicates that the device should automatically adjust exposure when needed.
+	ContinuousAutoExposure;
+	#ios Indicates that the device should only adjust exposure according to user provided ISO, exposureDuration values.
+	ModeCustom;		
+}
+
+camera_focus_mode = enum {
+	None;
+	Locked;
+	AutoFocus;
+	ContinuousAutoFocus;
+}
+
+camera_focus_range = enum {
+	None;
+	Near;
+	Far;
+}
+
+camera_config_gen = interface +c {
+	const flash_mode:string = "flash_mode";
+	const flash_mode_auto:string = "auto";
+	const flash_mode_on:string = "on";
+	const flash_mode_off:string = "off";
+	const quality:string = "quality";
+	const quality_360p:string = "360p";
+	const quality_480p:string = "480p";
+	const quality_720p:string = "720p";
+	const quality_1080p:string = "1080p";
+
+	static instance():camera_config_gen;
+	initialize(cfg:config_gen):bool;
+	getFlashMode():camera_flash;
+	getQuatityLevel():camera_quality;
+	setFlashMode(mode:camera_flash);
+	setQuatityLevel(quality:camera_quality);
+}
+
 camera_controller_gen = interface +o +j {
 
 	startCamera();
 	stopCamera();
-	setFlash(mode:camera_flash);
-	setQuality(quality:camera_quality);
 	switchFront(front:bool);
 	isFront():bool;
-	getFlash():camera_flash;
+	setFlashMode(mode:camera_flash);
+	getFlashMode():camera_flash;
+	setQuality(quality:camera_quality);
 	getQuality():camera_quality;
 
-	setFousePoint(x:i32, y:i32);
-	setExposurePoint(x:i32, y:i32);
-	setZoom(zoom:f32);
-	getZoom():f32;
+	setExposureMode(mode:camera_exposure_mode);
+	getExposureMode():camera_exposure_mode;
+	setExposurePoint(x:f32, y:f32);
+	setExposureEv(ev:f32);
+	getExposureEv():f32;
+	getExposureMaxEv():f32;
+	getExposureMinEv():f32;
+	setExposureDuration(seconds:f32);
+	getExposureDuration():f32;
+	getExposureMinDuration():f32;
+	getExposureMaxDuration():f32;
 	setISO(iso:i32);
 	getISO():i32;
-	setShutter(shutter:i32);
-	getShutter():i32;
-	setAperture(f:f32);
-	getAperture():f32;
+	getISOMax():i32;
+	getISOMin():i32;
+
+	setFocusMode(mode:camera_focus_mode);
+	getFocusMode():camera_focus_mode;
+	# lens form 0.0 to 1.0, shortest to furthest
+	setFocusLens(lens:f32);
+	getFocusLens():f32;
+	getFocusMax():f32;
+	getFocusMin():f32;
+	setFocusPoint(x:f32, y:f32);
+	setFocusAutoRange(range:camera_focus_range);
+	getFocusAutoRange():camera_focus_range;
+
+	setZoom(zoom:f32);
+	getZoom():f32;
+	getZoomMax():f32;
+	# minimum value is 1.0
+	getZoomMin():f32;
+
+	setFramePhoto(flag:bool);
 	captureOneFrame():video_frame_gen;
+	asnyOneFrame();
+	asnyOnePicture();
+	setCaptureHandler(handler:camera_capture_handler);
 }
 
 video_writer_gen = interface +c {
@@ -57,6 +135,7 @@ video_writer_gen = interface +c {
 	setFilePath(file:string);
 	getFilePath():string;
 	setFPS(fps:i32);
+	getFPS():i32;
 	setBitRate(rate:i32);
 	setVideoEncoder(encoder:video_encoder_gen);
 	encodeFrame(frame:video_frame_gen);
@@ -64,6 +143,7 @@ video_writer_gen = interface +c {
 	pause();
 	resume();
 	isRunning():bool;
+	setInterval(interval:i64);
 	saveNRlease();
 }
 

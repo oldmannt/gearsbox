@@ -31,13 +31,13 @@ CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_instance(JNIEnv
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }
 
-CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_create(JNIEnv* jniEnv, jobject /*this*/, jlong j_taskId, jlong j_delay, jint j_repeated)
+CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_createInfo(JNIEnv* jniEnv, jobject /*this*/, jlong j_taskId, jlong j_delay, jint j_repeated)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::gearsbox::TaskManagerGen::create(::djinni::I64::toCpp(jniEnv, j_taskId),
-                                                    ::djinni::I64::toCpp(jniEnv, j_delay),
-                                                    ::djinni::I32::toCpp(jniEnv, j_repeated));
+        auto r = ::gearsbox::TaskManagerGen::create_info(::djinni::I64::toCpp(jniEnv, j_taskId),
+                                                         ::djinni::I64::toCpp(jniEnv, j_delay),
+                                                         ::djinni::I32::toCpp(jniEnv, j_repeated));
         return ::djinni::release(::djinni_generated::NativeTaskInfoGen::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
 }

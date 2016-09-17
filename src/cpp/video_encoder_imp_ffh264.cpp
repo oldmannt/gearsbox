@@ -116,6 +116,7 @@ bool VideoEncoderImp_ffh264::initialize(const std::string & filepath, int32_t fp
 
 void VideoEncoderImp_ffh264::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
     //Read raw YUV data
+    CHECK_RT(frame!=nullptr, "frame null");
     CHECK_RT(frame->getData()!=0,"VideoFrameGen data null");
     uint8_t* picture_buf = (uint8_t*)frame->getData();
     m_av_frame->data[0] = picture_buf;              // Y

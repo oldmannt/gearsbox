@@ -8,12 +8,13 @@
 
 #include "TimerImp.hpp"
 #include "task_manager_gen.hpp"
-#include "ILog.h"
+#include "macro.h"
 #include <unordered_map>
 
 using namespace gearsbox;
 
 std::shared_ptr<TimerGen> TimerGen::create(int64_t task_id, int64_t interval, int32_t repeat_times, const std::shared_ptr<TaskExcuserGen> & hander){
+    CHECK_RTP(interval>0, nullptr, "interval invaild value:%d", interval);
     return std::make_shared<TimerImp>(task_id, interval, repeat_times, hander);
 }
 
@@ -46,7 +47,7 @@ m_handler(handler){
     m_timer = new uv_timer_t();
     m_timer->data = this;
     uv_timer_init(uv_default_loop(), m_timer);
-    m_handleinfo = TaskManagerGen::create(task_id, interval, repeat);
+    m_handleinfo = TaskManagerGen::create_info(task_id, interval, repeat);
 }
 
 TimerImp::~TimerImp() {

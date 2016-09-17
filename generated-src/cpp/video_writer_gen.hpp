@@ -24,6 +24,8 @@ public:
 
     virtual void setFPS(int32_t fps) = 0;
 
+    virtual int32_t getFPS() = 0;
+
     virtual void setBitRate(int32_t rate) = 0;
 
     virtual void setVideoEncoder(const std::shared_ptr<VideoEncoderGen> & encoder) = 0;
@@ -37,6 +39,8 @@ public:
     virtual void resume() = 0;
 
     virtual bool isRunning() = 0;
+
+    virtual void setInterval(int64_t interval) = 0;
 
     virtual void saveNRlease() = 0;
 };

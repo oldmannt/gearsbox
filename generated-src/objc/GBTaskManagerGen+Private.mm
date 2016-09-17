@@ -39,13 +39,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-+ (nullable id<GBTaskInfoGen>)create:(int64_t)taskId
-                               delay:(int64_t)delay
-                            repeated:(int32_t)repeated {
++ (nullable id<GBTaskInfoGen>)createInfo:(int64_t)taskId
+                                   delay:(int64_t)delay
+                                repeated:(int32_t)repeated {
     try {
-        auto r = ::gearsbox::TaskManagerGen::create(::djinni::I64::toCpp(taskId),
-                                                    ::djinni::I64::toCpp(delay),
-                                                    ::djinni::I32::toCpp(repeated));
+        auto r = ::gearsbox::TaskManagerGen::create_info(::djinni::I64::toCpp(taskId),
+                                                         ::djinni::I64::toCpp(delay),
+                                                         ::djinni::I32::toCpp(repeated));
         return ::djinni_generated::TaskInfoGen::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }

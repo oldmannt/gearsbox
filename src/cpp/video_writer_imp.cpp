@@ -10,7 +10,6 @@
 #include "video_frame_gen.hpp"
 #include "macro.h"
 #include "camera_controller_gen.hpp"
-#include "instance_getter_gen.hpp"
 #include "video_encoder_imp_ffmp4.hpp"
 #include "task_info_gen.hpp"
 #include "uv.h"
@@ -29,22 +28,30 @@ void VideoWriterImp::setFPS(int32_t fps){
     m_fps = fps;
 }
 
+int32_t VideoWriterImp::getFPS(){
+    return m_fps;
+}
+
 void VideoWriterImp::setBitRate(int32_t rate){
     m_bitrate = rate;
 }
 
 void VideoWriterImp::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
+    CHECK_RT(frame!=nullptr, "frame null");
     this->initialize(frame);
+    
     if (m_video_encoder==nullptr){
         return;
     }
+    static int frame_counter = 0;
+    G_LOG_C(LOG_INFO,"VideoWriterImp::captureOutput frame:%d %d",++frame_counter,uv_now(uv_default_loop())); 
     m_video_encoder->encodeFrame(frame);
 }
 
 void VideoWriterImp::excuse(const std::shared_ptr<TaskInfoGen> & info){
-    static int frame = 0;
-    G_LOG_C(LOG_INFO,"VideoWriterImp::excuse frame:%d %d",++frame,uv_now(uv_default_loop()));
-    this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
+    //this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
+    InstanceGetterGen::getCameraController()->asnyOneFrame();
+    //InstanceGetterGen::getCameraController()->asnyOnePicture();
 }
 
 void VideoWriterImp::start(int64_t interval){
@@ -57,8 +64,27 @@ void VideoWriterImp::start(int64_t interval){
     else
         m_writting_timer->setInterval(interval);
     
+    if (!m_init)
+        InstanceGetterGen::getCameraController()->setCaptureHandler(shared_from_this());
+    
     // encode the first frame
-    this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
+    //this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
+    InstanceGetterGen::getCameraController()->asnyOneFrame();
+    //InstanceGetterGen::getCameraController()->asnyOnePicture();
+    
+}
+
+void VideoWriterImp::captureOutput(const std::shared_ptr<VideoFrameGen> & picture, const std::string & error){
+    if (error.size()>0){
+        G_LOG_C(LOG_ERROR,"captureOutput err:%s", error.c_str());
+    }
+    
+    this->encodeFrame(picture);
+}
+
+void VideoWriterImp::setInterval(int64_t interval){
+    CHECK_RT(m_writting_timer, "m_writting_timer null");
+    m_writting_timer->setInterval(interval);
 }
 
 void VideoWriterImp::pause(){
@@ -94,9 +120,10 @@ void VideoWriterImp::saveNRlease(){
 }
 
 bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){
-    if (m_init||nullptr==frame)
+    CHECK_RTF(frame!=nullptr,"frame null");
+    if (m_init)
         return false;
-    
+
     if (m_video_encoder == nullptr){
         m_video_encoder = std::make_shared<VideoEncoderImp_ffmp4>();
     }

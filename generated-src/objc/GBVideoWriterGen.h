@@ -17,6 +17,8 @@
 
 - (void)setFPS:(int32_t)fps;
 
+- (int32_t)getFPS;
+
 - (void)setBitRate:(int32_t)rate;
 
 - (void)setVideoEncoder:(nullable id<GBVideoEncoderGen>)encoder;
@@ -30,6 +32,8 @@
 - (void)resume;
 
 - (BOOL)isRunning;
+
+- (void)setInterval:(int64_t)interval;
 
 - (void)saveNRlease;
 

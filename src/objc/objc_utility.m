@@ -8,6 +8,7 @@
 
 #import "objc_utility.h"
 #import "GBVideoInfoGen.h"
+#import "GBLogGen.h"
 #import <UIKit/UIKit.h>
 
 @implementation ObjcUtility
@@ -15,7 +16,9 @@
 +(GBVideoFrameImp* _Nonnull)toVideoFrame:(CMSampleBufferRef)sampleBuffer{
     CVPixelBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     
-    if (CVPixelBufferLockBaseAddress(imageBuffer, 0) != kCVReturnSuccess) {
+    CVReturn rt = CVPixelBufferLockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
+    if (rt != kCVReturnSuccess) {
+        [[GBLogGen instance] logerrf: [NSString stringWithFormat:@"CVPixelBufferLockBaseAddress lock failed:%i", rt]];
         return Nil;
     }
     UInt8 *bufferbasePtr = (UInt8 *)CVPixelBufferGetBaseAddress(imageBuffer);
@@ -53,7 +56,7 @@
         pUV+=bytesrow1;
     }
 
-    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);
+    CVPixelBufferUnlockBaseAddress(imageBuffer, kCVPixelBufferLock_ReadOnly);
     return video_frame;
 }
 

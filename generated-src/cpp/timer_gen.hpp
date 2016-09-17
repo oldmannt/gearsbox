@@ -14,6 +14,7 @@ class TimerGen {
 public:
     virtual ~TimerGen() {}
 
+    /**repeat_times<0 means forever, timer just pass task_id, nothing else  */
     static std::shared_ptr<TimerGen> create(int64_t task_id, int64_t interval, int32_t repeat_times, const std::shared_ptr<TaskExcuserGen> & hander);
 
     static int64_t currentTick();

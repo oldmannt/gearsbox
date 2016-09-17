@@ -8,37 +8,83 @@ public abstract class CameraControllerGen {
 
     public abstract void stopCamera();
 
-    public abstract void setFlash(CameraFlash mode);
-
-    public abstract void setQuality(CameraQuality quality);
-
     public abstract void switchFront(boolean front);
 
     public abstract boolean isFront();
 
-    public abstract CameraFlash getFlash();
+    public abstract void setFlashMode(CameraFlash mode);
+
+    public abstract CameraFlash getFlashMode();
+
+    public abstract void setQuality(CameraQuality quality);
 
     public abstract CameraQuality getQuality();
 
-    public abstract void setFousePoint(int x, int y);
+    public abstract void setExposureMode(CameraExposureMode mode);
 
-    public abstract void setExposurePoint(int x, int y);
+    public abstract CameraExposureMode getExposureMode();
 
-    public abstract void setZoom(float zoom);
+    public abstract void setExposurePoint(float x, float y);
 
-    public abstract float getZoom();
+    public abstract void setExposureEv(float ev);
+
+    public abstract float getExposureEv();
+
+    public abstract float getExposureMaxEv();
+
+    public abstract float getExposureMinEv();
+
+    public abstract void setExposureDuration(float seconds);
+
+    public abstract float getExposureDuration();
+
+    public abstract float getExposureMinDuration();
+
+    public abstract float getExposureMaxDuration();
 
     public abstract void setISO(int iso);
 
     public abstract int getISO();
 
-    public abstract void setShutter(int shutter);
+    public abstract int getISOMax();
 
-    public abstract int getShutter();
+    public abstract int getISOMin();
 
-    public abstract void setAperture(float f);
+    public abstract void setFocusMode(CameraFocusMode mode);
 
-    public abstract float getAperture();
+    public abstract CameraFocusMode getFocusMode();
+
+    /** lens form 0.0 to 1.0, shortest to furthest */
+    public abstract void setFocusLens(float lens);
+
+    public abstract float getFocusLens();
+
+    public abstract float getFocusMax();
+
+    public abstract float getFocusMin();
+
+    public abstract void setFocusPoint(float x, float y);
+
+    public abstract void setFocusAutoRange(CameraFocusRange range);
+
+    public abstract CameraFocusRange getFocusAutoRange();
+
+    public abstract void setZoom(float zoom);
+
+    public abstract float getZoom();
+
+    public abstract float getZoomMax();
+
+    /** minimum value is 1.0 */
+    public abstract float getZoomMin();
+
+    public abstract void setFramePhoto(boolean flag);
 
     public abstract VideoFrameGen captureOneFrame();
+
+    public abstract void asnyOneFrame();
+
+    public abstract void asnyOnePicture();
+
+    public abstract void setCaptureHandler(CameraCaptureHandler handler);
 }

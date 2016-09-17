@@ -8,7 +8,8 @@
 namespace gearsbox {
 
 enum class CameraQuality : int {
-    P288,
+    NONE,
+    P360,
     P480,
     P720,
     P1080,

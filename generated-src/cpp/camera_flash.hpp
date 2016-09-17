@@ -8,6 +8,7 @@
 namespace gearsbox {
 
 enum class CameraFlash : int {
+    NONE,
     ON,
     OFF,
     AUTO,

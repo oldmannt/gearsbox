@@ -5,6 +5,7 @@
 
 typedef NS_ENUM(NSInteger, GBCameraFlash)
 {
+    GBCameraFlashNone,
     GBCameraFlashOn,
     GBCameraFlashOff,
     GBCameraFlashAuto,

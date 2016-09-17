@@ -21,7 +21,7 @@ public:
 
     static std::shared_ptr<TaskManagerGen> instance();
 
-    static std::shared_ptr<TaskInfoGen> create(int64_t task_id, int64_t delay, int32_t repeated);
+    static std::shared_ptr<TaskInfoGen> create_info(int64_t task_id, int64_t delay, int32_t repeated);
 
     virtual void addTask(int64_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task) = 0;
 

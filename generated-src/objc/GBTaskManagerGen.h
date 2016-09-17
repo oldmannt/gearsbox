@@ -15,9 +15,9 @@
 
 + (nullable GBTaskManagerGen *)instance;
 
-+ (nullable id<GBTaskInfoGen>)create:(int64_t)taskId
-                               delay:(int64_t)delay
-                            repeated:(int32_t)repeated;
++ (nullable id<GBTaskInfoGen>)createInfo:(int64_t)taskId
+                                   delay:(int64_t)delay
+                                repeated:(int32_t)repeated;
 
 - (void)addTask:(int64_t)taskId
           delay:(int64_t)delay

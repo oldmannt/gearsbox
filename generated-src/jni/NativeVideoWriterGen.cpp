@@ -59,6 +59,16 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_nati
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT jint JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1getFPS(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
+        auto r = ref->getFPS();
+        return ::djinni::release(::djinni::I32::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
 CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setBitRate(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_rate)
 {
     try {
@@ -121,6 +131,15 @@ CJNIEXPORT jboolean JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_
         auto r = ref->isRunning();
         return ::djinni::release(::djinni::Bool::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setInterval(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jlong j_interval)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
+        ref->setInterval(::djinni::I64::toCpp(jniEnv, j_interval));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
 CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1saveNRlease(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)

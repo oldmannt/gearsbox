@@ -22,7 +22,7 @@ public abstract class TaskManagerGen {
 
     public static native TaskManagerGen instance();
 
-    public static native TaskInfoGen create(long taskId, long delay, int repeated);
+    public static native TaskInfoGen createInfo(long taskId, long delay, int repeated);
 
     private static final class CppProxy extends TaskManagerGen
     {

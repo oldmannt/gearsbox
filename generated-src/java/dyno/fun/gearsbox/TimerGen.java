@@ -24,6 +24,7 @@ public abstract class TimerGen {
 
     public abstract boolean isRunning();
 
+    /**repeat_times<0 means forever, timer just pass task_id, nothing else  */
     public static native TimerGen create(long taskId, long interval, int repeatTimes, TaskExcuserGen hander);
 
     public static native long currentTick();

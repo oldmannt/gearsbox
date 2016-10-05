@@ -53,6 +53,7 @@
           "./interface",
           './src/cpp/ui',
           './src/objc',
+          './deps/ffmpeg/include',
         ]
       },
       "defines": [

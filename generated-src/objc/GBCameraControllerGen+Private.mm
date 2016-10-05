@@ -18,6 +18,18 @@ class CameraControllerGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
+    void initialize(bool c_audio) override
+    {
+        @autoreleasepool {
+            [Handle::get() initialize:(::djinni::Bool::fromCpp(c_audio))];
+        }
+    }
+    void setAudioEnable(bool c_enable) override
+    {
+        @autoreleasepool {
+            [Handle::get() setAudioEnable:(::djinni::Bool::fromCpp(c_enable))];
+        }
+    }
     void startCamera() override
     {
         @autoreleasepool {

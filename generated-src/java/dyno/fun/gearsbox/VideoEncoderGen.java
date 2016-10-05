@@ -6,7 +6,7 @@ package dyno.fun.gearsbox;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class VideoEncoderGen {
-    public abstract boolean initialize(String filepath, int fps, int bitrate, int width, int height);
+    public abstract boolean initialize(String filepath, int fps, int bitrate, int width, int height, VideoFrameGen frame);
 
     public abstract void encodeFrame(VideoFrameGen frame);
 
@@ -36,12 +36,12 @@ public abstract class VideoEncoderGen {
         }
 
         @Override
-        public boolean initialize(String filepath, int fps, int bitrate, int width, int height)
+        public boolean initialize(String filepath, int fps, int bitrate, int width, int height, VideoFrameGen frame)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            return native_initialize(this.nativeRef, filepath, fps, bitrate, width, height);
+            return native_initialize(this.nativeRef, filepath, fps, bitrate, width, height, frame);
         }
-        private native boolean native_initialize(long _nativeRef, String filepath, int fps, int bitrate, int width, int height);
+        private native boolean native_initialize(long _nativeRef, String filepath, int fps, int bitrate, int width, int height, VideoFrameGen frame);
 
         @Override
         public void encodeFrame(VideoFrameGen frame)

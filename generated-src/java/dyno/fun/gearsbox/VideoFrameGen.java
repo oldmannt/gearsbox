@@ -23,4 +23,36 @@ public abstract class VideoFrameGen {
     public abstract void setSize(long size);
 
     public abstract void setLineSize(int linesize);
+
+    public abstract long getAudioData();
+
+    public abstract long getAudioDataSize();
+
+    public abstract long getAudioPSTValue();
+
+    public abstract int getAudioPSTScale();
+
+    public abstract int getNumSamples();
+
+    public abstract int getChannelsPerFrame();
+
+    public abstract double getSampleRate();
+
+    public abstract int getBitsPerChannel();
+
+    public abstract void setAudioData(long data);
+
+    public abstract void setAudioDataSize(long size);
+
+    public abstract void setAudioPSTValue(long value);
+
+    public abstract void setAudioPSTScale(int scale);
+
+    public abstract void setNumSamples(int num);
+
+    public abstract void setChannelsPerFrame(int channels);
+
+    public abstract void setSampleRate(double rate);
+
+    public abstract void setBitsPerChannel(int bits);
 }

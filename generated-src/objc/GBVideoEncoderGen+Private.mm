@@ -35,13 +35,15 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
                fps:(int32_t)fps
            bitrate:(int32_t)bitrate
              width:(int32_t)width
-            height:(int32_t)height {
+            height:(int32_t)height
+             frame:(nullable id<GBVideoFrameGen>)frame {
     try {
         auto r = _cppRefHandle.get()->initialize(::djinni::String::toCpp(filepath),
                                                  ::djinni::I32::toCpp(fps),
                                                  ::djinni::I32::toCpp(bitrate),
                                                  ::djinni::I32::toCpp(width),
-                                                 ::djinni::I32::toCpp(height));
+                                                 ::djinni::I32::toCpp(height),
+                                                 ::djinni_generated::VideoFrameGen::toCpp(frame));
         return ::djinni::Bool::fromCpp(r);
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -66,14 +68,15 @@ class VideoEncoderGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    bool initialize(const std::string & c_filepath, int32_t c_fps, int32_t c_bitrate, int32_t c_width, int32_t c_height) override
+    bool initialize(const std::string & c_filepath, int32_t c_fps, int32_t c_bitrate, int32_t c_width, int32_t c_height, const std::shared_ptr<::gearsbox::VideoFrameGen> & c_frame) override
     {
         @autoreleasepool {
             auto r = [Handle::get() initialize:(::djinni::String::fromCpp(c_filepath))
                                            fps:(::djinni::I32::fromCpp(c_fps))
                                        bitrate:(::djinni::I32::fromCpp(c_bitrate))
                                          width:(::djinni::I32::fromCpp(c_width))
-                                        height:(::djinni::I32::fromCpp(c_height))];
+                                        height:(::djinni::I32::fromCpp(c_height))
+                                         frame:(::djinni_generated::VideoFrameGen::fromCpp(c_frame))];
             return ::djinni::Bool::toCpp(r);
         }
     }

@@ -15,7 +15,7 @@ class VideoEncoderGen {
 public:
     virtual ~VideoEncoderGen() {}
 
-    virtual bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, int32_t width, int32_t height) = 0;
+    virtual bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, int32_t width, int32_t height, const std::shared_ptr<VideoFrameGen> & frame) = 0;
 
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame) = 0;
 

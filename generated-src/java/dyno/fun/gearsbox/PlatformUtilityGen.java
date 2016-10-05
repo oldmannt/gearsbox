@@ -28,6 +28,12 @@ public abstract class PlatformUtilityGen {
 
     public abstract FileInfoGen getFileInfo(String pathName);
 
+    public abstract boolean deleteFile(String fullpath);
+
+    public abstract boolean isVideoFileCompatibleToSavedPhotosAlbum(String fullpath);
+
+    public abstract boolean saveVideoFileToSavedPhotosAlbum(String fullpath);
+
     public abstract void playVideo(String file);
 
     public abstract VideoFrameGen createVideoFrame();

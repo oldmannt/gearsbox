@@ -20,6 +20,10 @@ class CameraControllerGen {
 public:
     virtual ~CameraControllerGen() {}
 
+    virtual void initialize(bool audio) = 0;
+
+    virtual void setAudioEnable(bool enable) = 0;
+
     virtual void startCamera() = 0;
 
     virtual void stopCamera() = 0;

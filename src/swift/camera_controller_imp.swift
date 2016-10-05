@@ -14,12 +14,21 @@ protocol CapturePictureHandler {
     func captureOutput(image:UIImage?, error:String?) -> Void
 }
 
-public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideoDataOutputSampleBufferDelegate {
+public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate {
     static let instance:GBCameraControllerImp = GBCameraControllerImp()
     
     @objc public func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
         
-        m_cmbuffer = sampleBuffer
+        if connection == self.m_audio_connection {
+            m_audio_buffer = sampleBuffer
+            let frame = ObjcUtility.toAudeoFrame(sampleBuffer)
+            if self.m_capture_handler != nil && frame.getAudioData() != 0{
+                self.m_capture_handler?.captureOutput(frame, error: "")
+            }
+        }
+        else {
+            m_cmbuffer = sampleBuffer
+        }
     }
 
     public func initializ_swif(view:UIView) -> Bool{
@@ -36,6 +45,16 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
         
         
         return true
+    }
+    
+    @objc public func initialize(audio: Bool){
+        setupAudio()
+        setAudioEnable(audio)
+    }
+    
+    @objc public func setAudioEnable(enable: Bool){
+        m_audio_enable = enable
+        m_audio_connection?.enabled = m_audio_enable
     }
     
     @objc public func startCamera(){
@@ -58,6 +77,30 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
     
     @objc public func isFront() -> Bool {
         return m_isfront
+    }
+    
+    func setupAudio() {
+        let audio_device:AVCaptureDevice = AVCaptureDevice(uniqueID: AVMediaTypeAudio)
+        var audio_input:AVCaptureDeviceInput?
+            
+        do {
+            try audio_input = AVCaptureDeviceInput(device: audio_device)
+        } catch {
+            GBLogGen.instance()?.logerrf("setupAuodio AVCaptureDeviceInput failed \(#file) \(#function) \(#line)");
+            return
+        }
+        
+        self.m_audio_output = AVCaptureAudioDataOutput()
+        if self.m_captureSession.canAddInput(audio_input){
+            m_captureSession.addInput(audio_input)
+        }
+
+        self.m_audio_output = AVCaptureAudioDataOutput()
+        self.m_audio_output?.setSampleBufferDelegate(self, queue: dispatch_get_main_queue())
+        if self.m_captureSession.canAddOutput(self.m_audio_output){
+            m_captureSession.addOutput(self.m_audio_output)
+        }
+        self.m_audio_connection = self.m_audio_output?.connectionWithMediaType(AVMediaTypeAudio)
     }
     
     func toFlashMode(mode:GBCameraFlash) -> AVCaptureFlashMode {
@@ -728,4 +771,9 @@ public class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVid
     private var m_capture_image_handler: CapturePictureHandler?
     private var m_capture_image:Bool = false
     private var m_frame_photo:Bool = false
+    
+    private var m_audio_enable: Bool = false
+    private var m_audio_output: AVCaptureAudioDataOutput?
+    private var m_audio_connection: AVCaptureConnection?
+    private var m_audio_buffer: CMSampleBuffer?
 }

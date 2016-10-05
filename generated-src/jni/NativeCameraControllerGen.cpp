@@ -21,6 +21,22 @@ NativeCameraControllerGen::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jn
 
 NativeCameraControllerGen::JavaProxy::~JavaProxy() = default;
 
+void NativeCameraControllerGen::JavaProxy::initialize(bool c_audio) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_initialize,
+                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_audio)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeCameraControllerGen::JavaProxy::setAudioEnable(bool c_enable) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setAudioEnable,
+                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_enable)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 void NativeCameraControllerGen::JavaProxy::startCamera() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

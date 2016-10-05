@@ -105,6 +105,33 @@ std::shared_ptr<::gearsbox::FileInfoGen> NativePlatformUtilityGen::JavaProxy::ge
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeFileInfoGen::toCpp(jniEnv, jret);
 }
+bool NativePlatformUtilityGen::JavaProxy::deleteFile(const std::string & c_fullpath) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallBooleanMethod(Handle::get().get(), data.method_deleteFile,
+                                          ::djinni::get(::djinni::String::fromCpp(jniEnv, c_fullpath)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::Bool::toCpp(jniEnv, jret);
+}
+bool NativePlatformUtilityGen::JavaProxy::isVideoFileCompatibleToSavedPhotosAlbum(const std::string & c_fullpath) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallBooleanMethod(Handle::get().get(), data.method_isVideoFileCompatibleToSavedPhotosAlbum,
+                                          ::djinni::get(::djinni::String::fromCpp(jniEnv, c_fullpath)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::Bool::toCpp(jniEnv, jret);
+}
+bool NativePlatformUtilityGen::JavaProxy::saveVideoFileToSavedPhotosAlbum(const std::string & c_fullpath) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallBooleanMethod(Handle::get().get(), data.method_saveVideoFileToSavedPhotosAlbum,
+                                          ::djinni::get(::djinni::String::fromCpp(jniEnv, c_fullpath)));
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::Bool::toCpp(jniEnv, jret);
+}
 void NativePlatformUtilityGen::JavaProxy::playVideo(const std::string & c_file) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

@@ -43,6 +43,9 @@ private:
         std::string getSubDirInHome(const std::string & sub_dir) override;
         std::string getFileNameFromPath(const std::string & path) override;
         std::shared_ptr<::gearsbox::FileInfoGen> getFileInfo(const std::string & path_name) override;
+        bool deleteFile(const std::string & fullpath) override;
+        bool isVideoFileCompatibleToSavedPhotosAlbum(const std::string & fullpath) override;
+        bool saveVideoFileToSavedPhotosAlbum(const std::string & fullpath) override;
         void playVideo(const std::string & file) override;
         std::shared_ptr<::gearsbox::VideoFrameGen> createVideoFrame() override;
 
@@ -61,6 +64,9 @@ private:
     const jmethodID method_getSubDirInHome { ::djinni::jniGetMethodID(clazz.get(), "getSubDirInHome", "(Ljava/lang/String;)Ljava/lang/String;") };
     const jmethodID method_getFileNameFromPath { ::djinni::jniGetMethodID(clazz.get(), "getFileNameFromPath", "(Ljava/lang/String;)Ljava/lang/String;") };
     const jmethodID method_getFileInfo { ::djinni::jniGetMethodID(clazz.get(), "getFileInfo", "(Ljava/lang/String;)Ldyno/fun/gearsbox/FileInfoGen;") };
+    const jmethodID method_deleteFile { ::djinni::jniGetMethodID(clazz.get(), "deleteFile", "(Ljava/lang/String;)Z") };
+    const jmethodID method_isVideoFileCompatibleToSavedPhotosAlbum { ::djinni::jniGetMethodID(clazz.get(), "isVideoFileCompatibleToSavedPhotosAlbum", "(Ljava/lang/String;)Z") };
+    const jmethodID method_saveVideoFileToSavedPhotosAlbum { ::djinni::jniGetMethodID(clazz.get(), "saveVideoFileToSavedPhotosAlbum", "(Ljava/lang/String;)Z") };
     const jmethodID method_playVideo { ::djinni::jniGetMethodID(clazz.get(), "playVideo", "(Ljava/lang/String;)V") };
     const jmethodID method_createVideoFrame { ::djinni::jniGetMethodID(clazz.get(), "createVideoFrame", "()Ldyno/fun/gearsbox/VideoFrameGen;") };
 };

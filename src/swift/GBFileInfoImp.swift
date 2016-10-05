@@ -58,7 +58,7 @@ public class GBFileInfoImp:  GBFileInfoGen{
     }
     
     @objc public func getName() -> String {
-        return m_prefix+m_suffix
+        return m_prefix+"."+m_suffix
     }
     
     @objc public func getSuffix() -> String {

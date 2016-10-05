@@ -32,6 +32,12 @@
 
 - (nullable id<GBFileInfoGen>)getFileInfo:(nonnull NSString *)pathName;
 
+- (BOOL)deleteFile:(nonnull NSString *)fullpath;
+
+- (BOOL)isVideoFileCompatibleToSavedPhotosAlbum:(nonnull NSString *)fullpath;
+
+- (BOOL)saveVideoFileToSavedPhotosAlbum:(nonnull NSString *)fullpath;
+
 - (void)playVideo:(nonnull NSString *)file;
 
 - (nullable id<GBVideoFrameGen>)createVideoFrame;

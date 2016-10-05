@@ -33,6 +33,8 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
+        void initialize(bool audio) override;
+        void setAudioEnable(bool enable) override;
         void startCamera() override;
         void stopCamera() override;
         void switchFront(bool front) override;
@@ -80,6 +82,8 @@ private:
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/CameraControllerGen") };
+    const jmethodID method_initialize { ::djinni::jniGetMethodID(clazz.get(), "initialize", "(Z)V") };
+    const jmethodID method_setAudioEnable { ::djinni::jniGetMethodID(clazz.get(), "setAudioEnable", "(Z)V") };
     const jmethodID method_startCamera { ::djinni::jniGetMethodID(clazz.get(), "startCamera", "()V") };
     const jmethodID method_stopCamera { ::djinni::jniGetMethodID(clazz.get(), "stopCamera", "()V") };
     const jmethodID method_switchFront { ::djinni::jniGetMethodID(clazz.get(), "switchFront", "(Z)V") };

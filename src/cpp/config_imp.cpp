@@ -46,7 +46,7 @@ std::string ConfigImp::getString(const std::string & type){
     try {
         return (*m_config)[type].asString();
     } catch (std::exception &ex) {
-        G_LOG_FC(LOG_ERROR, "getString err:%s", ex.what());
+        G_LOG_FC(LOG_ERROR, "getInt err:%s type:%s", ex.what(), type.c_str());
     }
 
     return "";
@@ -56,7 +56,7 @@ int32_t ConfigImp::getInt(const std::string & type){
     try {
         return (*m_config)[type].asInt();
     } catch (std::exception &ex) {
-        G_LOG_FC(LOG_ERROR, "getInt err:%s", ex.what());
+        G_LOG_FC(LOG_ERROR, "getInt err:%s type:%s", ex.what(), type.c_str());
     }
     
     return 0;
@@ -66,7 +66,7 @@ float ConfigImp::getFloat(const std::string & type){
     try {
         return (*m_config)[type].asFloat();
     } catch (std::exception &ex) {
-        G_LOG_FC(LOG_ERROR, "getFolat err:%s", ex.what());
+        G_LOG_FC(LOG_ERROR, "getFolat err:%s type:%s", ex.what(), type.c_str());
     }
     
     return 0.0f;
@@ -76,7 +76,7 @@ int64_t ConfigImp::getI64(const std::string & type){
     try {
         return (*m_config)[type].asInt64();
     } catch (std::exception &ex) {
-        G_LOG_FC(LOG_ERROR, "getI64 err:%s", ex.what());
+        G_LOG_FC(LOG_ERROR, "getI64 err:%s type:%s", ex.what(), type.c_str());
     }
     
     return 0;

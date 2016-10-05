@@ -39,6 +39,12 @@ public:
 
     virtual std::shared_ptr<FileInfoGen> getFileInfo(const std::string & path_name) = 0;
 
+    virtual bool deleteFile(const std::string & fullpath) = 0;
+
+    virtual bool isVideoFileCompatibleToSavedPhotosAlbum(const std::string & fullpath) = 0;
+
+    virtual bool saveVideoFileToSavedPhotosAlbum(const std::string & fullpath) = 0;
+
     virtual void playVideo(const std::string & file) = 0;
 
     virtual std::shared_ptr<VideoFrameGen> createVideoFrame() = 0;

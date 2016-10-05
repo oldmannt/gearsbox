@@ -28,6 +28,24 @@ video_frame_gen = interface +o +j {
 	setHeight(height:i32);
 	setSize(size:i64);
 	setLineSize(linesize:i32);
+
+	getAudioData():i64;
+	getAudioDataSize():i64;
+	getAudioPSTValue():i64;
+	getAudioPSTScale():i32;
+	getNumSamples():i32;
+	getChannelsPerFrame():i32;
+	getSampleRate():f64;
+	getBitsPerChannel():i32;
+
+	setAudioData(data:i64);
+	setAudioDataSize(size:i64);
+	setAudioPSTValue(value:i64);
+	setAudioPSTScale(scale:i32);
+	setNumSamples(num:i32);
+	setChannelsPerFrame(channels:i32);
+	setSampleRate(rate:f64);
+	setBitsPerChannel(bits:i32);
 }
 
 camera_capture_handler = interface +c +o +j {
@@ -80,6 +98,8 @@ camera_config_gen = interface +c {
 
 camera_controller_gen = interface +o +j {
 
+	initialize(audio:bool);
+	setAudioEnable(enable:bool);
 	startCamera();
 	stopCamera();
 	switchFront(front:bool);
@@ -148,7 +168,7 @@ video_writer_gen = interface +c {
 }
 
 video_encoder_gen = interface +c +j +o {
-	initialize(filepath:string, fps:i32, bitrate:i32, width:i32, height:i32):bool;
+	initialize(filepath:string, fps:i32, bitrate:i32, width:i32, height:i32, frame:video_frame_gen):bool;
 	encodeFrame(frame:video_frame_gen);
 	saveNRelease();
 }
@@ -166,3 +186,4 @@ video_info_gen = interface +c {
 	getDuration():i64; 
 	getVideoFrame():video_frame_gen;
 }
+

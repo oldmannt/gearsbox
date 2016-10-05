@@ -13,6 +13,10 @@
 
 @protocol GBCameraControllerGen
 
+- (void)initialize:(BOOL)audio;
+
+- (void)setAudioEnable:(BOOL)enable;
+
 - (void)startCamera;
 
 - (void)stopCamera;

@@ -44,14 +44,14 @@ void VideoWriterImp::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
         return;
     }
     static int frame_counter = 0;
-    G_LOG_C(LOG_INFO,"VideoWriterImp::captureOutput frame:%d %d",++frame_counter,uv_now(uv_default_loop())); 
+    if (frame->getData()!=0) // video frame
+        G_LOG_C(LOG_INFO,"VideoWriterImp::encodeFrame frame:%d %d",++frame_counter,uv_now(uv_default_loop()));
     m_video_encoder->encodeFrame(frame);
 }
 
 void VideoWriterImp::excuse(const std::shared_ptr<TaskInfoGen> & info){
     //this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
     InstanceGetterGen::getCameraController()->asnyOneFrame();
-    //InstanceGetterGen::getCameraController()->asnyOnePicture();
 }
 
 void VideoWriterImp::start(int64_t interval){
@@ -69,17 +69,15 @@ void VideoWriterImp::start(int64_t interval){
     
     // encode the first frame
     //this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
-    InstanceGetterGen::getCameraController()->asnyOneFrame();
-    //InstanceGetterGen::getCameraController()->asnyOnePicture();
-    
+    InstanceGetterGen::getCameraController()->asnyOneFrame();    
 }
 
-void VideoWriterImp::captureOutput(const std::shared_ptr<VideoFrameGen> & picture, const std::string & error){
+void VideoWriterImp::captureOutput(const std::shared_ptr<VideoFrameGen> & frame, const std::string & error){
     if (error.size()>0){
         G_LOG_C(LOG_ERROR,"captureOutput err:%s", error.c_str());
     }
     
-    this->encodeFrame(picture);
+    this->encodeFrame(frame);
 }
 
 void VideoWriterImp::setInterval(int64_t interval){
@@ -88,20 +86,17 @@ void VideoWriterImp::setInterval(int64_t interval){
 }
 
 void VideoWriterImp::pause(){
-    if (m_writting_timer==nullptr)
-        return;
+    CHECK_RT(m_writting_timer, "m_writting_timer null");
     m_writting_timer->pause();
 }
 
 void VideoWriterImp::resume(){
-    if (m_writting_timer==nullptr)
-        return;
+    CHECK_RT(m_writting_timer, "m_writting_timer null");
     m_writting_timer->resume();
 }
 
 bool VideoWriterImp::isRunning(){
-    if (m_writting_timer==nullptr)
-        return false;
+    CHECK_RT(m_writting_timer, "m_writting_timer null");
     return m_writting_timer->isRunning();
 }
 
@@ -128,7 +123,7 @@ bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){
         m_video_encoder = std::make_shared<VideoEncoderImp_ffmp4>();
     }
     CHECK_RTF(m_video_encoder!=nullptr, "m_video_encoder null");
-    CHECK_RTF(m_video_encoder->initialize(m_file_path, m_fps, m_bitrate, frame->getWidth(), frame->getHeight()),
+    CHECK_RTF(m_video_encoder->initialize(m_file_path, m_fps, m_bitrate, frame->getWidth(), frame->getHeight(), frame),
               "video encoder initialize failed");
     
     m_init = true;

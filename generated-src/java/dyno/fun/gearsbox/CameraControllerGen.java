@@ -4,6 +4,10 @@
 package dyno.fun.gearsbox;
 
 public abstract class CameraControllerGen {
+    public abstract void initialize(boolean audio);
+
+    public abstract void setAudioEnable(boolean enable);
+
     public abstract void startCamera();
 
     public abstract void stopCamera();

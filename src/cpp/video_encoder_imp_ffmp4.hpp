@@ -22,6 +22,7 @@ extern "C" {
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
 #include <libavutil/timestamp.h>
+#include <libswresample/swresample.h>
     
 #ifdef __cplusplus
 };
@@ -52,12 +53,12 @@ typedef struct OutputStream {
 class VideoEncoderImp_ffmp4 : public VideoEncoderGen{
 public:
     VideoEncoderImp_ffmp4():m_video_steam({0}),m_audio_steam({0}),m_format_ctx(0)
-                        ,m_av_frame(0),m_ysize(0),m_frame_counter(0) {
+                        ,m_ysize(0),m_frame_counter(0) {
         
     }
     virtual ~VideoEncoderImp_ffmp4() {}
     
-    virtual bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, int32_t width, int32_t height);
+    virtual bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, int32_t width, int32_t height, const std::shared_ptr<VideoFrameGen> & frame);
     
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame);
     
@@ -68,7 +69,6 @@ private:
     OutputStream m_video_steam;
     OutputStream m_audio_steam;
     AVFormatContext *m_format_ctx;
-    AVFrame* m_av_frame;
     int64_t m_ysize;
     int32_t m_frame_counter;
     int32_t m_width;

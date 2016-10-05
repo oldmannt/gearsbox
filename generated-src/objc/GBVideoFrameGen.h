@@ -26,4 +26,36 @@
 
 - (void)setLineSize:(int32_t)linesize;
 
+- (int64_t)getAudioData;
+
+- (int64_t)getAudioDataSize;
+
+- (int64_t)getAudioPSTValue;
+
+- (int32_t)getAudioPSTScale;
+
+- (int32_t)getNumSamples;
+
+- (int32_t)getChannelsPerFrame;
+
+- (double)getSampleRate;
+
+- (int32_t)getBitsPerChannel;
+
+- (void)setAudioData:(int64_t)data;
+
+- (void)setAudioDataSize:(int64_t)size;
+
+- (void)setAudioPSTValue:(int64_t)value;
+
+- (void)setAudioPSTScale:(int32_t)scale;
+
+- (void)setNumSamples:(int32_t)num;
+
+- (void)setChannelsPerFrame:(int32_t)channels;
+
+- (void)setSampleRate:(double)rate;
+
+- (void)setBitsPerChannel:(int32_t)bits;
+
 @end

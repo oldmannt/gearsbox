@@ -81,6 +81,110 @@ public:
             [Handle::get() setLineSize:(::djinni::I32::fromCpp(c_linesize))];
         }
     }
+    int64_t getAudioData() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getAudioData];
+            return ::djinni::I64::toCpp(r);
+        }
+    }
+    int64_t getAudioDataSize() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getAudioDataSize];
+            return ::djinni::I64::toCpp(r);
+        }
+    }
+    int64_t getAudioPSTValue() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getAudioPSTValue];
+            return ::djinni::I64::toCpp(r);
+        }
+    }
+    int32_t getAudioPSTScale() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getAudioPSTScale];
+            return ::djinni::I32::toCpp(r);
+        }
+    }
+    int32_t getNumSamples() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getNumSamples];
+            return ::djinni::I32::toCpp(r);
+        }
+    }
+    int32_t getChannelsPerFrame() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getChannelsPerFrame];
+            return ::djinni::I32::toCpp(r);
+        }
+    }
+    double getSampleRate() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getSampleRate];
+            return ::djinni::F64::toCpp(r);
+        }
+    }
+    int32_t getBitsPerChannel() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getBitsPerChannel];
+            return ::djinni::I32::toCpp(r);
+        }
+    }
+    void setAudioData(int64_t c_data) override
+    {
+        @autoreleasepool {
+            [Handle::get() setAudioData:(::djinni::I64::fromCpp(c_data))];
+        }
+    }
+    void setAudioDataSize(int64_t c_size) override
+    {
+        @autoreleasepool {
+            [Handle::get() setAudioDataSize:(::djinni::I64::fromCpp(c_size))];
+        }
+    }
+    void setAudioPSTValue(int64_t c_value) override
+    {
+        @autoreleasepool {
+            [Handle::get() setAudioPSTValue:(::djinni::I64::fromCpp(c_value))];
+        }
+    }
+    void setAudioPSTScale(int32_t c_scale) override
+    {
+        @autoreleasepool {
+            [Handle::get() setAudioPSTScale:(::djinni::I32::fromCpp(c_scale))];
+        }
+    }
+    void setNumSamples(int32_t c_num) override
+    {
+        @autoreleasepool {
+            [Handle::get() setNumSamples:(::djinni::I32::fromCpp(c_num))];
+        }
+    }
+    void setChannelsPerFrame(int32_t c_channels) override
+    {
+        @autoreleasepool {
+            [Handle::get() setChannelsPerFrame:(::djinni::I32::fromCpp(c_channels))];
+        }
+    }
+    void setSampleRate(double c_rate) override
+    {
+        @autoreleasepool {
+            [Handle::get() setSampleRate:(::djinni::F64::fromCpp(c_rate))];
+        }
+    }
+    void setBitsPerChannel(int32_t c_bits) override
+    {
+        @autoreleasepool {
+            [Handle::get() setBitsPerChannel:(::djinni::I32::fromCpp(c_bits))];
+        }
+    }
 };
 
 }  // namespace djinni_generated

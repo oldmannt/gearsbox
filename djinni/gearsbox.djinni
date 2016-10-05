@@ -80,6 +80,10 @@ platform_utility_gen = interface +o +j {
     getSubDirInHome(sub_dir:string):string;
     getFileNameFromPath(path:string):string;
     getFileInfo(path_name:string):file_info_gen;
+    deleteFile(fullpath:string):bool;
+
+    isVideoFileCompatibleToSavedPhotosAlbum(fullpath:string):bool;
+    saveVideoFileToSavedPhotosAlbum(fullpath:string):bool;
 
     playVideo(file:string);
 

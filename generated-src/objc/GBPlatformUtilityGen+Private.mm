@@ -88,6 +88,27 @@ public:
             return ::djinni_generated::FileInfoGen::toCpp(r);
         }
     }
+    bool deleteFile(const std::string & c_fullpath) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() deleteFile:(::djinni::String::fromCpp(c_fullpath))];
+            return ::djinni::Bool::toCpp(r);
+        }
+    }
+    bool isVideoFileCompatibleToSavedPhotosAlbum(const std::string & c_fullpath) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() isVideoFileCompatibleToSavedPhotosAlbum:(::djinni::String::fromCpp(c_fullpath))];
+            return ::djinni::Bool::toCpp(r);
+        }
+    }
+    bool saveVideoFileToSavedPhotosAlbum(const std::string & c_fullpath) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() saveVideoFileToSavedPhotosAlbum:(::djinni::String::fromCpp(c_fullpath))];
+            return ::djinni::Bool::toCpp(r);
+        }
+    }
     void playVideo(const std::string & c_file) override
     {
         @autoreleasepool {

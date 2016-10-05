@@ -43,6 +43,22 @@ private:
         void setHeight(int32_t height) override;
         void setSize(int64_t size) override;
         void setLineSize(int32_t linesize) override;
+        int64_t getAudioData() override;
+        int64_t getAudioDataSize() override;
+        int64_t getAudioPSTValue() override;
+        int32_t getAudioPSTScale() override;
+        int32_t getNumSamples() override;
+        int32_t getChannelsPerFrame() override;
+        double getSampleRate() override;
+        int32_t getBitsPerChannel() override;
+        void setAudioData(int64_t data) override;
+        void setAudioDataSize(int64_t size) override;
+        void setAudioPSTValue(int64_t value) override;
+        void setAudioPSTScale(int32_t scale) override;
+        void setNumSamples(int32_t num) override;
+        void setChannelsPerFrame(int32_t channels) override;
+        void setSampleRate(double rate) override;
+        void setBitsPerChannel(int32_t bits) override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::VideoFrameGen, ::djinni_generated::NativeVideoFrameGen>;
@@ -59,6 +75,22 @@ private:
     const jmethodID method_setHeight { ::djinni::jniGetMethodID(clazz.get(), "setHeight", "(I)V") };
     const jmethodID method_setSize { ::djinni::jniGetMethodID(clazz.get(), "setSize", "(J)V") };
     const jmethodID method_setLineSize { ::djinni::jniGetMethodID(clazz.get(), "setLineSize", "(I)V") };
+    const jmethodID method_getAudioData { ::djinni::jniGetMethodID(clazz.get(), "getAudioData", "()J") };
+    const jmethodID method_getAudioDataSize { ::djinni::jniGetMethodID(clazz.get(), "getAudioDataSize", "()J") };
+    const jmethodID method_getAudioPSTValue { ::djinni::jniGetMethodID(clazz.get(), "getAudioPSTValue", "()J") };
+    const jmethodID method_getAudioPSTScale { ::djinni::jniGetMethodID(clazz.get(), "getAudioPSTScale", "()I") };
+    const jmethodID method_getNumSamples { ::djinni::jniGetMethodID(clazz.get(), "getNumSamples", "()I") };
+    const jmethodID method_getChannelsPerFrame { ::djinni::jniGetMethodID(clazz.get(), "getChannelsPerFrame", "()I") };
+    const jmethodID method_getSampleRate { ::djinni::jniGetMethodID(clazz.get(), "getSampleRate", "()D") };
+    const jmethodID method_getBitsPerChannel { ::djinni::jniGetMethodID(clazz.get(), "getBitsPerChannel", "()I") };
+    const jmethodID method_setAudioData { ::djinni::jniGetMethodID(clazz.get(), "setAudioData", "(J)V") };
+    const jmethodID method_setAudioDataSize { ::djinni::jniGetMethodID(clazz.get(), "setAudioDataSize", "(J)V") };
+    const jmethodID method_setAudioPSTValue { ::djinni::jniGetMethodID(clazz.get(), "setAudioPSTValue", "(J)V") };
+    const jmethodID method_setAudioPSTScale { ::djinni::jniGetMethodID(clazz.get(), "setAudioPSTScale", "(I)V") };
+    const jmethodID method_setNumSamples { ::djinni::jniGetMethodID(clazz.get(), "setNumSamples", "(I)V") };
+    const jmethodID method_setChannelsPerFrame { ::djinni::jniGetMethodID(clazz.get(), "setChannelsPerFrame", "(I)V") };
+    const jmethodID method_setSampleRate { ::djinni::jniGetMethodID(clazz.get(), "setSampleRate", "(D)V") };
+    const jmethodID method_setBitsPerChannel { ::djinni::jniGetMethodID(clazz.get(), "setBitsPerChannel", "(I)V") };
 };
 
 }  // namespace djinni_generated

@@ -30,6 +30,38 @@ public:
     virtual void setSize(int64_t size) = 0;
 
     virtual void setLineSize(int32_t linesize) = 0;
+
+    virtual int64_t getAudioData() = 0;
+
+    virtual int64_t getAudioDataSize() = 0;
+
+    virtual int64_t getAudioPSTValue() = 0;
+
+    virtual int32_t getAudioPSTScale() = 0;
+
+    virtual int32_t getNumSamples() = 0;
+
+    virtual int32_t getChannelsPerFrame() = 0;
+
+    virtual double getSampleRate() = 0;
+
+    virtual int32_t getBitsPerChannel() = 0;
+
+    virtual void setAudioData(int64_t data) = 0;
+
+    virtual void setAudioDataSize(int64_t size) = 0;
+
+    virtual void setAudioPSTValue(int64_t value) = 0;
+
+    virtual void setAudioPSTScale(int32_t scale) = 0;
+
+    virtual void setNumSamples(int32_t num) = 0;
+
+    virtual void setChannelsPerFrame(int32_t channels) = 0;
+
+    virtual void setSampleRate(double rate) = 0;
+
+    virtual void setBitsPerChannel(int32_t bits) = 0;
 };
 
 }  // namespace gearsbox

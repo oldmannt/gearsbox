@@ -11,7 +11,8 @@
                fps:(int32_t)fps
            bitrate:(int32_t)bitrate
              width:(int32_t)width
-            height:(int32_t)height;
+            height:(int32_t)height
+             frame:(nullable id<GBVideoFrameGen>)frame;
 
 - (void)encodeFrame:(nullable id<GBVideoFrameGen>)frame;
 

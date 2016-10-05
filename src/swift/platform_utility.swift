@@ -134,6 +134,26 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return nil
     }
     
+    @objc public func deleteFile(fullpath: String) -> Bool {
+        
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(fullpath)
+        } catch let error as NSError {
+            GBLogGen.instance()?.logerrf("deleteFile path:\(fullpath) failed err:\(error)")
+            return false
+        }
+        return true
+    }
+    
+    @objc public func isVideoFileCompatibleToSavedPhotosAlbum(fullpath: String) -> Bool{
+        return UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(fullpath)
+    }
+    
+    @objc public func saveVideoFileToSavedPhotosAlbum(fullpath: String) -> Bool{
+        UISaveVideoAtPathToSavedPhotosAlbum(fullpath, nil, nil, nil)
+        return true
+    }
+    
     @objc public func playVideo(file: String){
         let player = AVPlayerViewController()
         let url:NSURL = NSURL(fileURLWithPath:file)

@@ -14,6 +14,7 @@
 @interface ObjcUtility : NSObject 
 
 +(GBVideoFrameImp* _Nonnull)toVideoFrame:(CMSampleBufferRef _Nonnull)sampleBuffer;
++(GBVideoFrameImp* _Nonnull)toAudeoFrame:(CMSampleBufferRef _Nonnull)audioBuffer;
 +(UIImage* _Nullable)VideoFram2UIImage:(GBVideoFrameImp* _Nonnull)gbVideoFrame;
 +(UIImage* _Nullable)VideoReview2UIImage:(NSString* _Nonnull)video_path;
 @end

@@ -94,5 +94,133 @@ void NativeVideoFrameGen::JavaProxy::setLineSize(int32_t c_linesize) {
                            ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_linesize)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
+int64_t NativeVideoFrameGen::JavaProxy::getAudioData() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallLongMethod(Handle::get().get(), data.method_getAudioData);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I64::toCpp(jniEnv, jret);
+}
+int64_t NativeVideoFrameGen::JavaProxy::getAudioDataSize() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallLongMethod(Handle::get().get(), data.method_getAudioDataSize);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I64::toCpp(jniEnv, jret);
+}
+int64_t NativeVideoFrameGen::JavaProxy::getAudioPSTValue() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallLongMethod(Handle::get().get(), data.method_getAudioPSTValue);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I64::toCpp(jniEnv, jret);
+}
+int32_t NativeVideoFrameGen::JavaProxy::getAudioPSTScale() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallIntMethod(Handle::get().get(), data.method_getAudioPSTScale);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I32::toCpp(jniEnv, jret);
+}
+int32_t NativeVideoFrameGen::JavaProxy::getNumSamples() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallIntMethod(Handle::get().get(), data.method_getNumSamples);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I32::toCpp(jniEnv, jret);
+}
+int32_t NativeVideoFrameGen::JavaProxy::getChannelsPerFrame() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallIntMethod(Handle::get().get(), data.method_getChannelsPerFrame);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I32::toCpp(jniEnv, jret);
+}
+double NativeVideoFrameGen::JavaProxy::getSampleRate() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallDoubleMethod(Handle::get().get(), data.method_getSampleRate);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::F64::toCpp(jniEnv, jret);
+}
+int32_t NativeVideoFrameGen::JavaProxy::getBitsPerChannel() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallIntMethod(Handle::get().get(), data.method_getBitsPerChannel);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I32::toCpp(jniEnv, jret);
+}
+void NativeVideoFrameGen::JavaProxy::setAudioData(int64_t c_data) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setAudioData,
+                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_data)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setAudioDataSize(int64_t c_size) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setAudioDataSize,
+                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_size)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setAudioPSTValue(int64_t c_value) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setAudioPSTValue,
+                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_value)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setAudioPSTScale(int32_t c_scale) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setAudioPSTScale,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_scale)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setNumSamples(int32_t c_num) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setNumSamples,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_num)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setChannelsPerFrame(int32_t c_channels) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setChannelsPerFrame,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_channels)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setSampleRate(double c_rate) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setSampleRate,
+                           ::djinni::get(::djinni::F64::fromCpp(jniEnv, c_rate)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeVideoFrameGen::JavaProxy::setBitsPerChannel(int32_t c_bits) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setBitsPerChannel,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_bits)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 
 }  // namespace djinni_generated

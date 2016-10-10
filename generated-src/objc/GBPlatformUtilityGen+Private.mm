@@ -18,6 +18,27 @@ class PlatformUtilityGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
+    int64_t getSystemTickNano() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getSystemTickNano];
+            return ::djinni::I64::toCpp(r);
+        }
+    }
+    int64_t getSystemTickMsec() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getSystemTickMsec];
+            return ::djinni::I64::toCpp(r);
+        }
+    }
+    double getSystemTickSec() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getSystemTickSec];
+            return ::djinni::F64::toCpp(r);
+        }
+    }
     void endEniting(bool c_force) override
     {
         @autoreleasepool {

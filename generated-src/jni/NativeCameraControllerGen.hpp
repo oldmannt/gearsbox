@@ -34,6 +34,7 @@ private:
         ~JavaProxy();
 
         void initialize(bool audio) override;
+        void setRefreshDuration(int64_t value, int32_t scale) override;
         void setAudioEnable(bool enable) override;
         void startCamera() override;
         void stopCamera() override;
@@ -71,11 +72,13 @@ private:
         float getZoom() override;
         float getZoomMax() override;
         float getZoomMin() override;
-        void setFramePhoto(bool flag) override;
         std::shared_ptr<::gearsbox::VideoFrameGen> captureOneFrame() override;
         void asnyOneFrame() override;
         void asnyOnePicture() override;
         void setCaptureHandler(const std::shared_ptr<::gearsbox::CameraCaptureHandler> & handler) override;
+        void setCaptureMode(::gearsbox::CameraCaptureMode mode) override;
+        ::gearsbox::CameraCaptureMode getCaptureMode() override;
+        void setImmediaPause(bool flag) override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::CameraControllerGen, ::djinni_generated::NativeCameraControllerGen>;
@@ -83,6 +86,7 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/CameraControllerGen") };
     const jmethodID method_initialize { ::djinni::jniGetMethodID(clazz.get(), "initialize", "(Z)V") };
+    const jmethodID method_setRefreshDuration { ::djinni::jniGetMethodID(clazz.get(), "setRefreshDuration", "(JI)V") };
     const jmethodID method_setAudioEnable { ::djinni::jniGetMethodID(clazz.get(), "setAudioEnable", "(Z)V") };
     const jmethodID method_startCamera { ::djinni::jniGetMethodID(clazz.get(), "startCamera", "()V") };
     const jmethodID method_stopCamera { ::djinni::jniGetMethodID(clazz.get(), "stopCamera", "()V") };
@@ -120,11 +124,13 @@ private:
     const jmethodID method_getZoom { ::djinni::jniGetMethodID(clazz.get(), "getZoom", "()F") };
     const jmethodID method_getZoomMax { ::djinni::jniGetMethodID(clazz.get(), "getZoomMax", "()F") };
     const jmethodID method_getZoomMin { ::djinni::jniGetMethodID(clazz.get(), "getZoomMin", "()F") };
-    const jmethodID method_setFramePhoto { ::djinni::jniGetMethodID(clazz.get(), "setFramePhoto", "(Z)V") };
     const jmethodID method_captureOneFrame { ::djinni::jniGetMethodID(clazz.get(), "captureOneFrame", "()Ldyno/fun/gearsbox/VideoFrameGen;") };
     const jmethodID method_asnyOneFrame { ::djinni::jniGetMethodID(clazz.get(), "asnyOneFrame", "()V") };
     const jmethodID method_asnyOnePicture { ::djinni::jniGetMethodID(clazz.get(), "asnyOnePicture", "()V") };
     const jmethodID method_setCaptureHandler { ::djinni::jniGetMethodID(clazz.get(), "setCaptureHandler", "(Ldyno/fun/gearsbox/CameraCaptureHandler;)V") };
+    const jmethodID method_setCaptureMode { ::djinni::jniGetMethodID(clazz.get(), "setCaptureMode", "(Ldyno/fun/gearsbox/CameraCaptureMode;)V") };
+    const jmethodID method_getCaptureMode { ::djinni::jniGetMethodID(clazz.get(), "getCaptureMode", "()Ldyno/fun/gearsbox/CameraCaptureMode;") };
+    const jmethodID method_setImmediaPause { ::djinni::jniGetMethodID(clazz.get(), "setImmediaPause", "(Z)V") };
 };
 
 }  // namespace djinni_generated

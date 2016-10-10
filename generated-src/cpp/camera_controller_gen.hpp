@@ -10,6 +10,7 @@ namespace gearsbox {
 
 class CameraCaptureHandler;
 class VideoFrameGen;
+enum class CameraCaptureMode;
 enum class CameraExposureMode;
 enum class CameraFlash;
 enum class CameraFocusMode;
@@ -21,6 +22,8 @@ public:
     virtual ~CameraControllerGen() {}
 
     virtual void initialize(bool audio) = 0;
+
+    virtual void setRefreshDuration(int64_t value, int32_t scale) = 0;
 
     virtual void setAudioEnable(bool enable) = 0;
 
@@ -98,8 +101,6 @@ public:
     /** minimum value is 1.0 */
     virtual float getZoomMin() = 0;
 
-    virtual void setFramePhoto(bool flag) = 0;
-
     virtual std::shared_ptr<VideoFrameGen> captureOneFrame() = 0;
 
     virtual void asnyOneFrame() = 0;
@@ -107,6 +108,12 @@ public:
     virtual void asnyOnePicture() = 0;
 
     virtual void setCaptureHandler(const std::shared_ptr<CameraCaptureHandler> & handler) = 0;
+
+    virtual void setCaptureMode(CameraCaptureMode mode) = 0;
+
+    virtual CameraCaptureMode getCaptureMode() = 0;
+
+    virtual void setImmediaPause(bool flag) = 0;
 };
 
 }  // namespace gearsbox

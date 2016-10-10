@@ -12,7 +12,7 @@ import UIKit
 class GBViewFactoryImp: GBViewFactoryGen {
     
     static let instance = GBViewFactoryImp()
-    @objc internal func injectView(view: GBViewGen?) -> Bool{
+    @objc internal func injectView(_ view: GBViewGen?) -> Bool{
         if view == nil {
             GBLogGen.instance()?.logerrf("param view nil \(#file) \(#function) \(#line) ")
             return false
@@ -37,7 +37,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
         return true;
     }
     
-    @objc internal func createView(conf: GBViewConf) -> GBViewGen?{
+    @objc internal func createView(_ conf: GBViewConf) -> GBViewGen?{
         if ((GBUiManagerGen.instance()?.getView(conf.id)) != nil){
             GBLogGen.instance()?.logerrf("create failed already in manager id:\(conf.id) \(#file) \(#function) \(#line) ")
             return nil
@@ -55,7 +55,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
         return view_imp
     }
     
-    @objc internal func createViewById(id: String, type:GBViewType) -> GBViewGen?{
+    @objc internal func createView(byId id: String, type:GBViewType) -> GBViewGen?{
         var view_conf:GBViewConf = (GBUiConfGen.instance()?.getViewConf(id))!
         if view_conf.id != id {
             view_conf = createViewConf(id, type: type)
@@ -64,54 +64,54 @@ class GBViewFactoryImp: GBViewFactoryGen {
         return createView(view_conf)
     }
     
-    @objc internal func showViewController(id: String, animated: Bool){
-        let current_vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+    @objc internal func showViewController(_ id: String, animated: Bool){
+        let current_vc = UIApplication.shared.keyWindow?.rootViewController
         if nil==current_vc{
             GBLogGen.instance()?.logerrf("showViewController current_vc null")
             return
         }
         
-        let next_vc = current_vc?.storyboard?.instantiateViewControllerWithIdentifier(id)
-        current_vc?.presentViewController(next_vc!, animated: false, completion: nil)
+        let next_vc = current_vc?.storyboard?.instantiateViewController(withIdentifier: id)
+        current_vc?.present(next_vc!, animated: false, completion: nil)
     }
     
-    internal func addIOSViewToUIMgr(view:UIView, id:String, constroller: ViewController){
+    internal func addIOSViewToUIMgr(_ view:UIView, id:String, constroller: ViewController){
         let view_imp = GBViewImp(id:id, view: view, constroller: constroller)
         GBUiManagerGen.instance()?.addView(view_imp)
     }
     
-    private func confView(view_imp: GBViewImp, conf:GBViewConf)->Bool{
+    fileprivate func confView(_ view_imp: GBViewImp, conf:GBViewConf)->Bool{
         setBaseConf(view_imp, conf: conf)
         createSubViews(view_imp, subviews: conf.subviews)
         createConstraints(view_imp, constraints: conf.constraints)
         return true
     }
     
-    private func createBase(conf:GBViewConf)->UIView{
+    fileprivate func createBase(_ conf:GBViewConf)->UIView{
         let ios_view = UIView();
         return ios_view;
     }
     
-    private func createLabel(conf:GBViewConf)->UILabel{
+    fileprivate func createLabel(_ conf:GBViewConf)->UILabel{
         let label:UILabel = UILabel();
         label.numberOfLines = 0;
         return label;
     }
     
-    private func createInput(conf:GBViewConf)->UITextField{
+    fileprivate func createInput(_ conf:GBViewConf)->UITextField{
         let view:UITextField = UITextField()
         return view;
     }
     
-    private func confiView(view_imp:GBViewImp, conf:GBViewConf){
+    fileprivate func confiView(_ view_imp:GBViewImp, conf:GBViewConf){
         switch conf.type {
-        case GBViewType.Base:
+        case GBViewType.base:
             setBaseConf(view_imp, conf: conf)
             break
-        case GBViewType.Label:
+        case GBViewType.label:
             setLabelConf(view_imp, conf: conf)
             break
-        case GBViewType.Input:
+        case GBViewType.input:
             setInput(view_imp, conf: conf)
             break
         default:
@@ -121,14 +121,14 @@ class GBViewFactoryImp: GBViewFactoryGen {
         
     }
     
-    private func createView(view_conf:GBViewConf) -> UIView?{
+    fileprivate func createView(_ view_conf:GBViewConf) -> UIView?{
         
         switch view_conf.type {
-        case GBViewType.Base:
+        case GBViewType.base:
             return createBase(view_conf)
-        case GBViewType.Label:
+        case GBViewType.label:
             return createLabel(view_conf)
-        case GBViewType.Input:
+        case GBViewType.input:
             return createInput(view_conf)
         default: break
         }
@@ -137,7 +137,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
         return nil
     }
        
-    private func setLabelConf(label:GBViewImp, conf:GBViewConf){
+    fileprivate func setLabelConf(_ label:GBViewImp, conf:GBViewConf){
         setBaseConf(label, conf: conf)
         let uiview:UILabel? = label.getUIView() as? UILabel
         if nil == uiview{
@@ -149,18 +149,18 @@ class GBViewFactoryImp: GBViewFactoryGen {
         //label.backgroundColor = UIColor.blackColor()
         //label.text = "12345678"
         //label.adjustsFontSizeToFitWidth = true;
-        uiview!.userInteractionEnabled = true;
+        uiview!.isUserInteractionEnabled = true;
         
         if (conf.fontsize>0){
-            uiview!.font = uiview!.font.fontWithSize(CGFloat(conf.fontsize));
+            uiview!.font = uiview!.font.withSize(CGFloat(conf.fontsize));
         }
         
-        if (conf.textalign != GBTextAlign.None){
+        if (conf.textalign != GBTextAlign.none){
             uiview!.textAlignment = GBTyperConvertor.convertUITextAlign(conf.textalign)!
         }
     }
     
-    private func setInput(input:GBViewImp, conf:GBViewConf){
+    fileprivate func setInput(_ input:GBViewImp, conf:GBViewConf){
         let uiview:UITextField? = input.getUIView() as? UITextField
         if nil == uiview{
             return
@@ -173,7 +173,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
         if (GBUiValueCheckerGen.instance()?.isValidTextBoarder(conf.textboarder) == true){
             uiview!.borderStyle = GBTyperConvertor.convertUITextBoarder(conf.textboarder);
         }
-        if (conf.keyboardtype != GBTextKeyboard.Default){
+        if (conf.keyboardtype != GBTextKeyboard.default){
             uiview!.keyboardType = GBTyperConvertor.convertKeyboardType(conf.keyboardtype)
         }
         if (conf.numericText){
@@ -184,19 +184,19 @@ class GBViewFactoryImp: GBViewFactoryGen {
         }
     }
     
-    private func createSubViews(view_imp:GBViewImp, subviews:[GBViewConf]){
+    fileprivate func createSubViews(_ view_imp:GBViewImp, subviews:[GBViewConf]){
         for sub_conf in subviews {
             view_imp.addSubView(sub_conf);
         }
     }
     
-    private func createConstraints(view_imp:GBViewImp, constraints:[GBViewConstraint]){
+    fileprivate func createConstraints(_ view_imp:GBViewImp, constraints:[GBViewConstraint]){
         for constraint in constraints {
-            view_imp.addConstraint(constraint)
+            view_imp.add(constraint)
         }
     }
 
-    private func setBaseConf(view:GBViewImp, conf:GBViewConf)->Bool{
+    fileprivate func setBaseConf(_ view:GBViewImp, conf:GBViewConf)->Bool{
         let uiview:UIView = view.getUIView()
         uiview.accessibilityIdentifier = conf.id;
 
@@ -212,11 +212,11 @@ class GBViewFactoryImp: GBViewFactoryGen {
     }
     
 
-    private func createViewConf(id:String, type:GBViewType)->GBViewConf{
+    fileprivate func createViewConf(_ id:String, type:GBViewType)->GBViewConf{
         let conf:GBViewConf = GBViewConf(id: id, type: type, frame: GBViewConf.noframe(),
-                        bgcolor: GBViewConf.nogbcolor(), fontsize: -1, textalign: GBTextAlign.None,
-                        textboarder: GBTextBoarder.None, text: "",
-                        numericText: false, keyboardtype: GBTextKeyboard.Default, maxlength: -1,
+                        bgcolor: GBViewConf.nogbcolor(), fontsize: -1, textalign: GBTextAlign.none,
+                        textboarder: GBTextBoarder.none, text: "",
+                        numericText: false, keyboardtype: GBTextKeyboard.default, maxlength: -1,
                         constraints: [GBViewConstraint](), subviews: [GBViewConf]())
         return conf
     }

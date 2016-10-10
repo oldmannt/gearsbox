@@ -16,6 +16,8 @@
 
 - (void)encodeFrame:(nullable id<GBVideoFrameGen>)frame;
 
+- (void)setFps:(int32_t)fps;
+
 - (void)saveNRelease;
 
 @end

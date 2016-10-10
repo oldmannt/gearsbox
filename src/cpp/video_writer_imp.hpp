@@ -40,7 +40,7 @@ public:
         m_video_encoder = nullptr;
     }
     
-    VideoWriterImp():m_video_encoder(nullptr),m_fps(0),m_bitrate(0),m_init(false){
+    VideoWriterImp():m_video_encoder(nullptr),m_fps(0),m_bitrate(0),m_init(false),m_auto_callback(false){
         
     }
     
@@ -86,6 +86,7 @@ private:
     int32_t m_fps;
     int32_t m_bitrate;
     bool m_init;
+    bool m_auto_callback;
     
     bool initialize(const std::shared_ptr<VideoFrameGen> & frame);
 };

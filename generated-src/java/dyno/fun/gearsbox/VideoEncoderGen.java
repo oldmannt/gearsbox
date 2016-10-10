@@ -10,6 +10,8 @@ public abstract class VideoEncoderGen {
 
     public abstract void encodeFrame(VideoFrameGen frame);
 
+    public abstract void setFps(int fps);
+
     public abstract void saveNRelease();
 
     private static final class CppProxy extends VideoEncoderGen
@@ -50,6 +52,14 @@ public abstract class VideoEncoderGen {
             native_encodeFrame(this.nativeRef, frame);
         }
         private native void native_encodeFrame(long _nativeRef, VideoFrameGen frame);
+
+        @Override
+        public void setFps(int fps)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setFps(this.nativeRef, fps);
+        }
+        private native void native_setFps(long _nativeRef, int fps);
 
         @Override
         public void saveNRelease()

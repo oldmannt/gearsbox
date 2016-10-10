@@ -45,6 +45,7 @@
       "include_dirs": [
         "./generated-src/objc",
         "./generated-src/cpp",
+        './deps/ffmpeg/include',
       ],
       'all_dependent_settings': {
         'include_dirs': [

@@ -4,6 +4,7 @@
 #include "NativeCameraControllerGen.hpp"  // my header
 #include "Marshal.hpp"
 #include "NativeCameraCaptureHandler.hpp"
+#include "NativeCameraCaptureMode.hpp"
 #include "NativeCameraExposureMode.hpp"
 #include "NativeCameraFlash.hpp"
 #include "NativeCameraFocusMode.hpp"
@@ -27,6 +28,15 @@ void NativeCameraControllerGen::JavaProxy::initialize(bool c_audio) {
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_initialize,
                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_audio)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeCameraControllerGen::JavaProxy::setRefreshDuration(int64_t c_value, int32_t c_scale) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setRefreshDuration,
+                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_value)),
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_scale)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
 void NativeCameraControllerGen::JavaProxy::setAudioEnable(bool c_enable) {
@@ -325,14 +335,6 @@ float NativeCameraControllerGen::JavaProxy::getZoomMin() {
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::F32::toCpp(jniEnv, jret);
 }
-void NativeCameraControllerGen::JavaProxy::setFramePhoto(bool c_flag) {
-    auto jniEnv = ::djinni::jniGetThreadEnv();
-    ::djinni::JniLocalScope jscope(jniEnv, 10);
-    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
-    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setFramePhoto,
-                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_flag)));
-    ::djinni::jniExceptionCheck(jniEnv);
-}
 std::shared_ptr<::gearsbox::VideoFrameGen> NativeCameraControllerGen::JavaProxy::captureOneFrame() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
@@ -361,6 +363,30 @@ void NativeCameraControllerGen::JavaProxy::setCaptureHandler(const std::shared_p
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_setCaptureHandler,
                            ::djinni::get(::djinni_generated::NativeCameraCaptureHandler::fromCpp(jniEnv, c_handler)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+void NativeCameraControllerGen::JavaProxy::setCaptureMode(::gearsbox::CameraCaptureMode c_mode) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setCaptureMode,
+                           ::djinni::get(::djinni_generated::NativeCameraCaptureMode::fromCpp(jniEnv, c_mode)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+::gearsbox::CameraCaptureMode NativeCameraControllerGen::JavaProxy::getCaptureMode() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_getCaptureMode);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni_generated::NativeCameraCaptureMode::toCpp(jniEnv, jret);
+}
+void NativeCameraControllerGen::JavaProxy::setImmediaPause(bool c_flag) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setImmediaPause,
+                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_flag)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
 

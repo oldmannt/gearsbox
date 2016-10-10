@@ -11,7 +11,7 @@ import UIKit
 
 class NumInputDelegate: NSObject, UITextFieldDelegate {
     
-    private var edtInput : UITextField?
+    fileprivate var edtInput : UITextField?
     
     init(edt: UITextField){
         edtInput = edt;
@@ -19,13 +19,13 @@ class NumInputDelegate: NSObject, UITextFieldDelegate {
     
     // Dismiss the keyboard when the user taps the "Return" key or its equivalent
     // while editing a text field.
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true;
     }
     
-    func textField(textField: UITextField,
-                   shouldChangeCharactersInRange range: NSRange,
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
                                                  replacementString string: String)
         -> Bool
     {
@@ -43,7 +43,7 @@ class NumInputDelegate: NSObject, UITextFieldDelegate {
         // If the contents still fit the constraints, allow the change
         // by returning true; otherwise disallow the change by returning false.
         let currentText = textField.text ?? ""
-        let prospectiveText = (currentText as NSString).stringByReplacingCharactersInRange(range, withString: string)
+        let prospectiveText = (currentText as NSString).replacingCharacters(in: range, with: string)
         
         switch textField {
             
@@ -58,7 +58,7 @@ class NumInputDelegate: NSObject, UITextFieldDelegate {
             }
             
             // allow only one "."
-            if string == "." && currentText.containsString("."){
+            if string == "." && currentText.contains("."){
                 return false
             }
             

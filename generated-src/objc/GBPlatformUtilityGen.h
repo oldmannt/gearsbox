@@ -9,6 +9,12 @@
 
 @protocol GBPlatformUtilityGen
 
+- (int64_t)getSystemTickNano;
+
+- (int64_t)getSystemTickMsec;
+
+- (double)getSystemTickSec;
+
 - (void)endEniting:(BOOL)force;
 
 - (GBLangType)getLanguage;

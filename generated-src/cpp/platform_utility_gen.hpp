@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <unordered_set>
@@ -16,6 +17,12 @@ enum class LangType;
 class PlatformUtilityGen {
 public:
     virtual ~PlatformUtilityGen() {}
+
+    virtual int64_t getSystemTickNano() = 0;
+
+    virtual int64_t getSystemTickMsec() = 0;
+
+    virtual double getSystemTickSec() = 0;
 
     virtual void endEniting(bool force) = 0;
 

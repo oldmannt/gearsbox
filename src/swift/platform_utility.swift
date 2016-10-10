@@ -10,18 +10,30 @@ import Foundation
 import UIKit
 import AVKit
 
-public class GBPlatformUtilityImp: GBPlatformUtilityGen {
+open class GBPlatformUtilityImp: GBPlatformUtilityGen {
     static let sharedInstance = GBPlatformUtilityImp()
     
-    private init(){}
+    fileprivate init(){}
     
-    @objc public func endEniting(force: Bool){
-        UIApplication.sharedApplication().keyWindow?.endEditing(force)
+    public func getSystemTickNano() -> Int64{
+        return Int64(CACurrentMediaTime()*1000000000)
     }
     
-    @objc public func getLanguage() -> GBLangType{
-        let strlangId = NSLocale.currentLocale().objectForKey(NSLocaleLanguageCode) as! String
-        if strlangId.rangeOfString("zh")==nil {
+    public func getSystemTickMsec() -> Int64{
+        return Int64(CACurrentMediaTime()*1000)
+    }
+    
+    public func getSystemTickSec() -> Double{
+        return CACurrentMediaTime()
+    }
+    
+    @objc open func endEniting(_ force: Bool){
+        UIApplication.shared.keyWindow?.endEditing(force)
+    }
+    
+    @objc open func getLanguage() -> GBLangType{
+        let strlangId = (Locale.current as NSLocale).object(forKey: NSLocale.Key.languageCode) as! String
+        if strlangId.range(of: "zh")==nil {
             return GBLangType.LANGENG
         }
         else{
@@ -30,12 +42,12 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
     }
     
     /**ios home directory */
-    @objc public func getHomeDirectory() -> String {
-        return NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+    @objc open func getHomeDirectory() -> String {
+        return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
     }
     
-    @objc public func getPackFilePath(file: String) -> String {
-        let rt = NSBundle.mainBundle().pathForResource(file, ofType: "")
+    @objc open func getPackFilePath(_ file: String) -> String {
+        let rt = Bundle.main.path(forResource: file, ofType: "")
         if rt == nil {
             GBLogGen.instance()?.logerrf("getPackFilePath \(file) failed")
             return ""
@@ -43,7 +55,7 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return rt!
     }
     
-    @objc public func getPackFileBuffer(file: String) -> String{
+    @objc open func getPackFileBuffer(_ file: String) -> String{
         let pack_path = getPackFilePath(file)
         if pack_path==""{
             return ""
@@ -62,7 +74,7 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
     }
     
     /**copy pack file to home directory and return path in home directory */
-    @objc public func getPackFileToHomePath(file: String) -> String{
+    @objc open func getPackFile(toHomePath file: String) -> String{
         let buffer = getPackFileBuffer(file)
         if buffer==""{
             return ""
@@ -70,7 +82,7 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         
         let doc_path = getHomeDirectory()+"/\(file)"
         do {
-            try buffer.writeToFile(doc_path, atomically: true, encoding: NSUTF8StringEncoding)
+            try buffer.write(toFile: doc_path, atomically: true, encoding: String.Encoding.utf8)
         } catch let error as NSError{
             // contents could not be loaded
             GBLogGen.instance()?.logerrf("write \(doc_path) failed \(error.userInfo) ")
@@ -80,18 +92,18 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return doc_path
     }
     
-    @objc public func getFilesFromPathBySuffix(path: String, suffix: String) -> Set<String>{
+    @objc open func getFilesFromPath(bySuffix path: String, suffix: String) -> Set<String>{
         var rt:Set<String> = Set<String>()
         do {
-            let url:NSURL = NSURL(fileURLWithPath:path)
+            let url:URL = URL(fileURLWithPath:path)
             // Get the directory contents urls (including subfolders urls)
-            let directoryContents = try NSFileManager.defaultManager().contentsOfDirectoryAtURL( url, includingPropertiesForKeys: nil, options: [])
+            let directoryContents = try FileManager.default.contentsOfDirectory( at: url, includingPropertiesForKeys: nil, options: [])
             
             // if you want to filter the directory contents you can do like this:
             let files = directoryContents.filter{ $0.pathExtension == suffix }
         
             for item in files {
-                rt.insert(item.path!)
+                rt.insert(item.path)
             }
             return rt
             
@@ -102,16 +114,15 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return rt
     }
     
-    @objc public func getSubDirInHome(subDir: String) -> String{
-        let paths = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true)
-        let documentsDirectory: AnyObject = paths[0]
-        let sub_dir = documentsDirectory.stringByAppendingPathComponent(subDir)
+    @objc open func getSubDir(inHome subDir: String) -> String{
+        let documentsDirectory: String = self.getHomeDirectory()
+        let sub_dir = documentsDirectory.appending(subDir)
         
-        if NSFileManager.defaultManager().fileExistsAtPath(sub_dir){
+        if FileManager.default.fileExists(atPath: sub_dir){
             return sub_dir
         }
         do {
-            try NSFileManager.defaultManager().createDirectoryAtPath(sub_dir, withIntermediateDirectories: false, attributes: nil)
+            try FileManager.default.createDirectory(atPath: sub_dir, withIntermediateDirectories: false, attributes: nil)
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("createPathInHome path:\(sub_dir) failed err:\(error)")
             return ""
@@ -120,12 +131,12 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return sub_dir
     }
     
-    @objc public func getFileNameFromPath(path: String) -> String{
+    @objc open func getFileName(fromPath path: String) -> String{
         let theFileName = (path as NSString).lastPathComponent
         return theFileName
     }
     
-    @objc public func getFileInfo(pathName: String) -> GBFileInfoGen?{
+    @objc open func getFileInfo(_ pathName: String) -> GBFileInfoGen?{
         let info = GBFileInfoImp()
         if info.initialize(pathName){
             return info
@@ -134,10 +145,10 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return nil
     }
     
-    @objc public func deleteFile(fullpath: String) -> Bool {
+    @objc open func deleteFile(_ fullpath: String) -> Bool {
         
         do {
-            try NSFileManager.defaultManager().removeItemAtPath(fullpath)
+            try FileManager.default.removeItem(atPath: fullpath)
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("deleteFile path:\(fullpath) failed err:\(error)")
             return false
@@ -145,30 +156,30 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return true
     }
     
-    @objc public func isVideoFileCompatibleToSavedPhotosAlbum(fullpath: String) -> Bool{
+    @objc open func isVideoFileCompatible(toSavedPhotosAlbum fullpath: String) -> Bool{
         return UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(fullpath)
     }
     
-    @objc public func saveVideoFileToSavedPhotosAlbum(fullpath: String) -> Bool{
+    @objc open func saveVideoFile(toSavedPhotosAlbum fullpath: String) -> Bool{
         UISaveVideoAtPathToSavedPhotosAlbum(fullpath, nil, nil, nil)
         return true
     }
     
-    @objc public func playVideo(file: String){
+    @objc open func playVideo(_ file: String){
         let player = AVPlayerViewController()
-        let url:NSURL = NSURL(fileURLWithPath:file)
-        player.player = AVPlayer(URL: url)
+        let url:URL = URL(fileURLWithPath:file)
+        player.player = AVPlayer(url: url)
         
-        getTopViewController()!.presentViewController(player, animated: false, completion: nil)
+        getTopViewController()!.present(player, animated: false, completion: nil)
     }
     
-    @objc public func createVideoFrame() -> GBVideoFrameGen?{
+    @objc open func createVideoFrame() -> GBVideoFrameGen?{
         let rt:GBVideoFrameGen = GBVideoFrameImp()
         return rt
     }
     
     func getTopViewController() -> UIViewController? {
-        var top = UIApplication.sharedApplication().keyWindow?.rootViewController
+        var top = UIApplication.shared.keyWindow?.rootViewController
         while let presentedViewController = top!.presentedViewController {
             top = presentedViewController
         }
@@ -179,15 +190,19 @@ public class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return top
     }
     
-    func getViewController(id:String) -> UIViewController? {
-        let current_vc = UIApplication.sharedApplication().keyWindow?.rootViewController
+    func getViewController(_ id:String) -> UIViewController? {
+        let current_vc = UIApplication.shared.keyWindow?.rootViewController
         if nil==current_vc{
             GBLogGen.instance()?.logerrf("getViewController current_vc null")
             return nil
         }
         
-        let vc = current_vc?.storyboard?.instantiateViewControllerWithIdentifier(id)
+        let vc = current_vc?.storyboard?.instantiateViewController(withIdentifier: id)
         return vc
+    }
+    
+    func getAddress<T: AnyObject>(object:T) -> Int {
+        return unsafeBitCast(object, to: Int.self)
     }
     
 }

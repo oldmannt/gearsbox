@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *delay==0 next frame
  */
 public abstract class TaskManagerGen {
+    /**delay<0 excuse immidiately, delay==0 next frame, repeaed <=0 not reapead */
     public abstract void addTask(long taskId, long delay, long repeated, TaskExcuserGen task);
 
     public abstract void addTaskI(long taskId, TaskExcuserGen task);

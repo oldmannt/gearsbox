@@ -96,9 +96,17 @@ camera_config_gen = interface +c {
 	setQuatityLevel(quality:camera_quality);
 }
 
+camera_capture_mode = enum {
+	None;
+	Immediate_Video;
+	Video;
+	Photo;
+}
+
 camera_controller_gen = interface +o +j {
 
 	initialize(audio:bool);
+	setRefreshDuration(value:i64,scale:i32);
 	setAudioEnable(enable:bool);
 	startCamera();
 	stopCamera();
@@ -142,11 +150,13 @@ camera_controller_gen = interface +o +j {
 	# minimum value is 1.0
 	getZoomMin():f32;
 
-	setFramePhoto(flag:bool);
 	captureOneFrame():video_frame_gen;
 	asnyOneFrame();
 	asnyOnePicture();
 	setCaptureHandler(handler:camera_capture_handler);
+	setCaptureMode(mode:camera_capture_mode);
+	getCaptureMode():camera_capture_mode;
+	setImmediaPause(flag:bool);
 }
 
 video_writer_gen = interface +c {
@@ -170,6 +180,7 @@ video_writer_gen = interface +c {
 video_encoder_gen = interface +c +j +o {
 	initialize(filepath:string, fps:i32, bitrate:i32, width:i32, height:i32, frame:video_frame_gen):bool;
 	encodeFrame(frame:video_frame_gen);
+	setFps(fps:i32);
 	saveNRelease();
 }
 

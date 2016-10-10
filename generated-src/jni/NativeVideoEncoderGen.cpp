@@ -37,6 +37,14 @@ void NativeVideoEncoderGen::JavaProxy::encodeFrame(const std::shared_ptr<::gears
                            ::djinni::get(::djinni_generated::NativeVideoFrameGen::fromCpp(jniEnv, c_frame)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
+void NativeVideoEncoderGen::JavaProxy::setFps(int32_t c_fps) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoEncoderGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setFps,
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_fps)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 void NativeVideoEncoderGen::JavaProxy::saveNRelease() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
@@ -74,6 +82,15 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoEncoderGen_00024CppProxy_nat
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoEncoderGen>(nativeRef);
         ref->encodeFrame(::djinni_generated::NativeVideoFrameGen::toCpp(jniEnv, j_frame));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoEncoderGen_00024CppProxy_native_1setFps(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_fps)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoEncoderGen>(nativeRef);
+        ref->setFps(::djinni::I32::toCpp(jniEnv, j_fps));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

@@ -11,96 +11,96 @@ import UIKit
 
 class  GBTyperConvertor {
 
-    static func convertUIColor(color: GBArgbColor)-> UIColor{
+    static func convertUIColor(_ color: GBArgbColor)-> UIColor{
         return UIColor(red: CGFloat(color.r),
                 green: CGFloat(color.g),
                 blue: CGFloat(color.b),
                 alpha: CGFloat(color.a))
     }
     
-    static func convertUIColor(color: GBArgbColor)-> CGColor{
+    static func convertUIColor(_ color: GBArgbColor)-> CGColor{
         return UIColor(red: CGFloat(color.r),
                        green: CGFloat(color.g),
                        blue: CGFloat(color.b),
-                       alpha: CGFloat(color.a)).CGColor
+                       alpha: CGFloat(color.a)).cgColor
     }
     
-    static func convertUIRect(rect: GBViewFrame)-> CGRect{
+    static func convertUIRect(_ rect: GBViewFrame)-> CGRect{
        return CGRect(x: CGFloat(rect.x), y: CGFloat(rect.y),
                width: CGFloat(rect.w), height: CGFloat(rect.h))
     }
     
-    static func convertUIConstraintType(type: GBConstraintType)-> NSLayoutAttribute{
+    static func convertUIConstraintType(_ type: GBConstraintType)-> NSLayoutAttribute{
        
-        var attr:NSLayoutAttribute = NSLayoutAttribute.NotAnAttribute
+        var attr:NSLayoutAttribute = NSLayoutAttribute.notAnAttribute
         switch type {
-        case GBConstraintType.Leading:
-            attr = NSLayoutAttribute.Leading
+        case GBConstraintType.leading:
+            attr = NSLayoutAttribute.leading
             break
-        case GBConstraintType.Trailing:
-            attr = NSLayoutAttribute.Trailing
+        case GBConstraintType.trailing:
+            attr = NSLayoutAttribute.trailing
             break
-        case GBConstraintType.Top:
-            attr = NSLayoutAttribute.Top
+        case GBConstraintType.top:
+            attr = NSLayoutAttribute.top
             break
-        case GBConstraintType.Bottom:
-            attr = NSLayoutAttribute.Bottom
+        case GBConstraintType.bottom:
+            attr = NSLayoutAttribute.bottom
             break
-        case GBConstraintType.Width:
-            attr = NSLayoutAttribute.Width
+        case GBConstraintType.width:
+            attr = NSLayoutAttribute.width
             break
-        case GBConstraintType.Height:
-            attr = NSLayoutAttribute.Height
+        case GBConstraintType.height:
+            attr = NSLayoutAttribute.height
             break
-        case GBConstraintType.CenterX:
-            attr = NSLayoutAttribute.CenterX
+        case GBConstraintType.centerX:
+            attr = NSLayoutAttribute.centerX
             break
-        case GBConstraintType.CenterY:
-            attr = NSLayoutAttribute.CenterY
+        case GBConstraintType.centerY:
+            attr = NSLayoutAttribute.centerY
             break
         default: break
         }
         return attr
     }
     
-    static func convertUITextBoarder(type: GBTextBoarder)->UITextBorderStyle{
+    static func convertUITextBoarder(_ type: GBTextBoarder)->UITextBorderStyle{
         switch type {
-        case GBTextBoarder.Line:
-            return UITextBorderStyle.Line;
-        case GBTextBoarder.Bezel:
-            return UITextBorderStyle.Bezel
-        case GBTextBoarder.RoundedRect:
-            return UITextBorderStyle.RoundedRect
+        case GBTextBoarder.line:
+            return UITextBorderStyle.line;
+        case GBTextBoarder.bezel:
+            return UITextBorderStyle.bezel
+        case GBTextBoarder.roundedRect:
+            return UITextBorderStyle.roundedRect
         default:
-            return UITextBorderStyle.None
+            return UITextBorderStyle.none
         }
     }
     
-    static func convertUITextAlign(type: GBTextAlign) ->NSTextAlignment?{
+    static func convertUITextAlign(_ type: GBTextAlign) ->NSTextAlignment?{
         switch type {
-        case GBTextAlign.Left:
-            return NSTextAlignment.Left
-        case GBTextAlign.Center:
-            return NSTextAlignment.Center
-        case GBTextAlign.Right:
-            return NSTextAlignment.Right
+        case GBTextAlign.left:
+            return NSTextAlignment.left
+        case GBTextAlign.center:
+            return NSTextAlignment.center
+        case GBTextAlign.right:
+            return NSTextAlignment.right
         default:
             return nil;
         }
     }
     
-    static func convertKeyboardType(type: GBTextKeyboard)->UIKeyboardType{
+    static func convertKeyboardType(_ type: GBTextKeyboard)->UIKeyboardType{
         switch type {
-        case GBTextKeyboard.Default:
-            return UIKeyboardType.Default
+        case GBTextKeyboard.default:
+            return UIKeyboardType.default
         case GBTextKeyboard.ASCII:
-            return UIKeyboardType.ASCIICapable
-        case GBTextKeyboard.DecimalPad:
-            return UIKeyboardType.DecimalPad
-        case GBTextKeyboard.NumberPad:
-            return UIKeyboardType.NumberPad
-        case GBTextKeyboard.PhonePad:
-            return UIKeyboardType.PhonePad
+            return UIKeyboardType.asciiCapable
+        case GBTextKeyboard.decimalPad:
+            return UIKeyboardType.decimalPad
+        case GBTextKeyboard.numberPad:
+            return UIKeyboardType.numberPad
+        case GBTextKeyboard.phonePad:
+            return UIKeyboardType.phonePad
         case GBTextKeyboard.URL:
             return UIKeyboardType.URL
         }

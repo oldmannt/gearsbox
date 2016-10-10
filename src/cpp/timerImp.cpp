@@ -76,6 +76,7 @@ void TimerImp::timerCallback(){
 
 bool TimerImp::start(){
     uint64_t is_repeat = m_repeatTimes==0?0:m_interval;
+    G_LOG_FC(LOG_ERROR, "timer start interval:%d, is_repeat:%d", m_interval, is_repeat);
     if (0 != uv_timer_start(m_timer, timer_cb, m_interval, is_repeat)){
         G_LOG_FC(LOG_ERROR, "timer start failed");
         return false;

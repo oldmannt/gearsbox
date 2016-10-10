@@ -24,6 +24,13 @@ public:
             [Handle::get() initialize:(::djinni::Bool::fromCpp(c_audio))];
         }
     }
+    void setRefreshDuration(int64_t c_value, int32_t c_scale) override
+    {
+        @autoreleasepool {
+            [Handle::get() setRefreshDuration:(::djinni::I64::fromCpp(c_value))
+                                        scale:(::djinni::I32::fromCpp(c_scale))];
+        }
+    }
     void setAudioEnable(bool c_enable) override
     {
         @autoreleasepool {
@@ -269,12 +276,6 @@ public:
             return ::djinni::F32::toCpp(r);
         }
     }
-    void setFramePhoto(bool c_flag) override
-    {
-        @autoreleasepool {
-            [Handle::get() setFramePhoto:(::djinni::Bool::fromCpp(c_flag))];
-        }
-    }
     std::shared_ptr<::gearsbox::VideoFrameGen> captureOneFrame() override
     {
         @autoreleasepool {
@@ -298,6 +299,25 @@ public:
     {
         @autoreleasepool {
             [Handle::get() setCaptureHandler:(::djinni_generated::CameraCaptureHandler::fromCpp(c_handler))];
+        }
+    }
+    void setCaptureMode(::gearsbox::CameraCaptureMode c_mode) override
+    {
+        @autoreleasepool {
+            [Handle::get() setCaptureMode:(::djinni::Enum<::gearsbox::CameraCaptureMode, GBCameraCaptureMode>::fromCpp(c_mode))];
+        }
+    }
+    ::gearsbox::CameraCaptureMode getCaptureMode() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getCaptureMode];
+            return ::djinni::Enum<::gearsbox::CameraCaptureMode, GBCameraCaptureMode>::toCpp(r);
+        }
+    }
+    void setImmediaPause(bool c_flag) override
+    {
+        @autoreleasepool {
+            [Handle::get() setImmediaPause:(::djinni::Bool::fromCpp(c_flag))];
         }
     }
 };

@@ -17,6 +17,30 @@ NativePlatformUtilityGen::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jni
 
 NativePlatformUtilityGen::JavaProxy::~JavaProxy() = default;
 
+int64_t NativePlatformUtilityGen::JavaProxy::getSystemTickNano() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallLongMethod(Handle::get().get(), data.method_getSystemTickNano);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I64::toCpp(jniEnv, jret);
+}
+int64_t NativePlatformUtilityGen::JavaProxy::getSystemTickMsec() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallLongMethod(Handle::get().get(), data.method_getSystemTickMsec);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I64::toCpp(jniEnv, jret);
+}
+double NativePlatformUtilityGen::JavaProxy::getSystemTickSec() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
+    auto jret = jniEnv->CallDoubleMethod(Handle::get().get(), data.method_getSystemTickSec);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::F64::toCpp(jniEnv, jret);
+}
 void NativePlatformUtilityGen::JavaProxy::endEniting(bool c_force) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

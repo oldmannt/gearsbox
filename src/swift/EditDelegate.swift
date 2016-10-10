@@ -13,26 +13,26 @@ import UIKit
 
 class EditDelegate: NSObject, UITextFieldDelegate {
     
-    private var edtInput : UITextField?
+    fileprivate var edtInput : UITextField?
     var m_delegates:[UITextFieldDelegate]=[]
     
     init(edt: UITextField){
         edtInput = edt;
     }
     
-    func addDelegates(delegate:UITextFieldDelegate){
+    func addDelegates(_ delegate:UITextFieldDelegate){
         m_delegates.append(delegate)
     }
     
     // Dismiss the keyboard when the user taps the "Return" key or its equivalent
     // while editing a text field.
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true;
     }
     
-    func textField(textField: UITextField,
-                   shouldChangeCharactersInRange range: NSRange,
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
                                                  replacementString string: String)
         -> Bool
     {
@@ -46,7 +46,7 @@ class EditDelegate: NSObject, UITextFieldDelegate {
         }
 
         for delegate in m_delegates {
-            if (!delegate.textField!(textField, shouldChangeCharactersInRange: range, replacementString: string)){
+            if (!delegate.textField!(textField, shouldChangeCharactersIn: range, replacementString: string)){
                 return false
             }
         }

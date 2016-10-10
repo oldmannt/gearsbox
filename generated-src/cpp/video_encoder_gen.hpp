@@ -19,6 +19,8 @@ public:
 
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame) = 0;
 
+    virtual void setFps(int32_t fps) = 0;
+
     virtual void saveNRelease() = 0;
 };
 

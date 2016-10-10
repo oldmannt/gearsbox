@@ -11,18 +11,23 @@ import UIKit
 class PopupViewController: UIViewController {
     
     var m_popbase:PopbaseUIViewController?
+    var m_overlay_view:UIView?
+    var m_background_view:UIView?
     
-    func setPopbase(popbase:PopbaseUIViewController) -> Bool {
+    func setPopbase(popbase:PopbaseUIViewController) {
         if nil != m_popbase {
-            return false
+            GBLogGen.instance()?.logerrf("m_popbase not nil")
         }
         
         m_popbase = popbase
-        return true
     }
     
     func dissmissPopup(animationType: SLpopupViewAnimationType) {
-        m_popbase?.dismissPopupViewController(animationType)
+        m_popbase?.dismissPopupViewController(popup_ctl: self, animationType: animationType)
+    }
+    
+    func getTag() -> Int {
+        return GBPlatformUtilityImp.sharedInstance.getAddress(object: self)
     }
 
     override func viewDidLoad() {

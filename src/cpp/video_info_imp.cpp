@@ -45,6 +45,7 @@ VideoInfoImp::~VideoInfoImp() {
 bool VideoInfoImp::initialize(std::string path, int32_t out_width, int32_t out_height){
     m_out_w = out_width;
     m_out_h = out_height;
+    G_LOG_C(LOG_INFO,"video info outw:%d outh:%d", out_width, out_height);
     av_register_all();
     
     AVFormatContext* format_cxt = 0;

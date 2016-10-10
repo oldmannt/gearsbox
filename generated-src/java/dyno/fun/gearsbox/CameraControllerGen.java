@@ -6,6 +6,8 @@ package dyno.fun.gearsbox;
 public abstract class CameraControllerGen {
     public abstract void initialize(boolean audio);
 
+    public abstract void setRefreshDuration(long value, int scale);
+
     public abstract void setAudioEnable(boolean enable);
 
     public abstract void startCamera();
@@ -82,8 +84,6 @@ public abstract class CameraControllerGen {
     /** minimum value is 1.0 */
     public abstract float getZoomMin();
 
-    public abstract void setFramePhoto(boolean flag);
-
     public abstract VideoFrameGen captureOneFrame();
 
     public abstract void asnyOneFrame();
@@ -91,4 +91,10 @@ public abstract class CameraControllerGen {
     public abstract void asnyOnePicture();
 
     public abstract void setCaptureHandler(CameraCaptureHandler handler);
+
+    public abstract void setCaptureMode(CameraCaptureMode mode);
+
+    public abstract CameraCaptureMode getCaptureMode();
+
+    public abstract void setImmediaPause(boolean flag);
 }

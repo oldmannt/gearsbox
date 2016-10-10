@@ -529,6 +529,13 @@ void VideoEncoderImp_ffmp4::encodeFrame(const std::shared_ptr<VideoFrameGen> & f
     }
 }
 
+void VideoEncoderImp_ffmp4::setFps(int32_t fps){
+    CHECK_RT(m_video_steam.st, "m_video_steam.st null");
+    m_video_steam.st->time_base = (AVRational){1, fps};
+    CHECK_RT(m_video_steam.st, "m_audio_steam.st null");
+    m_audio_steam.st->time_base = (AVRational){1, fps};
+}
+
 static void close_stream(AVFormatContext *format_ctx, OutputStream *output_stream)
 {
     avcodec_free_context(&output_stream->enc);

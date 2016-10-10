@@ -38,6 +38,30 @@ bool gearsbox::readJson(const std::string& param, Json::Value& config){
     return true;
 }
 
+#include <mach/mach_time.h>
+uint64_t subtractTimes( uint64_t elapsed )
+{
+    static mach_timebase_info_data_t    sTimebaseInfo;
+    
+    // Convert to nanoseconds.
+    
+    // If this is the first time we've run, get the timebase.
+    // We can use denom == 0 to indicate that sTimebaseInfo is
+    // uninitialised because it makes no sense to have a zero
+    // denominator is a fraction.
+    
+    if ( sTimebaseInfo.denom == 0 ) {
+        (void) mach_timebase_info(&sTimebaseInfo);
+    }
+    
+    // Do the maths. We hope that the multiplication doesn't
+    // overflow; the price you pay for working in fixed point.
+    
+    uint64_t elapsedNano = elapsed * sTimebaseInfo.numer / sTimebaseInfo.denom;
+    
+    return elapsedNano;
+}
+
 /*
 ViewConf gearsbox::emptyViewConf(){
     return std::move(ViewConf(""                     // std::string id_,

@@ -6,6 +6,12 @@ package dyno.fun.gearsbox;
 import java.util.HashSet;
 
 public abstract class PlatformUtilityGen {
+    public abstract long getSystemTickNano();
+
+    public abstract long getSystemTickMsec();
+
+    public abstract double getSystemTickSec();
+
     public abstract void endEniting(boolean force);
 
     public abstract LangType getLanguage();

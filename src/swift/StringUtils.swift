@@ -11,21 +11,21 @@ import Foundation
 extension String {
     
     // Returns true if the string has at least one character in common with matchCharacters.
-    func containsCharactersIn(matchCharacters: String) -> Bool {
-        let characterSet = NSCharacterSet(charactersInString: matchCharacters)
-        return self.rangeOfCharacterFromSet(characterSet) != nil
+    func containsCharactersIn(_ matchCharacters: String) -> Bool {
+        let characterSet = CharacterSet(charactersIn: matchCharacters)
+        return self.rangeOfCharacter(from: characterSet) != nil
     }
     
     // Returns true if the string contains only characters found in matchCharacters.
-    func containsOnlyCharactersIn(matchCharacters: String) -> Bool {
-        let disallowedCharacterSet = NSCharacterSet(charactersInString: matchCharacters).invertedSet
-        return self.rangeOfCharacterFromSet(disallowedCharacterSet) == nil
+    func containsOnlyCharactersIn(_ matchCharacters: String) -> Bool {
+        let disallowedCharacterSet = CharacterSet(charactersIn: matchCharacters).inverted
+        return self.rangeOfCharacter(from: disallowedCharacterSet) == nil
     }
     
     // Returns true if the string has no characters in common with matchCharacters.
-    func doesNotContainCharactersIn(matchCharacters: String) -> Bool {
-        let characterSet = NSCharacterSet(charactersInString: matchCharacters)
-        return self.rangeOfCharacterFromSet(characterSet) == nil
+    func doesNotContainCharactersIn(_ matchCharacters: String) -> Bool {
+        let characterSet = CharacterSet(charactersIn: matchCharacters)
+        return self.rangeOfCharacter(from: characterSet) == nil
     }
     
     // Returns true if the string represents a proper numeric value.
@@ -33,7 +33,7 @@ extension String {
     // which decimal separator it will accept.
     func isNumeric() -> Bool
     {
-        let scanner = NSScanner(string: self)
+        let scanner = Scanner(string: self)
         
         // A newly-created scanner has no locale by default.
         // We'll set our scanner's locale to the user's locale
@@ -41,9 +41,9 @@ extension String {
         // the user expects (for example, in North America,
         // "." is the decimal separator, while in many parts
         // of Europe, "," is used).
-        scanner.locale = NSLocale.currentLocale()
+        scanner.locale = Locale.current
         
-        return scanner.scanDecimal(nil) && scanner.atEnd
+        return scanner.scanDecimal(nil) && scanner.isAtEnd
     }
     
 }

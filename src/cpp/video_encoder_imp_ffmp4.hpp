@@ -62,6 +62,8 @@ public:
     
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame);
     
+    virtual void setFps(int32_t fps);
+    
     virtual void saveNRelease();
     
 private:

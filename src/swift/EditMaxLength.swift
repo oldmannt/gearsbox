@@ -11,8 +11,8 @@ import UIKit
 
 class EditMaxLength: NSObject, UITextFieldDelegate {
     
-    private var edtInput : UITextField?
-    private var m_length:Int
+    fileprivate var edtInput : UITextField?
+    fileprivate var m_length:Int
     
     init(edt: UITextField, length:Int){
         edtInput = edt
@@ -21,13 +21,13 @@ class EditMaxLength: NSObject, UITextFieldDelegate {
     
     // Dismiss the keyboard when the user taps the "Return" key or its equivalent
     // while editing a text field.
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true;
     }
     
-    func textField(textField: UITextField,
-                   shouldChangeCharactersInRange range: NSRange,
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
                                                  replacementString string: String)
         -> Bool
     {

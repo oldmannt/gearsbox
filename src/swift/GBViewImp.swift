@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-public
+open
 class GBViewImp: GBViewGen {
-    private var m_id: String!
-    private var m_view: UIView!
-    private var m_controller:UIViewController?
-    private var m_subView:[String:GBViewImp] = [:]
-    private var m_event_handler:[GBViewEvent:GBViewEventHandler] = [:]
-    private var m_edit_delegates:EditDelegate?
+    fileprivate var m_id: String!
+    fileprivate var m_view: UIView!
+    fileprivate var m_controller:UIViewController?
+    fileprivate var m_subView:[String:GBViewImp] = [:]
+    fileprivate var m_event_handler:[GBViewEvent:GBViewEventHandler] = [:]
+    fileprivate var m_edit_delegates:EditDelegate?
     
     public init(id: String, view: UIView){
         m_id = id
@@ -29,16 +29,16 @@ class GBViewImp: GBViewGen {
         m_controller = constroller
     }
     
-    @objc public func getId() -> String{
+    @objc open func getId() -> String{
         return m_id;
     }
     
-    @objc public func setFrame(frame: GBViewFrame){
+    @objc open func setFrame(_ frame: GBViewFrame){
         m_view.frame = CGRect(origin: CGPoint(x: CGFloat(frame.x), y: CGFloat(frame.y)),
                size: CGSize(width: CGFloat(frame.w), height: CGFloat(frame.h)))
     }
     
-    @objc public func getFrame() -> GBViewFrame{
+    @objc open func getFrame() -> GBViewFrame{
         let frame:GBViewFrame = GBViewFrame(
             x:Float(m_view.frame.origin.x),
             y:Float(m_view.frame.origin.y),
@@ -48,29 +48,29 @@ class GBViewImp: GBViewGen {
         return frame;
     }
     
-    @objc public func setBackgroundColor(a: Float, r: Float, g: Float, b: Float){
+    @objc open func setBackgroundColor(_ a: Float, r: Float, g: Float, b: Float){
         m_view.backgroundColor = UIColor(colorLiteralRed: r, green: g, blue: b, alpha: a)
     }
     
-    @objc public func getType() -> GBViewType{
+    @objc open func getType() -> GBViewType{
         if m_view is UILabel {
-            return GBViewType.Label
+            return GBViewType.label
         }
         else if m_view is UITextField{
-            return GBViewType.Input
+            return GBViewType.input
         }
         else{
-            return GBViewType.Base
+            return GBViewType.base
         }
     }
     
     
-    @objc public func setBoard(width: Float, color: GBArgbColor){
+    @objc open func setBoard(_ width: Float, color: GBArgbColor){
         m_view.layer.borderWidth = CGFloat(width)
         m_view.layer.borderColor = GBTyperConvertor.convertUIColor(color)
     }
     
-    @objc public func setText(text: String) {
+    @objc open func setText(_ text: String) {
         if let label = m_view as? UILabel {
             label.text = text
         }
@@ -79,18 +79,18 @@ class GBViewImp: GBViewGen {
         }
     }
     
-    @objc public func getText() -> String{
+    @objc open func getText() -> String{
         if let label = m_view as? UILabel {
             return label.text!
         }
         else if let text_view = m_view as? UITextField {
             return  text_view.text!
         }
-        GBLogGen.instance()?.logerrf("m_view \(m_view.dynamicType) ")
+        GBLogGen.instance()?.logerrf("m_view \(type(of: m_view)) ")
         return ""
     }
     
-    @objc public func setTextColor(color: GBArgbColor){
+    @objc open func setTextColor(_ color: GBArgbColor){
         if let label = m_view as? UILabel {
             label.textColor = GBTyperConvertor.convertUIColor(color)
         }
@@ -99,17 +99,17 @@ class GBViewImp: GBViewGen {
         }
     }
     
-    @objc public func setFontSize(size: Int32){
+    @objc open func setFontSize(_ size: Int32){
         if let label = m_view as? UILabel {
             //label.font.fontWithSize(CGFloat(size));
-            label.font = UIFont.systemFontOfSize(CGFloat(size))
+            label.font = UIFont.systemFont(ofSize: CGFloat(size))
         }
         else if let text_view = m_view as? UITextField {
-            text_view.font!.fontWithSize(CGFloat(size));
+            text_view.font!.withSize(CGFloat(size));
         }
     }
     
-    @objc public func setNumbernic(type:Int32){
+    @objc open func setNumbernic(_ type:Int32){
         if nil == getEdit(){
             return
         }
@@ -123,7 +123,7 @@ class GBViewImp: GBViewGen {
         m_edit_delegates?.addDelegates(NumInputDelegate(edt: edit))
     }
     
-    @objc public func setMaxTextLen(length:Int32){
+    @objc open func setMaxTextLen(_ length:Int32){
         if nil == getEdit(){
             return
         }
@@ -136,19 +136,19 @@ class GBViewImp: GBViewGen {
         m_edit_delegates?.addDelegates(EditMaxLength(edt:edit, length: Int(length)))
     }
     
-    @objc public func setVisiable(v: Bool){
-        m_view.hidden = !v
+    @objc open func setVisiable(_ v: Bool){
+        m_view.isHidden = !v
     }
     
-    @objc public func becomeFirstResponder(){
+    @objc open func becomeFirstResponder(){
         m_view.becomeFirstResponder()
     }
     
-    @objc public func getSubView(id: String) -> GBViewGen?{
+    @objc open func getSubView(_ id: String) -> GBViewGen?{
         return m_subView[id]
     }
     
-    @objc public func addSubViewById(id: String, type:GBViewType) -> GBViewGen?{
+    @objc open func addSubView(byId id: String, type:GBViewType) -> GBViewGen?{
         if m_subView[id] != nil {
             GBLogGen.instance()?.logerrf("addSubViewById failed aready exist id: \(id) \(#file) \(#function) \(#line) ")
             return nil;
@@ -159,7 +159,7 @@ class GBViewImp: GBViewGen {
             return nil;
         }
         
-        let view_gen:GBViewImp? = GBViewFactoryImp.instance.createViewById(id, type: type) as? GBViewImp;
+        let view_gen:GBViewImp? = GBViewFactoryImp.instance.createView(byId: id, type: type) as? GBViewImp;
         if (nil == view_gen){
             return nil
         }
@@ -168,7 +168,7 @@ class GBViewImp: GBViewGen {
         return view_gen
     }
     
-    @objc public func addSubView(conf: GBViewConf) -> GBViewGen?{
+    @objc open func addSubView(_ conf: GBViewConf) -> GBViewGen?{
         if m_subView[conf.id] != nil {
             GBLogGen.instance()?.logerrf("addView failed aready exist id: \(conf.id) \(#file) \(#function) \(#line) ")
             return nil;
@@ -188,7 +188,7 @@ class GBViewImp: GBViewGen {
         return view_gen
     }
     
-    private func addSubView(subview:GBViewImp)->Bool{
+    fileprivate func addSubView(_ subview:GBViewImp)->Bool{
         m_view.addSubview(subview.getUIView())
         subview.setUIViewController(m_controller!)
         m_subView[subview.getId()] = subview
@@ -196,22 +196,22 @@ class GBViewImp: GBViewGen {
         return true;
     }
 
-    @objc public func removeSubView(id: String) -> Bool{
+    @objc open func removeSubView(_ id: String) -> Bool{
         if !removeSubViewImp(id){
             return false
         }
-        m_subView.removeValueForKey(id)
+        m_subView.removeValue(forKey: id)
         return true
     }
     
-    @objc public func removeAllSubView(){
+    @objc open func removeAllSubView(){
         for (id, _) in m_subView{
             removeSubViewImp(id)
         }
         m_subView.removeAll()
     }
     
-    @objc public func addConstraint(constraint: GBViewConstraint){
+    @objc open func add(_ constraint: GBViewConstraint){
         //let typestr = ["None    ","Leading ","Trailing","Top     ","Bottom  ","Width   ","Height  ","CenterX ","CenterY "]
         //print("constraint: viewFrome:\(constraint.viewFrom) viewTo:\(constraint.viewTo) type:\(typestr[constraint.type.rawValue]) typeTo:\(typestr[constraint.typeTo.rawValue]) multiplier:\(constraint.multiplier) offset:\(constraint.offset)")
         
@@ -236,48 +236,48 @@ class GBViewImp: GBViewGen {
         let attr:NSLayoutAttribute = GBTyperConvertor.convertUIConstraintType(constraint.type)
         var toattr:NSLayoutAttribute = GBTyperConvertor.convertUIConstraintType(constraint.typeTo)
         if nil == toview{
-            toattr = NSLayoutAttribute.NotAnAttribute
+            toattr = NSLayoutAttribute.notAnAttribute
         }
         
-        if attr == NSLayoutAttribute.NotAnAttribute {
+        if attr == NSLayoutAttribute.notAnAttribute {
             GBLogGen.instance()?.logerrf("GBConstraintType err type:\(constraint.type) toype:\(constraint.typeTo)\(#file) \(#function) \(#line) ")
             return
         }
         
         view!.getUIView().translatesAutoresizingMaskIntoConstraints = false
-        m_view.addConstraint(NSLayoutConstraint(item: ios_view1, attribute: attr, relatedBy: .Equal,
+        m_view.addConstraint(NSLayoutConstraint(item: ios_view1, attribute: attr, relatedBy: .equal,
             toItem: ios_toview, attribute: toattr, multiplier: multi, constant: offset))
 
     }
     
-    @objc public func setEventHandler(event:GBViewEvent, handler: GBViewEventHandler?){
+    @objc open func setEventHandler(_ event:GBViewEvent, handler: GBViewEventHandler?){
         let recognizer = UITapGestureRecognizer(target: self, action:#selector(GBViewImp.tapEvent(_:)))
         m_view.addGestureRecognizer(recognizer)
         
         if m_view is UIControl{
             let ctrl:UIControl = m_view as! UIControl;
-            ctrl.addTarget(self, action: #selector(GBViewImp.textChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
+            ctrl.addTarget(self, action: #selector(GBViewImp.textChange(_:)), for: UIControlEvents.editingChanged)
         }
         m_event_handler[event] = handler;
     }
     
-    @objc internal func tapEvent(sender:UIGestureRecognizer){
-        if nil == m_event_handler[GBViewEvent.Tap] {
+    @objc internal func tapEvent(_ sender:UIGestureRecognizer){
+        if nil == m_event_handler[GBViewEvent.tap] {
             return
         }
-        let point:CGPoint = sender.locationInView(sender.view)
-        let param:GBViewEventParam = GBViewEventParam(x: Float(point.x), y: Float(point.y),type: GBViewEvent.Tap, text: "")
+        let point:CGPoint = sender.location(in: sender.view)
+        let param:GBViewEventParam = GBViewEventParam(x: Float(point.x), y: Float(point.y),type: GBViewEvent.tap, text: "")
         
-        m_event_handler[GBViewEvent.Tap]!.handle(param, view: self)
+        m_event_handler[GBViewEvent.tap]!.handle(param, view: self)
     }
     
-    @objc internal func textChange(sender: UITextField){
-        if nil == m_event_handler[GBViewEvent.TextChange] {
+    @objc internal func textChange(_ sender: UITextField){
+        if nil == m_event_handler[GBViewEvent.textChange] {
             return
         }
         
-        let param:GBViewEventParam = GBViewEventParam(x: 0,y: 0,type: GBViewEvent.TextChange, text: sender.text!)
-        m_event_handler[GBViewEvent.TextChange]!.handle(param, view: self)
+        let param:GBViewEventParam = GBViewEventParam(x: 0,y: 0,type: GBViewEvent.textChange, text: sender.text!)
+        m_event_handler[GBViewEvent.textChange]!.handle(param, view: self)
     }
     
     internal func getDelegate() -> EditDelegate?{return m_edit_delegates}
@@ -285,11 +285,11 @@ class GBViewImp: GBViewGen {
         return m_view
     }
     
-    internal func setUIViewController(controller:UIViewController){
+    internal func setUIViewController(_ controller:UIViewController){
         m_controller = controller
     }
     
-    private func removeSubViewImp(id:String) -> Bool{
+    fileprivate func removeSubViewImp(_ id:String) -> Bool{
         let view_gen:GBViewImp? = m_subView[id]
         if view_gen == nil{
             GBLogGen.instance()?.logerrf("nothing to remove \(#file) \(#function) \(#line) ")
@@ -301,12 +301,12 @@ class GBViewImp: GBViewGen {
         return true
     }
     
-    private func getLabel() -> UILabel?{
+    fileprivate func getLabel() -> UILabel?{
         let label = m_view as? UILabel
         return label
     }
     
-    private func getEdit() -> UITextField?{
+    fileprivate func getEdit() -> UITextField?{
         let edit = m_view as? UITextField
         return edit
 

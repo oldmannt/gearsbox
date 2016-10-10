@@ -33,6 +33,9 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
+        int64_t getSystemTickNano() override;
+        int64_t getSystemTickMsec() override;
+        double getSystemTickSec() override;
         void endEniting(bool force) override;
         ::gearsbox::LangType getLanguage() override;
         std::string getHomeDirectory() override;
@@ -54,6 +57,9 @@ private:
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/PlatformUtilityGen") };
+    const jmethodID method_getSystemTickNano { ::djinni::jniGetMethodID(clazz.get(), "getSystemTickNano", "()J") };
+    const jmethodID method_getSystemTickMsec { ::djinni::jniGetMethodID(clazz.get(), "getSystemTickMsec", "()J") };
+    const jmethodID method_getSystemTickSec { ::djinni::jniGetMethodID(clazz.get(), "getSystemTickSec", "()D") };
     const jmethodID method_endEniting { ::djinni::jniGetMethodID(clazz.get(), "endEniting", "(Z)V") };
     const jmethodID method_getLanguage { ::djinni::jniGetMethodID(clazz.get(), "getLanguage", "()Ldyno/fun/gearsbox/LangType;") };
     const jmethodID method_getHomeDirectory { ::djinni::jniGetMethodID(clazz.get(), "getHomeDirectory", "()Ljava/lang/String;") };

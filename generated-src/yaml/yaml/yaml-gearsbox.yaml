@@ -146,6 +146,35 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/CameraCaptureHandler;'
 ---
+name: gb_camera_capture_mode
+typedef: 'enum'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::CameraCaptureMode'
+  header: '"camera_capture_mode.hpp"'
+  byValue: true
+objc:
+  typename: 'GBCameraCaptureMode'
+  pointer: false
+  hash: '%s.hash'
+  boxed: 'NSNumber'
+  header: '"GBCameraCaptureMode.h"'
+objcpp:
+  translator: '::djinni::Enum<::gearsbox::CameraCaptureMode, GBCameraCaptureMode>'
+  header: '"DJIMarshal+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.CameraCaptureMode'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.CameraCaptureMode'
+jni:
+  translator: '::djinni_generated::NativeCameraCaptureMode'
+  header: '"NativeCameraCaptureMode.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/CameraCaptureMode;'
+---
 name: gb_camera_config_gen
 typedef: 'interface +c'
 params: []

@@ -17,17 +17,17 @@ class MainLoop : NSObject {
     var frameInterval : Int!
     var last : Double!
     
-    init(frameInterval: Int, doSomething: (Int64) -> ()) {
+    init(frameInterval: Int, doSomething: @escaping (Int64) -> ()) {
         self.doSomething = doSomething
         self.frameInterval = frameInterval
-        last = NSDate().timeIntervalSinceNow
+        last = CACurrentMediaTime()
         super.init()
         start()
     }
     
     // you could overwrite this too
     func handleTimer() {
-        let now:Double = NSDate().timeIntervalSinceNow
+        let now:Double = CACurrentMediaTime()
         //print("handleTimer \((now - last)*1000)")
         
         doSomething(Int64((now - last)*1000))
@@ -37,12 +37,12 @@ class MainLoop : NSObject {
     func start() {
         displayLink = CADisplayLink(target: self, selector: #selector(MainLoop.handleTimer))
         displayLink.frameInterval = frameInterval
-        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
     }
     
     func stop() {
-        displayLink.paused = true
-        displayLink.removeFromRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
+        displayLink.isPaused = true
+        displayLink.remove(from: RunLoop.main, forMode: RunLoopMode.defaultRunLoopMode)
         displayLink = nil
     }
 }

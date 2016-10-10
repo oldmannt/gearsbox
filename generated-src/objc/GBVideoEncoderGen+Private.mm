@@ -54,6 +54,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (void)setFps:(int32_t)fps {
+    try {
+        _cppRefHandle.get()->setFps(::djinni::I32::toCpp(fps));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 - (void)saveNRelease {
     try {
         _cppRefHandle.get()->saveNRelease();
@@ -84,6 +90,12 @@ public:
     {
         @autoreleasepool {
             [Handle::get() encodeFrame:(::djinni_generated::VideoFrameGen::fromCpp(c_frame))];
+        }
+    }
+    void setFps(int32_t c_fps) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFps:(::djinni::I32::fromCpp(c_fps))];
         }
     }
     void saveNRelease() override

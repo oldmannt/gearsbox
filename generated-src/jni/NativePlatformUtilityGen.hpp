@@ -52,7 +52,7 @@ private:
         bool saveVideoFileToSavedPhotosAlbum(const std::string & fullpath) override;
         void playVideo(const std::string & file) override;
         void alertDialog(const std::string & tittle, const std::string & msg) override;
-        void showLoadingView() override;
+        void showLoadingView(bool show) override;
         std::shared_ptr<::gearsbox::VideoFrameGen> createVideoFrame() override;
 
     private:
@@ -79,7 +79,7 @@ private:
     const jmethodID method_saveVideoFileToSavedPhotosAlbum { ::djinni::jniGetMethodID(clazz.get(), "saveVideoFileToSavedPhotosAlbum", "(Ljava/lang/String;)Z") };
     const jmethodID method_playVideo { ::djinni::jniGetMethodID(clazz.get(), "playVideo", "(Ljava/lang/String;)V") };
     const jmethodID method_alertDialog { ::djinni::jniGetMethodID(clazz.get(), "alertDialog", "(Ljava/lang/String;Ljava/lang/String;)V") };
-    const jmethodID method_showLoadingView { ::djinni::jniGetMethodID(clazz.get(), "showLoadingView", "()V") };
+    const jmethodID method_showLoadingView { ::djinni::jniGetMethodID(clazz.get(), "showLoadingView", "(Z)V") };
     const jmethodID method_createVideoFrame { ::djinni::jniGetMethodID(clazz.get(), "createVideoFrame", "()Ldyno/fun/gearsbox/VideoFrameGen;") };
 };
 

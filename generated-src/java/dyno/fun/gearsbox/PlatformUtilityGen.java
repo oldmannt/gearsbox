@@ -46,7 +46,7 @@ public abstract class PlatformUtilityGen {
 
     public abstract void alertDialog(String tittle, String msg);
 
-    public abstract void showLoadingView();
+    public abstract void showLoadingView(boolean show);
 
     public abstract VideoFrameGen createVideoFrame();
 }

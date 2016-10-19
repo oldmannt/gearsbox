@@ -182,7 +182,35 @@ open class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return rt
     }
     
-    public func showLoadingView(){
+    fileprivate var m_indicate:UIActivityIndicatorView? = nil
+    public func showLoadingView(_ show: Bool){
+        
+        let top_vc = self.getTopViewController()
+        if nil == top_vc{
+            return
+        }
+        
+        if nil == m_indicate {
+            if !show {
+                return
+            }
+            m_indicate = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+            m_indicate?.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+            m_indicate?.center = (top_vc?.view.center)!
+            m_indicate?.tag = self.getAddress(object: m_indicate!)
+        }
+        
+        if show{
+            if nil == top_vc?.view.viewWithTag((m_indicate?.tag)!){
+                top_vc?.view.addSubview(m_indicate!)
+            }
+            top_vc?.view.bringSubview(toFront: m_indicate!)
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+        else {
+            m_indicate?.removeFromSuperview()
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        }
         
     }
     

@@ -150,10 +150,10 @@ public:
                                    msg:(::djinni::String::fromCpp(c_msg))];
         }
     }
-    void showLoadingView() override
+    void showLoadingView(bool c_show) override
     {
         @autoreleasepool {
-            [Handle::get() showLoadingView];
+            [Handle::get() showLoadingView:(::djinni::Bool::fromCpp(c_show))];
         }
     }
     std::shared_ptr<::gearsbox::VideoFrameGen> createVideoFrame() override

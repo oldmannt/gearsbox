@@ -51,7 +51,7 @@
 - (void)alertDialog:(nonnull NSString *)tittle
                 msg:(nonnull NSString *)msg;
 
-- (void)showLoadingView;
+- (void)showLoadingView:(BOOL)show;
 
 - (nullable id<GBVideoFrameGen>)createVideoFrame;
 

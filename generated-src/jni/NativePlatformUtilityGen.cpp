@@ -182,11 +182,12 @@ void NativePlatformUtilityGen::JavaProxy::alertDialog(const std::string & c_titt
                            ::djinni::get(::djinni::String::fromCpp(jniEnv, c_msg)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
-void NativePlatformUtilityGen::JavaProxy::showLoadingView() {
+void NativePlatformUtilityGen::JavaProxy::showLoadingView(bool c_show) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativePlatformUtilityGen>::get();
-    jniEnv->CallVoidMethod(Handle::get().get(), data.method_showLoadingView);
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_showLoadingView,
+                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_show)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
 std::shared_ptr<::gearsbox::VideoFrameGen> NativePlatformUtilityGen::JavaProxy::createVideoFrame() {

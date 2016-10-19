@@ -91,7 +91,7 @@ platform_utility_gen = interface +o +j {
 
     playVideo(file:string);
     alertDialog(tittle:string, msg:string);
-    showLoadingView();
+    showLoadingView(show:bool);
 
     createVideoFrame():video_frame_gen;
 }

@@ -58,7 +58,7 @@ public:
 
     virtual void alertDialog(const std::string & tittle, const std::string & msg) = 0;
 
-    virtual void showLoadingView() = 0;
+    virtual void showLoadingView(bool show) = 0;
 
     virtual std::shared_ptr<VideoFrameGen> createVideoFrame() = 0;
 };

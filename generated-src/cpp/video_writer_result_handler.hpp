@@ -15,6 +15,8 @@ public:
 
     /** in slo-mo mode memory full */
     virtual void beforeForceStop() = 0;
+
+    virtual void onProgress(float percent) = 0;
 };
 
 }  // namespace gearsbox

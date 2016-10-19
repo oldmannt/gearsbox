@@ -168,6 +168,7 @@ video_writer_result_handler = interface +c +j +o {
 	onComplete(success:bool, path:string);
 	# in slo-mo mode memory full
 	beforeForceStop();
+	onProgress(percent:f32);
 }
 
 video_writer_gen = interface +c {

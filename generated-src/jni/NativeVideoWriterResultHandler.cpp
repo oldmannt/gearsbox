@@ -30,6 +30,14 @@ void NativeVideoWriterResultHandler::JavaProxy::beforeForceStop() {
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_beforeForceStop);
     ::djinni::jniExceptionCheck(jniEnv);
 }
+void NativeVideoWriterResultHandler::JavaProxy::onProgress(float c_percent) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoWriterResultHandler>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_onProgress,
+                           ::djinni::get(::djinni::F32::fromCpp(jniEnv, c_percent)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 
 CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterResultHandler_00024CppProxy_nativeDestroy(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
 {
@@ -55,6 +63,15 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterResultHandler_00024Cpp
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterResultHandler>(nativeRef);
         ref->beforeForceStop();
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterResultHandler_00024CppProxy_native_1onProgress(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jfloat j_percent)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterResultHandler>(nativeRef);
+        ref->onProgress(::djinni::F32::toCpp(jniEnv, j_percent));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

@@ -44,6 +44,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (void)onProgress:(float)percent {
+    try {
+        _cppRefHandle.get()->onProgress(::djinni::F32::toCpp(percent));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 namespace djinni_generated {
 
 class VideoWriterResultHandler::ObjcProxy final
@@ -63,6 +69,12 @@ public:
     {
         @autoreleasepool {
             [Handle::get() beforeForceStop];
+        }
+    }
+    void onProgress(float c_percent) override
+    {
+        @autoreleasepool {
+            [Handle::get() onProgress:(::djinni::F32::fromCpp(c_percent))];
         }
     }
 };

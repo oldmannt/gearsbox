@@ -11,6 +11,8 @@ public abstract class VideoWriterResultHandler {
     /** in slo-mo mode memory full */
     public abstract void beforeForceStop();
 
+    public abstract void onProgress(float percent);
+
     private static final class CppProxy extends VideoWriterResultHandler
     {
         private final long nativeRef;
@@ -49,5 +51,13 @@ public abstract class VideoWriterResultHandler {
             native_beforeForceStop(this.nativeRef);
         }
         private native void native_beforeForceStop(long _nativeRef);
+
+        @Override
+        public void onProgress(float percent)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_onProgress(this.nativeRef, percent);
+        }
+        private native void native_onProgress(long _nativeRef, float percent);
     }
 }

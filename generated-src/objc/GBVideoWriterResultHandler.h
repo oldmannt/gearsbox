@@ -12,4 +12,6 @@
 /** in slo-mo mode memory full */
 - (void)beforeForceStop;
 
+- (void)onProgress:(float)percent;
+
 @end

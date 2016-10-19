@@ -35,6 +35,7 @@ private:
 
         void onComplete(bool success, const std::string & path) override;
         void beforeForceStop() override;
+        void onProgress(float percent) override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::VideoWriterResultHandler, ::djinni_generated::NativeVideoWriterResultHandler>;
@@ -43,6 +44,7 @@ private:
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/VideoWriterResultHandler") };
     const jmethodID method_onComplete { ::djinni::jniGetMethodID(clazz.get(), "onComplete", "(ZLjava/lang/String;)V") };
     const jmethodID method_beforeForceStop { ::djinni::jniGetMethodID(clazz.get(), "beforeForceStop", "()V") };
+    const jmethodID method_onProgress { ::djinni::jniGetMethodID(clazz.get(), "onProgress", "(F)V") };
 };
 
 }  // namespace djinni_generated

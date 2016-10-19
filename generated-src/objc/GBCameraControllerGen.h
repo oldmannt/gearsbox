@@ -16,9 +16,6 @@
 
 - (void)initialize:(BOOL)audio;
 
-- (void)setRefreshDuration:(int64_t)value
-                     scale:(int32_t)scale;
-
 - (void)setAudioEnable:(BOOL)enable;
 
 - (void)startCamera;
@@ -36,6 +33,17 @@
 - (void)setQuality:(GBCameraQuality)quality;
 
 - (GBCameraQuality)getQuality;
+
+- (void)setSloMo:(BOOL)flag;
+
+- (BOOL)getSloMo;
+
+- (int32_t)getMaxFrameRate;
+
+- (int32_t)getDefaultFrameRate;
+
+- (void)setFrameDuration:(int64_t)value
+                   scale:(int32_t)scale;
 
 - (void)setExposureMode:(GBCameraExposureMode)mode;
 

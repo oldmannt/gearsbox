@@ -83,12 +83,15 @@ platform_utility_gen = interface +o +j {
     getSubDirInHome(sub_dir:string):string;
     getFileNameFromPath(path:string):string;
     getFileInfo(path_name:string):file_info_gen;
+    fileExists(path_name:string):bool;
     deleteFile(fullpath:string):bool;
 
     isVideoFileCompatibleToSavedPhotosAlbum(fullpath:string):bool;
     saveVideoFileToSavedPhotosAlbum(fullpath:string):bool;
 
     playVideo(file:string);
+    alertDialog(tittle:string, msg:string);
+    showLoadingView();
 
     createVideoFrame():video_frame_gen;
 }
@@ -145,8 +148,8 @@ task_excuser_gen = interface +o +j +c {
 }
 
 timer_gen = interface +c {
-    #repeat_times<0 means forever, timer just pass task_id, nothing else 
-    static create(task_id:i64, interval:i64, repeat_times:i32, hander:task_excuser_gen):timer_gen;
+    #repeat_times<0 means forever
+    static create(interval:i64, repeat_times:i32, hander:task_excuser_gen):timer_gen;
     static currentTick():i64;
     start():bool;
     stop();

@@ -30,15 +30,6 @@ void NativeCameraControllerGen::JavaProxy::initialize(bool c_audio) {
                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_audio)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
-void NativeCameraControllerGen::JavaProxy::setRefreshDuration(int64_t c_value, int32_t c_scale) {
-    auto jniEnv = ::djinni::jniGetThreadEnv();
-    ::djinni::JniLocalScope jscope(jniEnv, 10);
-    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
-    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setRefreshDuration,
-                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_value)),
-                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_scale)));
-    ::djinni::jniExceptionCheck(jniEnv);
-}
 void NativeCameraControllerGen::JavaProxy::setAudioEnable(bool c_enable) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
@@ -108,6 +99,47 @@ void NativeCameraControllerGen::JavaProxy::setQuality(::gearsbox::CameraQuality 
     auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_getQuality);
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni_generated::NativeCameraQuality::toCpp(jniEnv, jret);
+}
+void NativeCameraControllerGen::JavaProxy::setSloMo(bool c_flag) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setSloMo,
+                           ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_flag)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+bool NativeCameraControllerGen::JavaProxy::getSloMo() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallBooleanMethod(Handle::get().get(), data.method_getSloMo);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::Bool::toCpp(jniEnv, jret);
+}
+int32_t NativeCameraControllerGen::JavaProxy::getMaxFrameRate() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallIntMethod(Handle::get().get(), data.method_getMaxFrameRate);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I32::toCpp(jniEnv, jret);
+}
+int32_t NativeCameraControllerGen::JavaProxy::getDefaultFrameRate() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallIntMethod(Handle::get().get(), data.method_getDefaultFrameRate);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::I32::toCpp(jniEnv, jret);
+}
+void NativeCameraControllerGen::JavaProxy::setFrameDuration(int64_t c_value, int32_t c_scale) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setFrameDuration,
+                           ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_value)),
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_scale)));
+    ::djinni::jniExceptionCheck(jniEnv);
 }
 void NativeCameraControllerGen::JavaProxy::setExposureMode(::gearsbox::CameraExposureMode c_mode) {
     auto jniEnv = ::djinni::jniGetThreadEnv();

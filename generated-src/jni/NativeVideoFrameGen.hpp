@@ -33,6 +33,7 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
+        bool parserSample() override;
         int64_t getData() override;
         int32_t getWidth() override;
         int32_t getHeight() override;
@@ -65,6 +66,7 @@ private:
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/VideoFrameGen") };
+    const jmethodID method_parserSample { ::djinni::jniGetMethodID(clazz.get(), "parserSample", "()Z") };
     const jmethodID method_getData { ::djinni::jniGetMethodID(clazz.get(), "getData", "()J") };
     const jmethodID method_getWidth { ::djinni::jniGetMethodID(clazz.get(), "getWidth", "()I") };
     const jmethodID method_getHeight { ::djinni::jniGetMethodID(clazz.get(), "getHeight", "()I") };

@@ -15,7 +15,7 @@ djinni_test:test.djinni run_djinni.sh
 	sh ./run_djinni.sh test
 
 ios_proj: djinni gearsbox.gyp ./deps/djinni/support-lib/support_lib.gyp 
-	deps/gyp/gyp --depth=. -f xcode -DOS=ios --generator-output ./build_ios -Ideps/djinni/common.gypi ./gearsbox.gyp --root-target gearsbox_objc --root-target test
+	deps/gyp/gyp --depth=. -f xcode -DOS=ios --generator-output ./build_ios -Ideps/djinni/common.gypi ./gearsbox.gyp --root-target gearsbox_objc --root-target gtest
 ios: ios_proj
 	xcodebuild -workspace ios_project/djinni_sqlite.xcworkspace \
 		-scheme gearsbox \
@@ -54,7 +54,7 @@ deps:
 	cd deps/gyp &&git checkout -q 0bb67471bca068996e15b56738fa4824dfa19de0
 
 mac_proj: djinni gearsbox.gyp ./deps/djinni/support-lib/support_lib.gyp 
-	deps/gyp/gyp --depth=. -f xcode -DOS=mac --generator-output ./build_mac -Ideps/djinni/common.gypi ./gearsbox.gyp --root-target gearsbox_objc --root-target test
+	deps/gyp/gyp --depth=. -f xcode -DOS=mac --generator-output ./build_mac -Ideps/djinni/common.gypi ./gearsbox.gyp --root-target gearsbox_objc --root-target gtest --root-target test
 
 test: mac_proj
 	xcodebuild -project build_mac/gearsbox.xcodeproj -configuration Debug -target test | cat && ./build/Debug/test

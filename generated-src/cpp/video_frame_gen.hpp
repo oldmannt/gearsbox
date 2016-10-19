@@ -11,6 +11,8 @@ class VideoFrameGen {
 public:
     virtual ~VideoFrameGen() {}
 
+    virtual bool parserSample() = 0;
+
     virtual int64_t getData() = 0;
 
     virtual int32_t getWidth() = 0;

@@ -24,6 +24,10 @@ public abstract class ConfigGen {
 
     public abstract void setI64(String type, long value);
 
+    public abstract int getArrayCount();
+
+    public abstract ConfigGen getArrayItem(int index);
+
     public abstract ConfigGen getSubConfig(String key);
 
     public static native ConfigGen create();
@@ -122,6 +126,22 @@ public abstract class ConfigGen {
             native_setI64(this.nativeRef, type, value);
         }
         private native void native_setI64(long _nativeRef, String type, long value);
+
+        @Override
+        public int getArrayCount()
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getArrayCount(this.nativeRef);
+        }
+        private native int native_getArrayCount(long _nativeRef);
+
+        @Override
+        public ConfigGen getArrayItem(int index)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getArrayItem(this.nativeRef, index);
+        }
+        private native ConfigGen native_getArrayItem(long _nativeRef, int index);
 
         @Override
         public ConfigGen getSubConfig(String key)

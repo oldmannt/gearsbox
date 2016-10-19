@@ -38,6 +38,8 @@
 
 - (nullable id<GBFileInfoGen>)getFileInfo:(nonnull NSString *)pathName;
 
+- (BOOL)fileExists:(nonnull NSString *)pathName;
+
 - (BOOL)deleteFile:(nonnull NSString *)fullpath;
 
 - (BOOL)isVideoFileCompatibleToSavedPhotosAlbum:(nonnull NSString *)fullpath;
@@ -45,6 +47,11 @@
 - (BOOL)saveVideoFileToSavedPhotosAlbum:(nonnull NSString *)fullpath;
 
 - (void)playVideo:(nonnull NSString *)file;
+
+- (void)alertDialog:(nonnull NSString *)tittle
+                msg:(nonnull NSString *)msg;
+
+- (void)showLoadingView;
 
 - (nullable id<GBVideoFrameGen>)createVideoFrame;
 

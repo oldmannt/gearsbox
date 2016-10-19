@@ -17,6 +17,7 @@ camera_quality = enum {
 }
 
 video_frame_gen = interface +o +j {
+	parserSample():bool;
 	getData():i64;
 	getWidth():i32;
 	getHeight():i32;
@@ -106,7 +107,6 @@ camera_capture_mode = enum {
 camera_controller_gen = interface +o +j {
 
 	initialize(audio:bool);
-	setRefreshDuration(value:i64,scale:i32);
 	setAudioEnable(enable:bool);
 	startCamera();
 	stopCamera();
@@ -116,6 +116,11 @@ camera_controller_gen = interface +o +j {
 	getFlashMode():camera_flash;
 	setQuality(quality:camera_quality);
 	getQuality():camera_quality;
+	setSloMo(flag:bool);
+	getSloMo():bool;
+	getMaxFrameRate():i32;
+	getDefaultFrameRate():i32;
+	setFrameDuration(value:i64,scale:i32);
 
 	setExposureMode(mode:camera_exposure_mode);
 	getExposureMode():camera_exposure_mode;
@@ -159,9 +164,16 @@ camera_controller_gen = interface +o +j {
 	setImmediaPause(flag:bool);
 }
 
+video_writer_result_handler = interface +c +j +o {
+	onComplete(success:bool, path:string);
+	# in slo-mo mode memory full
+	beforeForceStop();
+}
+
 video_writer_gen = interface +c {
 	static create():video_writer_gen;
 
+	setReslutHandler(handler:video_writer_result_handler);
 	setFilePath(file:string);
 	getFilePath():string;
 	setFPS(fps:i32);

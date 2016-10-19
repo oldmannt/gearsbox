@@ -4,6 +4,8 @@
 package dyno.fun.gearsbox;
 
 public abstract class VideoFrameGen {
+    public abstract boolean parserSample();
+
     public abstract long getData();
 
     public abstract int getWidth();

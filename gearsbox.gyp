@@ -98,7 +98,7 @@
       },
     },
     {
-      'target_name': 'test',
+      'target_name': 'gtest',
       'type': 'executable',
       'dependencies': [
         'gearsbox',
@@ -110,15 +110,40 @@
       },
       'include_dirs': [
         '.',
-        'test',
+        'gtest/src',
+        'gtest/cpp',
+        './deps/libuv/include',
       ],
       "defines": [
         'TEST_STAND_ALONE',
         'GEARSBOX_TEST',
       ],
       'sources': [
-        '<!@(python deps/djinni/example/glob.py test *.cpp *.hpp *.h)',
-      ]
+        '<!@(python deps/djinni/example/glob.py gtest/src *.h *.cpp *.hpp *.h)',
+        '<!@(python deps/djinni/example/glob.py gtest/cpp *.h *.cpp *.hpp *.h)',
+      ],
+    },
+    {
+      'target_name': 'test',
+      'type': 'executable',
+      'dependencies': [
+        'gearsbox',
+      ],
+      'cflags_cc!': [ '-Werror', '-Wextra' ],
+      'xcode_settings': {
+        'OTHER_CPLUSPLUSFLAGS!' : ['-Werror', '-Wextra'],
+      },
+      'include_dirs': [
+        '.',
+        './deps/libuv/include',
+      ],
+      "defines": [
+        'TEST_STAND_ALONE',
+        'GEARSBOX_TEST',
+      ],
+      'sources': [
+        '<!@(python deps/djinni/example/glob.py test *.h *.cpp *.hpp *.h)',
+      ],
     },
   ],
 }

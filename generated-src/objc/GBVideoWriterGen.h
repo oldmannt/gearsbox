@@ -5,11 +5,14 @@
 @class GBVideoWriterGen;
 @protocol GBVideoEncoderGen;
 @protocol GBVideoFrameGen;
+@protocol GBVideoWriterResultHandler;
 
 
 @interface GBVideoWriterGen : NSObject
 
 + (nullable GBVideoWriterGen *)create;
+
+- (void)setReslutHandler:(nullable id<GBVideoWriterResultHandler>)handler;
 
 - (void)setFilePath:(nonnull NSString *)file;
 

@@ -145,6 +145,10 @@ open class GBPlatformUtilityImp: GBPlatformUtilityGen {
         return nil
     }
     
+    public func fileExists(_ pathName: String) -> Bool{
+        return FileManager.default.fileExists(atPath: pathName);
+    }
+    
     @objc open func deleteFile(_ fullpath: String) -> Bool {
         
         do {
@@ -176,6 +180,27 @@ open class GBPlatformUtilityImp: GBPlatformUtilityGen {
     @objc open func createVideoFrame() -> GBVideoFrameGen?{
         let rt:GBVideoFrameGen = GBVideoFrameImp()
         return rt
+    }
+    
+    public func showLoadingView(){
+        
+    }
+    
+    fileprivate var m_alert_vc:UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
+    public func alertDialog(_ tittle: String, msg: String){
+        var _tittle = tittle
+        if _tittle == "" {
+            _tittle = (GBLanguageStoreGen.instance()?.getString(LPAConfigKeyValueALERTTILLEINFO))!
+        }
+        if m_alert_vc.title == nil{
+              m_alert_vc.addAction(UIAlertAction(title: GBLanguageStoreGen.instance()?.getString("ok"), style: .default, handler: { (act:UIAlertAction) in
+                self.m_alert_vc.dismiss(animated: true, completion: nil)
+            }))
+        }
+        m_alert_vc.title = _tittle
+        m_alert_vc.message = msg
+        
+        getTopViewController()?.present(m_alert_vc, animated: true, completion: nil)
     }
     
     func getTopViewController() -> UIViewController? {

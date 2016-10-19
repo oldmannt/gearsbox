@@ -13,9 +13,9 @@
 
 using namespace gearsbox;
 
-std::shared_ptr<TimerGen> TimerGen::create(int64_t task_id, int64_t interval, int32_t repeat_times, const std::shared_ptr<TaskExcuserGen> & hander){
+std::shared_ptr<TimerGen> TimerGen::create(int64_t interval, int32_t repeat_times, const std::shared_ptr<TaskExcuserGen> & hander){
     CHECK_RTP(interval>0, nullptr, "interval invaild value:%d", interval);
-    return std::make_shared<TimerImp>(task_id, interval, repeat_times, hander);
+    return std::make_shared<TimerImp>(interval, repeat_times, hander);
 }
 
 int64_t TimerGen::currentTick(){
@@ -37,7 +37,7 @@ static void close_timer_cb(uv_handle_t* handle) {
     delete handle;
 }
 
-TimerImp::TimerImp(int64_t task_id, int64_t interval, int32_t repeat, std::shared_ptr<TaskExcuserGen> handler)
+TimerImp::TimerImp(int64_t interval, int32_t repeat, std::shared_ptr<TaskExcuserGen> handler)
 :m_interval(interval),
 m_timePassed(0),
 m_repeatTimes(repeat),
@@ -47,10 +47,11 @@ m_handler(handler){
     m_timer = new uv_timer_t();
     m_timer->data = this;
     uv_timer_init(uv_default_loop(), m_timer);
-    m_handleinfo = TaskManagerGen::create_info(task_id, interval, repeat);
+    m_handleinfo = TaskManagerGen::create_info(0, interval, repeat);
 }
 
 TimerImp::~TimerImp() {
+    uv_timer_stop(m_timer);
     uv_close((uv_handle_t*)m_timer, close_timer_cb);
     m_handler = nullptr;
 }
@@ -76,7 +77,7 @@ void TimerImp::timerCallback(){
 
 bool TimerImp::start(){
     uint64_t is_repeat = m_repeatTimes==0?0:m_interval;
-    G_LOG_FC(LOG_ERROR, "timer start interval:%d, is_repeat:%d", m_interval, is_repeat);
+    //G_LOG_FC(LOG_ERROR, "timer start interval:%d, is_repeat:%d", m_interval, is_repeat);
     if (0 != uv_timer_start(m_timer, timer_cb, m_interval, is_repeat)){
         G_LOG_FC(LOG_ERROR, "timer start failed");
         return false;

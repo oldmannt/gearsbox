@@ -109,6 +109,13 @@ public:
             return ::djinni_generated::FileInfoGen::toCpp(r);
         }
     }
+    bool fileExists(const std::string & c_path_name) override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() fileExists:(::djinni::String::fromCpp(c_path_name))];
+            return ::djinni::Bool::toCpp(r);
+        }
+    }
     bool deleteFile(const std::string & c_fullpath) override
     {
         @autoreleasepool {
@@ -134,6 +141,19 @@ public:
     {
         @autoreleasepool {
             [Handle::get() playVideo:(::djinni::String::fromCpp(c_file))];
+        }
+    }
+    void alertDialog(const std::string & c_tittle, const std::string & c_msg) override
+    {
+        @autoreleasepool {
+            [Handle::get() alertDialog:(::djinni::String::fromCpp(c_tittle))
+                                   msg:(::djinni::String::fromCpp(c_msg))];
+        }
+    }
+    void showLoadingView() override
+    {
+        @autoreleasepool {
+            [Handle::get() showLoadingView];
         }
     }
     std::shared_ptr<::gearsbox::VideoFrameGen> createVideoFrame() override

@@ -8,6 +8,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 #import "GBVideoFrameGen.h"
 
 @interface GBVideoFrameImp : NSObject<GBVideoFrameGen>;
@@ -24,6 +25,9 @@
 @property int32_t m_audio_channels_per_frame;
 @property double m_audio_sample_rate;
 @property int32_t m_audio_bits_per_channel;
+- (instancetype) initWithImage:(CMSampleBufferRef _Nonnull)ios_image;
+- (instancetype) initWithAudio:(CMSampleBufferRef _Nonnull)ios_sample;
+- (BOOL)parserSample;
 - (int64_t)getData;
 
 - (int32_t)getWidth;

@@ -11,12 +11,15 @@ namespace gearsbox {
 
 class VideoEncoderGen;
 class VideoFrameGen;
+class VideoWriterResultHandler;
 
 class VideoWriterGen {
 public:
     virtual ~VideoWriterGen() {}
 
     static std::shared_ptr<VideoWriterGen> create();
+
+    virtual void setReslutHandler(const std::shared_ptr<VideoWriterResultHandler> & handler) = 0;
 
     virtual void setFilePath(const std::string & file) = 0;
 

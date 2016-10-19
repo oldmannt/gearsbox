@@ -9,6 +9,7 @@
 #import "GBVideoEncoderGen+Private.h"
 #import "GBVideoFrameGen+Private.h"
 #import "GBVideoWriterGen+Private.h"
+#import "GBVideoWriterResultHandler+Private.h"
 #include <exception>
 #include <utility>
 
@@ -36,6 +37,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         auto r = ::gearsbox::VideoWriterGen::create();
         return ::djinni_generated::VideoWriterGen::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)setReslutHandler:(nullable id<GBVideoWriterResultHandler>)handler {
+    try {
+        _cppRefHandle.get()->setReslutHandler(::djinni_generated::VideoWriterResultHandler::toCpp(handler));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

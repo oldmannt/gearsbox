@@ -34,7 +34,6 @@ private:
         ~JavaProxy();
 
         void initialize(bool audio) override;
-        void setRefreshDuration(int64_t value, int32_t scale) override;
         void setAudioEnable(bool enable) override;
         void startCamera() override;
         void stopCamera() override;
@@ -44,6 +43,11 @@ private:
         ::gearsbox::CameraFlash getFlashMode() override;
         void setQuality(::gearsbox::CameraQuality quality) override;
         ::gearsbox::CameraQuality getQuality() override;
+        void setSloMo(bool flag) override;
+        bool getSloMo() override;
+        int32_t getMaxFrameRate() override;
+        int32_t getDefaultFrameRate() override;
+        void setFrameDuration(int64_t value, int32_t scale) override;
         void setExposureMode(::gearsbox::CameraExposureMode mode) override;
         ::gearsbox::CameraExposureMode getExposureMode() override;
         void setExposurePoint(float x, float y) override;
@@ -86,7 +90,6 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/CameraControllerGen") };
     const jmethodID method_initialize { ::djinni::jniGetMethodID(clazz.get(), "initialize", "(Z)V") };
-    const jmethodID method_setRefreshDuration { ::djinni::jniGetMethodID(clazz.get(), "setRefreshDuration", "(JI)V") };
     const jmethodID method_setAudioEnable { ::djinni::jniGetMethodID(clazz.get(), "setAudioEnable", "(Z)V") };
     const jmethodID method_startCamera { ::djinni::jniGetMethodID(clazz.get(), "startCamera", "()V") };
     const jmethodID method_stopCamera { ::djinni::jniGetMethodID(clazz.get(), "stopCamera", "()V") };
@@ -96,6 +99,11 @@ private:
     const jmethodID method_getFlashMode { ::djinni::jniGetMethodID(clazz.get(), "getFlashMode", "()Ldyno/fun/gearsbox/CameraFlash;") };
     const jmethodID method_setQuality { ::djinni::jniGetMethodID(clazz.get(), "setQuality", "(Ldyno/fun/gearsbox/CameraQuality;)V") };
     const jmethodID method_getQuality { ::djinni::jniGetMethodID(clazz.get(), "getQuality", "()Ldyno/fun/gearsbox/CameraQuality;") };
+    const jmethodID method_setSloMo { ::djinni::jniGetMethodID(clazz.get(), "setSloMo", "(Z)V") };
+    const jmethodID method_getSloMo { ::djinni::jniGetMethodID(clazz.get(), "getSloMo", "()Z") };
+    const jmethodID method_getMaxFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getMaxFrameRate", "()I") };
+    const jmethodID method_getDefaultFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getDefaultFrameRate", "()I") };
+    const jmethodID method_setFrameDuration { ::djinni::jniGetMethodID(clazz.get(), "setFrameDuration", "(JI)V") };
     const jmethodID method_setExposureMode { ::djinni::jniGetMethodID(clazz.get(), "setExposureMode", "(Ldyno/fun/gearsbox/CameraExposureMode;)V") };
     const jmethodID method_getExposureMode { ::djinni::jniGetMethodID(clazz.get(), "getExposureMode", "()Ldyno/fun/gearsbox/CameraExposureMode;") };
     const jmethodID method_setExposurePoint { ::djinni::jniGetMethodID(clazz.get(), "setExposurePoint", "(FF)V") };

@@ -9,6 +9,7 @@
 
 #include "gtest/gtest.h"
 #include "ilog.h"
+#include "uv.h"
 
 #include "test_mgr.hpp"
 
@@ -131,6 +132,6 @@ int32_t TestMgrImp::runTests(){
 int main(int argc, char **argv) {
     TestMgrGen::instance()->initialize(argv[0]);
     TestMgrGen::instance()->runTests();
-    
+    return uv_run(uv_default_loop(),UV_RUN_DEFAULT);
 }
 #endif

@@ -6,6 +6,8 @@
 
 @protocol GBVideoFrameGen
 
+- (BOOL)parserSample;
+
 - (int64_t)getData;
 
 - (int32_t)getWidth;

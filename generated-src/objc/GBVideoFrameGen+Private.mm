@@ -16,6 +16,13 @@ class VideoFrameGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
+    bool parserSample() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() parserSample];
+            return ::djinni::Bool::toCpp(r);
+        }
+    }
     int64_t getData() override
     {
         @autoreleasepool {

@@ -8,9 +8,8 @@
 
 @interface GBTimerGen : NSObject
 
-/**repeat_times<0 means forever, timer just pass task_id, nothing else  */
-+ (nullable GBTimerGen *)create:(int64_t)taskId
-                       interval:(int64_t)interval
+/**repeat_times<0 means forever */
++ (nullable GBTimerGen *)create:(int64_t)interval
                     repeatTimes:(int32_t)repeatTimes
                          hander:(nullable id<GBTaskExcuserGen>)hander;
 

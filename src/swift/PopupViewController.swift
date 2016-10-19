@@ -26,8 +26,8 @@ class PopupViewController: UIViewController {
         m_popbase?.dismissPopupViewController(popup_ctl: self, animationType: animationType)
     }
     
-    func getTag() -> Int {
-        return GBPlatformUtilityImp.sharedInstance.getAddress(object: self)
+    func isShowed() -> Bool{
+        return !view.isHidden
     }
 
     override func viewDidLoad() {

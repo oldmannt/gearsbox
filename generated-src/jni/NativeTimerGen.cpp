@@ -21,12 +21,11 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TimerGen_00024CppProxy_nativeDest
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TimerGen_create(JNIEnv* jniEnv, jobject /*this*/, jlong j_taskId, jlong j_interval, jint j_repeatTimes, jobject j_hander)
+CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_TimerGen_create(JNIEnv* jniEnv, jobject /*this*/, jlong j_interval, jint j_repeatTimes, jobject j_hander)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
-        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(jniEnv, j_taskId),
-                                              ::djinni::I64::toCpp(jniEnv, j_interval),
+        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(jniEnv, j_interval),
                                               ::djinni::I32::toCpp(jniEnv, j_repeatTimes),
                                               ::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_hander));
         return ::djinni::release(::djinni_generated::NativeTimerGen::fromCpp(jniEnv, r));

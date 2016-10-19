@@ -119,6 +119,26 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_ConfigGen_00024CppProxy_native_1s
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
+CJNIEXPORT jint JNICALL Java_dyno_fun_gearsbox_ConfigGen_00024CppProxy_native_1getArrayCount(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::ConfigGen>(nativeRef);
+        auto r = ref->getArrayCount();
+        return ::djinni::release(::djinni::I32::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
+CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_ConfigGen_00024CppProxy_native_1getArrayItem(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jint j_index)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::ConfigGen>(nativeRef);
+        auto r = ref->getArrayItem(::djinni::I32::toCpp(jniEnv, j_index));
+        return ::djinni::release(::djinni_generated::NativeConfigGen::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
 CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_ConfigGen_00024CppProxy_native_1getSubConfig(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jstring j_key)
 {
     try {

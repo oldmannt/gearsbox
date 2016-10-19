@@ -34,6 +34,8 @@ public abstract class PlatformUtilityGen {
 
     public abstract FileInfoGen getFileInfo(String pathName);
 
+    public abstract boolean fileExists(String pathName);
+
     public abstract boolean deleteFile(String fullpath);
 
     public abstract boolean isVideoFileCompatibleToSavedPhotosAlbum(String fullpath);
@@ -41,6 +43,10 @@ public abstract class PlatformUtilityGen {
     public abstract boolean saveVideoFileToSavedPhotosAlbum(String fullpath);
 
     public abstract void playVideo(String file);
+
+    public abstract void alertDialog(String tittle, String msg);
+
+    public abstract void showLoadingView();
 
     public abstract VideoFrameGen createVideoFrame();
 }

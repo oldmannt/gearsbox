@@ -6,6 +6,7 @@
 #include "NativeVideoEncoderGen.hpp"
 #include "NativeVideoFrameGen.hpp"
 #include "NativeVideoWriterGen.hpp"
+#include "NativeVideoWriterResultHandler.hpp"
 
 namespace djinni_generated {
 
@@ -29,6 +30,15 @@ CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_create(JNIEnv* 
         auto r = ::gearsbox::VideoWriterGen::create();
         return ::djinni::release(::djinni_generated::NativeVideoWriterGen::fromCpp(jniEnv, r));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setReslutHandler(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_handler)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
+        ref->setReslutHandler(::djinni_generated::NativeVideoWriterResultHandler::toCpp(jniEnv, j_handler));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
 CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setFilePath(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jstring j_file)

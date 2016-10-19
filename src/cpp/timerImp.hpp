@@ -28,7 +28,7 @@ public:
     virtual int64_t getTimePassed(){return m_timePassed;}
     virtual bool isRunning(){return m_running;}
     
-    TimerImp(int64_t task_id, int64_t interval, int32_t repeat, std::shared_ptr<TaskExcuserGen> handler);
+    TimerImp(int64_t interval, int32_t repeat, std::shared_ptr<TaskExcuserGen> handler);
     virtual ~TimerImp();
     void timerCallback();
     

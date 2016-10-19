@@ -6,8 +6,6 @@ package dyno.fun.gearsbox;
 public abstract class CameraControllerGen {
     public abstract void initialize(boolean audio);
 
-    public abstract void setRefreshDuration(long value, int scale);
-
     public abstract void setAudioEnable(boolean enable);
 
     public abstract void startCamera();
@@ -25,6 +23,16 @@ public abstract class CameraControllerGen {
     public abstract void setQuality(CameraQuality quality);
 
     public abstract CameraQuality getQuality();
+
+    public abstract void setSloMo(boolean flag);
+
+    public abstract boolean getSloMo();
+
+    public abstract int getMaxFrameRate();
+
+    public abstract int getDefaultFrameRate();
+
+    public abstract void setFrameDuration(long value, int scale);
 
     public abstract void setExposureMode(CameraExposureMode mode);
 

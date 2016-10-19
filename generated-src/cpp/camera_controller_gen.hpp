@@ -23,8 +23,6 @@ public:
 
     virtual void initialize(bool audio) = 0;
 
-    virtual void setRefreshDuration(int64_t value, int32_t scale) = 0;
-
     virtual void setAudioEnable(bool enable) = 0;
 
     virtual void startCamera() = 0;
@@ -42,6 +40,16 @@ public:
     virtual void setQuality(CameraQuality quality) = 0;
 
     virtual CameraQuality getQuality() = 0;
+
+    virtual void setSloMo(bool flag) = 0;
+
+    virtual bool getSloMo() = 0;
+
+    virtual int32_t getMaxFrameRate() = 0;
+
+    virtual int32_t getDefaultFrameRate() = 0;
+
+    virtual void setFrameDuration(int64_t value, int32_t scale) = 0;
 
     virtual void setExposureMode(CameraExposureMode mode) = 0;
 

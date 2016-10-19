@@ -33,6 +33,10 @@ public:
 
     virtual void setI64(const std::string & type, int64_t value) = 0;
 
+    virtual int32_t getArrayCount() = 0;
+
+    virtual std::shared_ptr<ConfigGen> getArrayItem(int32_t index) = 0;
+
     virtual std::shared_ptr<ConfigGen> getSubConfig(const std::string & key) = 0;
 };
 

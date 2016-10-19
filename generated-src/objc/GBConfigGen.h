@@ -31,6 +31,10 @@
 - (void)setI64:(nonnull NSString *)type
          value:(int64_t)value;
 
+- (int32_t)getArrayCount;
+
+- (nullable GBConfigGen *)getArrayItem:(int32_t)index;
+
 - (nullable GBConfigGen *)getSubConfig:(nonnull NSString *)key;
 
 @end

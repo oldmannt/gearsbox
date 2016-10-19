@@ -31,13 +31,11 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     return self;
 }
 
-+ (nullable GBTimerGen *)create:(int64_t)taskId
-                       interval:(int64_t)interval
++ (nullable GBTimerGen *)create:(int64_t)interval
                     repeatTimes:(int32_t)repeatTimes
                          hander:(nullable id<GBTaskExcuserGen>)hander {
     try {
-        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(taskId),
-                                              ::djinni::I64::toCpp(interval),
+        auto r = ::gearsbox::TimerGen::create(::djinni::I64::toCpp(interval),
                                               ::djinni::I32::toCpp(repeatTimes),
                                               ::djinni_generated::TaskExcuserGen::toCpp(hander));
         return ::djinni_generated::TimerGen::fromCpp(r);

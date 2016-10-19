@@ -24,13 +24,6 @@ public:
             [Handle::get() initialize:(::djinni::Bool::fromCpp(c_audio))];
         }
     }
-    void setRefreshDuration(int64_t c_value, int32_t c_scale) override
-    {
-        @autoreleasepool {
-            [Handle::get() setRefreshDuration:(::djinni::I64::fromCpp(c_value))
-                                        scale:(::djinni::I32::fromCpp(c_scale))];
-        }
-    }
     void setAudioEnable(bool c_enable) override
     {
         @autoreleasepool {
@@ -86,6 +79,40 @@ public:
         @autoreleasepool {
             auto r = [Handle::get() getQuality];
             return ::djinni::Enum<::gearsbox::CameraQuality, GBCameraQuality>::toCpp(r);
+        }
+    }
+    void setSloMo(bool c_flag) override
+    {
+        @autoreleasepool {
+            [Handle::get() setSloMo:(::djinni::Bool::fromCpp(c_flag))];
+        }
+    }
+    bool getSloMo() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getSloMo];
+            return ::djinni::Bool::toCpp(r);
+        }
+    }
+    int32_t getMaxFrameRate() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getMaxFrameRate];
+            return ::djinni::I32::toCpp(r);
+        }
+    }
+    int32_t getDefaultFrameRate() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getDefaultFrameRate];
+            return ::djinni::I32::toCpp(r);
+        }
+    }
+    void setFrameDuration(int64_t c_value, int32_t c_scale) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFrameDuration:(::djinni::I64::fromCpp(c_value))
+                                      scale:(::djinni::I32::fromCpp(c_scale))];
         }
     }
     void setExposureMode(::gearsbox::CameraExposureMode c_mode) override

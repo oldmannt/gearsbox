@@ -12,5 +12,7 @@ config_gen = interface +c {
     setInt(type:string, value:i32);
     setFloat(type:string, value:f32);
     setI64(type:string, value:i64);
+    getArrayCount():i32;
+    getArrayItem(index:i32):config_gen;
     getSubConfig(key:string):config_gen;
 }

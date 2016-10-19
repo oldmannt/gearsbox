@@ -14,6 +14,14 @@ NativeVideoFrameGen::JavaProxy::JavaProxy(JniType j) : Handle(::djinni::jniGetTh
 
 NativeVideoFrameGen::JavaProxy::~JavaProxy() = default;
 
+bool NativeVideoFrameGen::JavaProxy::parserSample() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoFrameGen>::get();
+    auto jret = jniEnv->CallBooleanMethod(Handle::get().get(), data.method_parserSample);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::Bool::toCpp(jniEnv, jret);
+}
 int64_t NativeVideoFrameGen::JavaProxy::getData() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

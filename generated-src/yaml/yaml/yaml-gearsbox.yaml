@@ -1103,6 +1103,35 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/VideoWriterGen;'
 ---
+name: gb_video_writer_result_handler
+typedef: 'interface +c +o +j'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::VideoWriterResultHandler'
+  header: '"video_writer_result_handler.hpp"'
+  byValue: false
+objc:
+  typename: 'GBVideoWriterResultHandler'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBVideoWriterResultHandler'
+  header: '"GBVideoWriterResultHandler.h"'
+objcpp:
+  translator: '::djinni_generated::VideoWriterResultHandler'
+  header: '"GBVideoWriterResultHandler+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.VideoWriterResultHandler'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.VideoWriterResultHandler'
+jni:
+  translator: '::djinni_generated::NativeVideoWriterResultHandler'
+  header: '"NativeVideoWriterResultHandler.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/VideoWriterResultHandler;'
+---
 name: gb_view_conf
 typedef: 'record +c'
 params: []

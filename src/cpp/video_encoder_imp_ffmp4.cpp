@@ -7,6 +7,8 @@
 //
 
 #include "video_encoder_imp_ffmp4.hpp"
+#include "instance_getter_gen.hpp"
+#include "platform_utility_gen.hpp"
 #include "video_frame_gen.hpp"
 
 #include "macro.h"
@@ -42,11 +44,11 @@ static bool open_video(AVFormatContext *format_context, AVCodec *codec, OutputSt
     AVCodecContext *av_codec_context = output_stream->enc;
     AVDictionary *opt = NULL;
     
-    av_dict_copy(&opt, opt_arg, 0);
+    //av_dict_copy(&opt, opt_arg, 0);
     
     /* open the codec */
-    ret = avcodec_open2(av_codec_context, codec, &opt);
-    av_dict_free(&opt);
+    ret = avcodec_open2(av_codec_context, codec, NULL);
+    //av_dict_free(&opt);
     if (ret < 0) {
         G_LOG_FC(LOG_ERROR, "Could not open video codec: %s", av_err2str(ret));
         return false;
@@ -227,6 +229,7 @@ static bool add_stream(OutputStream *output_stream, AVFormatContext *format_cont
             break;
             
         case AVMEDIA_TYPE_VIDEO:
+        {
             av_codec_context->codec_id = codec_id;
             
             av_codec_context->bit_rate = bitrate;
@@ -240,7 +243,7 @@ static bool add_stream(OutputStream *output_stream, AVFormatContext *format_cont
             output_stream->st->time_base = (AVRational){ 1, fps };
             av_codec_context->time_base       = output_stream->st->time_base;
             
-            av_codec_context->gop_size      = 12; /* emit one intra frame every twelve frames at most */
+            av_codec_context->gop_size      = 250; /* emit one intra frame every twelve frames at most */
             av_codec_context->pix_fmt       = pix_fmt;
             if (av_codec_context->codec_id == AV_CODEC_ID_MPEG2VIDEO) {
                 /* just for testing, we also add B-frames */
@@ -252,6 +255,16 @@ static bool add_stream(OutputStream *output_stream, AVFormatContext *format_cont
                  * the motion of the chroma plane does not match the luma plane. */
                 av_codec_context->mb_decision = 2;
             }
+            // Set Option
+            AVDictionary *param = 0;
+            // H.264
+            if(av_codec_context->codec_id == AV_CODEC_ID_H264) {
+                av_dict_set(&param, "preset", "veryfast", 0);
+                //av_dict_set(&param, "tune", "zerolatency", 0);
+                av_codec_context->max_b_frames=3;
+                // av_dict_set(&param, "profile", "main", 0);
+            }
+        }
             break;
             
         default:
@@ -299,12 +312,12 @@ bool VideoEncoderImp_ffmp4::initialize(const std::string & filepath, int32_t fps
     /* Now that all the parameters are set, we can open the audio and
      * video codecs and allocate the necessary encode buffers. */
     if (have_video)
-        open_video(m_format_ctx, video_codec, &m_video_steam, av_dictionary);
+        open_video(m_format_ctx, video_codec, &m_video_steam, NULL);
     
-    if (have_audio)
-        open_audio(m_format_ctx, audio_codec, &m_audio_steam, av_dictionary);
+    //if (have_audio)
+    //    open_audio(m_format_ctx, audio_codec, &m_audio_steam, av_dictionary);
     
-    av_dump_format(m_format_ctx, 0, m_file_path.c_str(), 1);
+    //av_dump_format(m_format_ctx, 0, m_file_path.c_str(), 1);
     
     /* open the output file, if needed */
     if (!(fmt->flags & AVFMT_NOFILE)) {
@@ -314,13 +327,14 @@ bool VideoEncoderImp_ffmp4::initialize(const std::string & filepath, int32_t fps
             return false;
         }
     }
-    
+
     /* Write the stream header, if any. */
-    int ret = avformat_write_header(m_format_ctx, &av_dictionary);
+    int ret = avformat_write_header(m_format_ctx, NULL);
     if (ret < 0) {
         G_LOG_FC(LOG_ERROR,"Error occurred when opening output file: %s",av_err2str(ret));
         return false;
     }
+
     m_ysize = m_video_steam.enc->width * m_video_steam.enc->height;
     return true;
     
@@ -330,11 +344,13 @@ static void log_packet(const AVFormatContext *fmt_ctx, const AVPacket *pkt)
 {
     AVRational *time_base = &fmt_ctx->streams[pkt->stream_index]->time_base;
     
+    /*
     G_LOG_FC(LOG_ERROR, "pts:%s pts_time:%s dts:%s dts_time:%s duration:%s duration_time:%s stream_index:%d",
            av_ts2str(pkt->pts), av_ts2timestr(pkt->pts, time_base),
            av_ts2str(pkt->dts), av_ts2timestr(pkt->dts, time_base),
            av_ts2str(pkt->duration), av_ts2timestr(pkt->duration, time_base),
            pkt->stream_index);
+     */
 }
 
 static int write_frame(AVFormatContext *fmt_ctx, const AVRational *time_base, AVStream *st, AVPacket *pkt)
@@ -510,6 +526,19 @@ void VideoEncoderImp_ffmp4::encodeFrame(const std::shared_ptr<VideoFrameGen> & f
     
     CHECK_RT(m_video_steam.st!=nullptr, "video stream null, no initialize");
     CHECK_RT(m_video_steam.frame!=nullptr, "video frame null, no initialize");
+    CHECK_RT(frame!=nullptr, "frame null");
+    CHECK_RT(frame->parserSample(), "frame parser failed");
+    
+    static int frame_counter = 0;
+    
+    {
+        static double last = InstanceGetterGen::getPlatformUtility()->getSystemTickSec();
+        
+        //G_LOG_C(LOG_INFO,"VideoWriterImp::encodeFrame frame:%d %f",++frame_counter,
+        //        InstanceGetterGen::getPlatformUtility()->getSystemTickSec()-last);
+        last = InstanceGetterGen::getPlatformUtility()->getSystemTickSec();
+        
+    }
     
     if (frame->getData()!=0){
         //Read raw YUV data
@@ -527,6 +556,9 @@ void VideoEncoderImp_ffmp4::encodeFrame(const std::shared_ptr<VideoFrameGen> & f
     else if (frame->getAudioData()!=0){
         write_audio_frame(m_format_ctx, &m_audio_steam, frame);
     }
+    else {
+        G_LOG_FC(LOG_ERROR, "frame no data");
+    }
 }
 
 void VideoEncoderImp_ffmp4::setFps(int32_t fps){
@@ -542,7 +574,7 @@ static void close_stream(AVFormatContext *format_ctx, OutputStream *output_strea
     av_frame_free(&output_stream->frame);
     av_frame_free(&output_stream->tmp_frame);
     sws_freeContext(output_stream->sws_ctx);
-    //swr_free(&output_stream->swr_ctx);
+    swr_free(&output_stream->swr_ctx);
 }
 
 void VideoEncoderImp_ffmp4::saveNRelease(){

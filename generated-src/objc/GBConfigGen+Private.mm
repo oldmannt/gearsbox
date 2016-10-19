@@ -104,6 +104,20 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (int32_t)getArrayCount {
+    try {
+        auto r = _cppRefHandle.get()->getArrayCount();
+        return ::djinni::I32::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (nullable GBConfigGen *)getArrayItem:(int32_t)index {
+    try {
+        auto r = _cppRefHandle.get()->getArrayItem(::djinni::I32::toCpp(index));
+        return ::djinni_generated::ConfigGen::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 - (nullable GBConfigGen *)getSubConfig:(nonnull NSString *)key {
     try {
         auto r = _cppRefHandle.get()->getSubConfig(::djinni::String::toCpp(key));

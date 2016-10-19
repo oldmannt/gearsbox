@@ -6,6 +6,8 @@ package dyno.fun.gearsbox;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class VideoWriterGen {
+    public abstract void setReslutHandler(VideoWriterResultHandler handler);
+
     public abstract void setFilePath(String file);
 
     public abstract String getFilePath();
@@ -56,6 +58,14 @@ public abstract class VideoWriterGen {
             destroy();
             super.finalize();
         }
+
+        @Override
+        public void setReslutHandler(VideoWriterResultHandler handler)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setReslutHandler(this.nativeRef, handler);
+        }
+        private native void native_setReslutHandler(long _nativeRef, VideoWriterResultHandler handler);
 
         @Override
         public void setFilePath(String file)

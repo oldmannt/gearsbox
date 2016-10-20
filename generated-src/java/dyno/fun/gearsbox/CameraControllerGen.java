@@ -34,6 +34,8 @@ public abstract class CameraControllerGen {
 
     public abstract void setFrameDuration(long value, int scale);
 
+    public abstract Duration getFrameDuration();
+
     public abstract void setExposureMode(CameraExposureMode mode);
 
     public abstract CameraExposureMode getExposureMode();
@@ -105,4 +107,6 @@ public abstract class CameraControllerGen {
     public abstract CameraCaptureMode getCaptureMode();
 
     public abstract void setImmediaPause(boolean flag);
+
+    public abstract String getDebugInfo();
 }

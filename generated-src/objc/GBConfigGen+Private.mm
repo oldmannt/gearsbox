@@ -72,6 +72,13 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (BOOL)getBool:(nonnull NSString *)type {
+    try {
+        auto r = _cppRefHandle.get()->getBool(::djinni::String::toCpp(type));
+        return ::djinni::Bool::fromCpp(r);
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 - (void)setString:(nonnull NSString *)type
             value:(nonnull NSString *)value {
     try {
@@ -101,6 +108,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     try {
         _cppRefHandle.get()->setI64(::djinni::String::toCpp(type),
                                     ::djinni::I64::toCpp(value));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)setBool:(nonnull NSString *)type
+          value:(BOOL)value {
+    try {
+        _cppRefHandle.get()->setBool(::djinni::String::toCpp(type),
+                                     ::djinni::Bool::toCpp(value));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

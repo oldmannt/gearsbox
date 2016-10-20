@@ -183,7 +183,11 @@ open class GBPlatformUtilityImp: GBPlatformUtilityGen {
     }
     
     fileprivate var m_indicate:UIActivityIndicatorView? = nil
+    fileprivate var m_indicateOverlay:UIView? = nil
     public func showLoadingView(_ show: Bool){
+        if (m_indicateOverlay != nil) {
+            m_indicateOverlay?.isHidden = !show
+        }
         
         let top_vc = self.getTopViewController()
         if nil == top_vc{
@@ -194,22 +198,28 @@ open class GBPlatformUtilityImp: GBPlatformUtilityGen {
             if !show {
                 return
             }
-            m_indicate = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-            m_indicate?.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+            m_indicate = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+            m_indicate?.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
             m_indicate?.center = (top_vc?.view.center)!
-            m_indicate?.tag = self.getAddress(object: m_indicate!)
+            
+            m_indicateOverlay = UIView(frame: (top_vc?.view.bounds)!)
+            m_indicateOverlay?.backgroundColor = UIColor.black
+            m_indicateOverlay?.alpha = 0.5
+            m_indicateOverlay?.tag = self.getAddress(object: m_indicateOverlay!)
+            m_indicateOverlay?.addSubview(m_indicate!)
         }
         
-        if show{
-            if nil == top_vc?.view.viewWithTag((m_indicate?.tag)!){
-                top_vc?.view.addSubview(m_indicate!)
+        m_indicateOverlay?.isHidden = !show
+        if show {
+            if nil == top_vc?.view.viewWithTag((m_indicateOverlay?.tag)!){
+                top_vc?.view.addSubview(m_indicateOverlay!)
             }
-            top_vc?.view.bringSubview(toFront: m_indicate!)
-            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+            m_indicate?.startAnimating()
+            top_vc?.view.bringSubview(toFront: m_indicateOverlay!)
         }
         else {
-            m_indicate?.removeFromSuperview()
-            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            m_indicate?.stopAnimating()
+            m_indicateOverlay?.removeFromSuperview()
         }
         
     }

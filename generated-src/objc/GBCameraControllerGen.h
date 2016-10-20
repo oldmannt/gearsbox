@@ -7,6 +7,7 @@
 #import "GBCameraFocusMode.h"
 #import "GBCameraFocusRange.h"
 #import "GBCameraQuality.h"
+#import "GBDuration.h"
 #import <Foundation/Foundation.h>
 @protocol GBCameraCaptureHandler;
 @protocol GBVideoFrameGen;
@@ -44,6 +45,8 @@
 
 - (void)setFrameDuration:(int64_t)value
                    scale:(int32_t)scale;
+
+- (nonnull GBDuration *)getFrameDuration;
 
 - (void)setExposureMode:(GBCameraExposureMode)mode;
 
@@ -118,5 +121,7 @@
 - (GBCameraCaptureMode)getCaptureMode;
 
 - (void)setImmediaPause:(BOOL)flag;
+
+- (nonnull NSString *)getDebugInfo;
 
 @end

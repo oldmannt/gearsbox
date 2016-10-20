@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <string>
 
 namespace gearsbox {
 
@@ -16,6 +17,7 @@ enum class CameraFlash;
 enum class CameraFocusMode;
 enum class CameraFocusRange;
 enum class CameraQuality;
+struct Duration;
 
 class CameraControllerGen {
 public:
@@ -50,6 +52,8 @@ public:
     virtual int32_t getDefaultFrameRate() = 0;
 
     virtual void setFrameDuration(int64_t value, int32_t scale) = 0;
+
+    virtual Duration getFrameDuration() = 0;
 
     virtual void setExposureMode(CameraExposureMode mode) = 0;
 
@@ -122,6 +126,8 @@ public:
     virtual CameraCaptureMode getCaptureMode() = 0;
 
     virtual void setImmediaPause(bool flag) = 0;
+
+    virtual std::string getDebugInfo() = 0;
 };
 
 }  // namespace gearsbox

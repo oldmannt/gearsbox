@@ -82,8 +82,7 @@ void VideoWriterImp::encodeFrameAsyn(const std::shared_ptr<VideoFrameGen> & fram
     std::shared_ptr<uv_rwlock_t> auto_unlock(&m_rw_lock, uv_rwlock_wrunlock);
     uv_rwlock_wrlock(&m_rw_lock);
     m_frame_buffer->push(frame);
-    if (m_frame_buffer->getDistence() == 0 && m_write_result_handler){
-        m_write_result_handler->beforeForceStop();
+    if (m_frame_buffer->getDistence() == 0){
         this->saveNRlease();
     }
 }
@@ -133,7 +132,7 @@ void VideoWriterImp::asynWritting(){
         }
         
         if (frame == nullptr){
-            usleep(100000);
+            usleep(20000);
             continue;
         }
         else{
@@ -203,6 +202,10 @@ void VideoWriterImp::saveNRlease(){
         m_writting_timer->setInterval(500); // frequency of update the progress
     m_end_thread = true;
     InstanceGetterGen::getCameraController()->setCaptureHandler(nullptr);
+    
+    if (m_frame_buffer->getDistence() != 0 && m_write_result_handler){
+        m_write_result_handler->beforeForceStop();
+    }
 }
 
 bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){

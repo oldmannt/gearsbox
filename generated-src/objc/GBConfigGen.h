@@ -19,6 +19,8 @@
 
 - (int64_t)getI64:(nonnull NSString *)type;
 
+- (BOOL)getBool:(nonnull NSString *)type;
+
 - (void)setString:(nonnull NSString *)type
             value:(nonnull NSString *)value;
 
@@ -30,6 +32,9 @@
 
 - (void)setI64:(nonnull NSString *)type
          value:(int64_t)value;
+
+- (void)setBool:(nonnull NSString *)type
+          value:(BOOL)value;
 
 - (int32_t)getArrayCount;
 

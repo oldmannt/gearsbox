@@ -48,6 +48,7 @@ private:
         int32_t getMaxFrameRate() override;
         int32_t getDefaultFrameRate() override;
         void setFrameDuration(int64_t value, int32_t scale) override;
+        ::gearsbox::Duration getFrameDuration() override;
         void setExposureMode(::gearsbox::CameraExposureMode mode) override;
         ::gearsbox::CameraExposureMode getExposureMode() override;
         void setExposurePoint(float x, float y) override;
@@ -83,6 +84,7 @@ private:
         void setCaptureMode(::gearsbox::CameraCaptureMode mode) override;
         ::gearsbox::CameraCaptureMode getCaptureMode() override;
         void setImmediaPause(bool flag) override;
+        std::string getDebugInfo() override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::CameraControllerGen, ::djinni_generated::NativeCameraControllerGen>;
@@ -104,6 +106,7 @@ private:
     const jmethodID method_getMaxFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getMaxFrameRate", "()I") };
     const jmethodID method_getDefaultFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getDefaultFrameRate", "()I") };
     const jmethodID method_setFrameDuration { ::djinni::jniGetMethodID(clazz.get(), "setFrameDuration", "(JI)V") };
+    const jmethodID method_getFrameDuration { ::djinni::jniGetMethodID(clazz.get(), "getFrameDuration", "()Ldyno/fun/gearsbox/Duration;") };
     const jmethodID method_setExposureMode { ::djinni::jniGetMethodID(clazz.get(), "setExposureMode", "(Ldyno/fun/gearsbox/CameraExposureMode;)V") };
     const jmethodID method_getExposureMode { ::djinni::jniGetMethodID(clazz.get(), "getExposureMode", "()Ldyno/fun/gearsbox/CameraExposureMode;") };
     const jmethodID method_setExposurePoint { ::djinni::jniGetMethodID(clazz.get(), "setExposurePoint", "(FF)V") };
@@ -139,6 +142,7 @@ private:
     const jmethodID method_setCaptureMode { ::djinni::jniGetMethodID(clazz.get(), "setCaptureMode", "(Ldyno/fun/gearsbox/CameraCaptureMode;)V") };
     const jmethodID method_getCaptureMode { ::djinni::jniGetMethodID(clazz.get(), "getCaptureMode", "()Ldyno/fun/gearsbox/CameraCaptureMode;") };
     const jmethodID method_setImmediaPause { ::djinni::jniGetMethodID(clazz.get(), "setImmediaPause", "(Z)V") };
+    const jmethodID method_getDebugInfo { ::djinni::jniGetMethodID(clazz.get(), "getDebugInfo", "()Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

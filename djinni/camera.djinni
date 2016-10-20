@@ -104,6 +104,11 @@ camera_capture_mode = enum {
 	Photo;
 }
 
+duration = record {
+	value:i64;
+	scale:i32;
+}
+
 camera_controller_gen = interface +o +j {
 
 	initialize(audio:bool);
@@ -121,6 +126,7 @@ camera_controller_gen = interface +o +j {
 	getMaxFrameRate():i32;
 	getDefaultFrameRate():i32;
 	setFrameDuration(value:i64,scale:i32);
+	getFrameDuration():duration;
 
 	setExposureMode(mode:camera_exposure_mode);
 	getExposureMode():camera_exposure_mode;
@@ -162,12 +168,14 @@ camera_controller_gen = interface +o +j {
 	setCaptureMode(mode:camera_capture_mode);
 	getCaptureMode():camera_capture_mode;
 	setImmediaPause(flag:bool);
+
+	getDebugInfo():string;
 }
 
 video_writer_result_handler = interface +c +j +o {
 	onComplete(success:bool, path:string);
-	# in slo-mo mode memory full
-	beforeForceStop();
+	# there is frame in buffer, especially in slo-mo mode memory full
+	beforeComplete();
 	onProgress(percent:f32);
 }
 

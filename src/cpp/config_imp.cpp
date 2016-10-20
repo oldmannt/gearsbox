@@ -111,6 +111,14 @@ int64_t ConfigImp::getI64(const std::string & type){
     return 0;
 }
 
+bool ConfigImp::getBool(const std::string & type){
+    try {
+        return (*m_config)[type].asBool();
+    } catch (std::exception &ex){
+        G_LOG_FC(LOG_ERROR, "setBool err:%s type:%s", ex.what(), type.c_str());
+    }
+}
+
 /*
 template<typename T>
 void ConfigImp::setValue(const std::string& key, const T& value){
@@ -179,6 +187,14 @@ void ConfigImp::setI64(const std::string & type, int64_t value){
         save();
     } catch (std::exception &ex) {
         G_LOG_FC(LOG_ERROR, "setValue err:%s type:%s", ex.what(), typeid(value).name());
+    }
+}
+
+void ConfigImp::setBool(const std::string & type, bool value){
+    try {
+        (*m_config)[type] = value;
+    } catch (std::exception &ex){
+        G_LOG_FC(LOG_ERROR, "setBool err:%s type:%s", ex.what(), type.c_str());
     }
 }
 

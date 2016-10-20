@@ -34,7 +34,10 @@ protocol CapturePictureHandler {
     func captureOutput(_ image:UIImage?, error:String?) -> Void
 }
 
-var last_tick:Double = 0
+fileprivate var m_last_tick:Double = 0
+fileprivate var m_second_counter:Double = 0;
+fileprivate var m_frame_counter:Double = 0
+fileprivate var m_frame_rate:Double = 0
 open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideoDataOutputSampleBufferDelegate,AVCaptureAudioDataOutputSampleBufferDelegate {
     static let instance:GBCameraControllerImp = GBCameraControllerImp()
     
@@ -54,10 +57,18 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
                 
                 self.m_capture_handler?.captureOutput(GBVideoFrameImp(image: sampleBuffer), error: "")
             }
-            
         }
-        //print("capture lapsed:%f", CACurrentMediaTime()-last_tick)
-        //last_tick = CACurrentMediaTime()
+        
+        let elapse = CACurrentMediaTime()-m_last_tick
+        m_second_counter+=elapse
+        m_frame_counter += 1.0
+        if m_second_counter >= 1.0 {
+            m_frame_rate = m_frame_counter/m_second_counter;
+            m_frame_counter = 0.0
+            m_second_counter = 0.0
+        }
+        //print("capture lapsed:%f", CACurrentMediaTime()-m_last_tick)
+        m_last_tick = CACurrentMediaTime()
     }
 
     open func initializ_swif(_ view:UIView) -> Bool{
@@ -117,6 +128,11 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setFrameDuration err:\(error) \(#file) \(#function) \(#line)");
         }        
+    }
+    
+    public func getFrameDuration() -> GBDuration{
+        let duration:CMTime = (m_captureDevice?.activeVideoMaxFrameDuration)!
+        return GBDuration(value: duration.value, scale: duration.timescale);
     }
     
     @objc open func initialize(_ audio: Bool){
@@ -896,4 +912,42 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     fileprivate var m_audio_output: AVCaptureAudioDataOutput?
     fileprivate var m_audio_connection: AVCaptureConnection?
     fileprivate var m_audio_buffer: CMSampleBuffer?
+    
+    open func getDebugInfo() -> String {
+        var text:String = ""
+        
+        let duration:CMTime = (m_captureDevice?.exposureDuration)!
+        let duration_max:Double = (m_captureDevice?.activeFormat.maxExposureDuration.seconds)!
+        let duration_min:Double = (m_captureDevice?.activeFormat.minExposureDuration.seconds)!
+
+        let duration_model = GBCameraControllerImp.instance.getExposureMode()
+        
+        let iso:Float = (m_captureDevice?.iso)!
+        let iso_max:Float = (m_captureDevice?.activeFormat.maxISO)!
+        let iso_min:Float = (m_captureDevice?.activeFormat.minISO)!
+        
+        let focus:Float = m_captureDevice!.lensPosition
+        let focus_max:Float = 1.0
+        let focus_min:Float = 0
+        let focus_model = GBCameraControllerImp.instance.getFocusMode()
+        let focus_range = GBCameraControllerImp.instance.getFocusAutoRange()
+        
+        let zoom:Float = Float((m_captureDevice?.videoZoomFactor)!)
+        let zoom_max:Float = Float((m_captureDevice?.activeFormat.videoMaxZoomFactor)!)
+        
+        let frame_duration:CMTime = (m_captureDevice?.activeVideoMaxFrameDuration)!
+        
+        text += String.init(format: "exposure %d:%d second:%.03f max:%.03f min:%.03f mode:%d\n",
+                           duration.value/1000,duration.timescale/1000, duration.seconds,
+                           duration_max, duration_min, duration_model.rawValue);
+        text += String.init(format: "iso:%.01f max:%.01f min:%.01f\n", iso, iso_max, iso_min);
+        text += String.init(format: "focus: %.03f max:%.03f min:%.03f mode:%d range:%d\n",
+                            focus, focus_max, focus_min, focus_model.rawValue, focus_range.rawValue);
+        text += String("zoom: \(zoom) max:\(zoom_max)\n")
+        text += String.init(format: "frame duration:%d/%d seconds:%.03f\n",
+                            frame_duration.value, frame_duration.timescale, Float(frame_duration.value)/Float(frame_duration.timescale))
+        text += String.init(format: "fps:%.02f", m_frame_rate)
+        
+        return text
+    }
 }

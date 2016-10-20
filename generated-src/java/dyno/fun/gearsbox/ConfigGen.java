@@ -16,6 +16,8 @@ public abstract class ConfigGen {
 
     public abstract long getI64(String type);
 
+    public abstract boolean getBool(String type);
+
     public abstract void setString(String type, String value);
 
     public abstract void setInt(String type, int value);
@@ -23,6 +25,8 @@ public abstract class ConfigGen {
     public abstract void setFloat(String type, float value);
 
     public abstract void setI64(String type, long value);
+
+    public abstract void setBool(String type, boolean value);
 
     public abstract int getArrayCount();
 
@@ -96,6 +100,14 @@ public abstract class ConfigGen {
         private native long native_getI64(long _nativeRef, String type);
 
         @Override
+        public boolean getBool(String type)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            return native_getBool(this.nativeRef, type);
+        }
+        private native boolean native_getBool(long _nativeRef, String type);
+
+        @Override
         public void setString(String type, String value)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
@@ -126,6 +138,14 @@ public abstract class ConfigGen {
             native_setI64(this.nativeRef, type, value);
         }
         private native void native_setI64(long _nativeRef, String type, long value);
+
+        @Override
+        public void setBool(String type, boolean value)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_setBool(this.nativeRef, type, value);
+        }
+        private native void native_setBool(long _nativeRef, String type, boolean value);
 
         @Override
         public int getArrayCount()

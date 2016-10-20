@@ -10,6 +10,7 @@
 #include "NativeCameraFocusMode.hpp"
 #include "NativeCameraFocusRange.hpp"
 #include "NativeCameraQuality.hpp"
+#include "NativeDuration.hpp"
 #include "NativeVideoFrameGen.hpp"
 
 namespace djinni_generated {
@@ -140,6 +141,14 @@ void NativeCameraControllerGen::JavaProxy::setFrameDuration(int64_t c_value, int
                            ::djinni::get(::djinni::I64::fromCpp(jniEnv, c_value)),
                            ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_scale)));
     ::djinni::jniExceptionCheck(jniEnv);
+}
+::gearsbox::Duration NativeCameraControllerGen::JavaProxy::getFrameDuration() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallObjectMethod(Handle::get().get(), data.method_getFrameDuration);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni_generated::NativeDuration::toCpp(jniEnv, jret);
 }
 void NativeCameraControllerGen::JavaProxy::setExposureMode(::gearsbox::CameraExposureMode c_mode) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
@@ -420,6 +429,14 @@ void NativeCameraControllerGen::JavaProxy::setImmediaPause(bool c_flag) {
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_setImmediaPause,
                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_flag)));
     ::djinni::jniExceptionCheck(jniEnv);
+}
+std::string NativeCameraControllerGen::JavaProxy::getDebugInfo() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = (jstring)jniEnv->CallObjectMethod(Handle::get().get(), data.method_getDebugInfo);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::String::toCpp(jniEnv, jret);
 }
 
 }  // namespace djinni_generated

@@ -6,6 +6,7 @@
 #import "DJIMarshal+Private.h"
 #import "DJIObjcWrapperCache+Private.h"
 #import "GBCameraCaptureHandler+Private.h"
+#import "GBDuration+Private.h"
 #import "GBVideoFrameGen+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
@@ -113,6 +114,13 @@ public:
         @autoreleasepool {
             [Handle::get() setFrameDuration:(::djinni::I64::fromCpp(c_value))
                                       scale:(::djinni::I32::fromCpp(c_scale))];
+        }
+    }
+    ::gearsbox::Duration getFrameDuration() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getFrameDuration];
+            return ::djinni_generated::Duration::toCpp(r);
         }
     }
     void setExposureMode(::gearsbox::CameraExposureMode c_mode) override
@@ -345,6 +353,13 @@ public:
     {
         @autoreleasepool {
             [Handle::get() setImmediaPause:(::djinni::Bool::fromCpp(c_flag))];
+        }
+    }
+    std::string getDebugInfo() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getDebugInfo];
+            return ::djinni::String::toCpp(r);
         }
     }
 };

@@ -465,6 +465,35 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/CrashHandlerGen;'
 ---
+name: gb_duration
+typedef: 'record'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::Duration'
+  header: '"duration.hpp"'
+  byValue: false
+objc:
+  typename: 'GBDuration'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBDuration'
+  header: '"GBDuration.h"'
+objcpp:
+  translator: '::djinni_generated::Duration'
+  header: '"GBDuration+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.Duration'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.Duration'
+jni:
+  translator: '::djinni_generated::NativeDuration'
+  header: '"NativeDuration.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/Duration;'
+---
 name: gb_file_info_gen
 typedef: 'interface +o +j'
 params: []

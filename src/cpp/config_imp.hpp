@@ -32,6 +32,8 @@ public:
     
     virtual int64_t getI64(const std::string & type);
     
+    virtual bool getBool(const std::string & type);
+    
     virtual void setString(const std::string & type, const std::string & value);
     
     virtual void setInt(const std::string & type, int32_t value);
@@ -39,6 +41,8 @@ public:
     virtual void setFloat(const std::string & type, float value);
     
     virtual void setI64(const std::string & type, int64_t value);
+    
+    virtual void setBool(const std::string & type, bool value);
     
     virtual int32_t getArrayCount();
     

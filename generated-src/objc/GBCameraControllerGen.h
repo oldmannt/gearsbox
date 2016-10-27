@@ -79,6 +79,14 @@
 
 - (int32_t)getISOMin;
 
+- (float)getEV;
+
+- (void)setEV:(float)ev;
+
+- (float)getEVMax;
+
+- (float)getEVMin;
+
 - (void)setFocusMode:(GBCameraFocusMode)mode;
 
 - (GBCameraFocusMode)getFocusMode;

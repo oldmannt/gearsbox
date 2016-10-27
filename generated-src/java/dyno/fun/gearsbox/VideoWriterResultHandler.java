@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class VideoWriterResultHandler {
     public abstract void onComplete(boolean success, String path);
 
-    /** in slo-mo mode memory full */
-    public abstract void beforeForceStop();
+    /** there is frame in buffer, especially in slo-mo mode memory full */
+    public abstract void beforeComplete();
 
     public abstract void onProgress(float percent);
 
@@ -45,12 +45,12 @@ public abstract class VideoWriterResultHandler {
         private native void native_onComplete(long _nativeRef, boolean success, String path);
 
         @Override
-        public void beforeForceStop()
+        public void beforeComplete()
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_beforeForceStop(this.nativeRef);
+            native_beforeComplete(this.nativeRef);
         }
-        private native void native_beforeForceStop(long _nativeRef);
+        private native void native_beforeComplete(long _nativeRef);
 
         @Override
         public void onProgress(float percent)

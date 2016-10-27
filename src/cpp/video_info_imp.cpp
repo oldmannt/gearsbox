@@ -45,7 +45,7 @@ VideoInfoImp::~VideoInfoImp() {
 bool VideoInfoImp::initialize(std::string path, int32_t out_width, int32_t out_height){
     m_out_w = out_width;
     m_out_h = out_height;
-    G_LOG_C(LOG_INFO,"video info outw:%d outh:%d", out_width, out_height);
+    //G_LOG_C(LOG_INFO,"video info outw:%d outh:%d", out_width, out_height);
     av_register_all();
     
     AVFormatContext* format_cxt = 0;
@@ -61,9 +61,10 @@ bool VideoInfoImp::initialize(std::string path, int32_t out_width, int32_t out_h
     do {
         
         int err = avformat_open_input(&format_cxt, path.c_str(), 0, 0);
-        BREAK(err==0, "avformat_open_input file:%s failed err:%s", path.c_str(), av_err2str(err));
+        BREAK(err==0, "avformat_open_input file:%s failed err:%s", InstanceGetterGen::getPlatformUtility()->getFileNameFromPath(path).c_str(), av_err2str(err));
         err = avformat_find_stream_info(format_cxt, 0);
-        BREAK(err>=0, "avformat_find_stream_info file:%s failed err:%s", path.c_str(), av_err2str(err));
+        BREAK(err>=0, "avformat_find_stream_info file:%s failed err:%s",
+              InstanceGetterGen::getPlatformUtility()->getFileNameFromPath(path).c_str(), av_err2str(err));
         
         //G_LOG_C(LOG_INFO,"path: %s", format_cxt->filename);
         //G_LOG_C(LOG_INFO,"fps_probe_size: %d", format_cxt->fps_probe_size);

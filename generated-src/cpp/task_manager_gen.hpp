@@ -24,13 +24,15 @@ public:
     static std::shared_ptr<TaskInfoGen> create_info(int64_t task_id, int64_t delay, int32_t repeated);
 
     /**delay<0 excuse immidiately, delay==0 next frame, repeaed <=0 not reapead */
-    virtual void addTask(int64_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task) = 0;
+    virtual void addTask(int64_t task_id, int64_t delay, int32_t repeated, const std::shared_ptr<TaskExcuserGen> & task) = 0;
 
     virtual void addTaskI(int64_t task_id, const std::shared_ptr<TaskExcuserGen> & task) = 0;
 
     virtual void addTaskInfo(const std::shared_ptr<TaskInfoGen> & task, const std::shared_ptr<TaskExcuserGen> & task_excuser) = 0;
 
     virtual void addTaskExcuser(const std::shared_ptr<TaskExcuserGen> & task) = 0;
+
+    virtual void addMainThreadTask(const std::shared_ptr<TaskExcuserGen> & excuser, const std::shared_ptr<TaskInfoGen> & task) = 0;
 
     virtual void removeTask(int64_t task_id) = 0;
 };

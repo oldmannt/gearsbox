@@ -26,7 +26,7 @@ namespace std {
 
 namespace gearsbox {
     bool readJson(const std::string& param, Json::Value& config);
-    //ViewConf emptyViewConf();
+    long long nowMilli();
 
 }
 

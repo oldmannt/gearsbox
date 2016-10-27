@@ -52,12 +52,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 
 - (void)addTask:(int64_t)taskId
           delay:(int64_t)delay
-       repeated:(int64_t)repeated
+       repeated:(int32_t)repeated
            task:(nullable id<GBTaskExcuserGen>)task {
     try {
         _cppRefHandle.get()->addTask(::djinni::I64::toCpp(taskId),
                                      ::djinni::I64::toCpp(delay),
-                                     ::djinni::I64::toCpp(repeated),
+                                     ::djinni::I32::toCpp(repeated),
                                      ::djinni_generated::TaskExcuserGen::toCpp(task));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
@@ -81,6 +81,14 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (void)addTaskExcuser:(nullable id<GBTaskExcuserGen>)task {
     try {
         _cppRefHandle.get()->addTaskExcuser(::djinni_generated::TaskExcuserGen::toCpp(task));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
+- (void)addMainThreadTask:(nullable id<GBTaskExcuserGen>)excuser
+                     task:(nullable id<GBTaskInfoGen>)task {
+    try {
+        _cppRefHandle.get()->addMainThreadTask(::djinni_generated::TaskExcuserGen::toCpp(excuser),
+                                               ::djinni_generated::TaskInfoGen::toCpp(task));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 

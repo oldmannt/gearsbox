@@ -13,8 +13,8 @@ public:
 
     virtual void onComplete(bool success, const std::string & path) = 0;
 
-    /** in slo-mo mode memory full */
-    virtual void beforeForceStop() = 0;
+    /** there is frame in buffer, especially in slo-mo mode memory full */
+    virtual void beforeComplete() = 0;
 
     virtual void onProgress(float percent) = 0;
 };

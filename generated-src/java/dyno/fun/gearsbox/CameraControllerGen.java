@@ -66,6 +66,14 @@ public abstract class CameraControllerGen {
 
     public abstract int getISOMin();
 
+    public abstract float getEV();
+
+    public abstract void setEV(float ev);
+
+    public abstract float getEVMax();
+
+    public abstract float getEVMin();
+
     public abstract void setFocusMode(CameraFocusMode mode);
 
     public abstract CameraFocusMode getFocusMode();

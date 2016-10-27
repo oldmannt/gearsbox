@@ -38,9 +38,9 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
-- (void)beforeForceStop {
+- (void)beforeComplete {
     try {
-        _cppRefHandle.get()->beforeForceStop();
+        _cppRefHandle.get()->beforeComplete();
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -65,10 +65,10 @@ public:
                                  path:(::djinni::String::fromCpp(c_path))];
         }
     }
-    void beforeForceStop() override
+    void beforeComplete() override
     {
         @autoreleasepool {
-            [Handle::get() beforeForceStop];
+            [Handle::get() beforeComplete];
         }
     }
     void onProgress(float c_percent) override

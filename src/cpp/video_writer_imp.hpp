@@ -41,12 +41,6 @@ class VideoFrameGen;
 class VideoWriterImp : public VideoWriterGen, public TaskExcuserGen, public CameraCaptureHandler, public std::enable_shared_from_this<VideoWriterImp>{
 public:
     virtual ~VideoWriterImp() {
-        m_video_encoder = nullptr;
-        m_write_result_handler = nullptr;
-        m_video_encoder = nullptr;
-        m_frame_buffer = nullptr;
-        m_auto_release_lock = nullptr;
-        m_work_thread = nullptr;
     }
     
     VideoWriterImp():m_video_encoder(nullptr),m_fps(0),m_bitrate(0),m_init(false),m_auto_callback(false),m_rw_lock({0}),m_end_thread(false){

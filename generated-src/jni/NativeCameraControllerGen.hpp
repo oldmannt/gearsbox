@@ -64,6 +64,10 @@ private:
         int32_t getISO() override;
         int32_t getISOMax() override;
         int32_t getISOMin() override;
+        float getEV() override;
+        void setEV(float ev) override;
+        float getEVMax() override;
+        float getEVMin() override;
         void setFocusMode(::gearsbox::CameraFocusMode mode) override;
         ::gearsbox::CameraFocusMode getFocusMode() override;
         void setFocusLens(float lens) override;
@@ -122,6 +126,10 @@ private:
     const jmethodID method_getISO { ::djinni::jniGetMethodID(clazz.get(), "getISO", "()I") };
     const jmethodID method_getISOMax { ::djinni::jniGetMethodID(clazz.get(), "getISOMax", "()I") };
     const jmethodID method_getISOMin { ::djinni::jniGetMethodID(clazz.get(), "getISOMin", "()I") };
+    const jmethodID method_getEV { ::djinni::jniGetMethodID(clazz.get(), "getEV", "()F") };
+    const jmethodID method_setEV { ::djinni::jniGetMethodID(clazz.get(), "setEV", "(F)V") };
+    const jmethodID method_getEVMax { ::djinni::jniGetMethodID(clazz.get(), "getEVMax", "()F") };
+    const jmethodID method_getEVMin { ::djinni::jniGetMethodID(clazz.get(), "getEVMin", "()F") };
     const jmethodID method_setFocusMode { ::djinni::jniGetMethodID(clazz.get(), "setFocusMode", "(Ldyno/fun/gearsbox/CameraFocusMode;)V") };
     const jmethodID method_getFocusMode { ::djinni::jniGetMethodID(clazz.get(), "getFocusMode", "()Ldyno/fun/gearsbox/CameraFocusMode;") };
     const jmethodID method_setFocusLens { ::djinni::jniGetMethodID(clazz.get(), "setFocusLens", "(F)V") };

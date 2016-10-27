@@ -11,6 +11,8 @@
 
 #include <map>
 #include <set>
+#include <mutex>
+#include <queue>
 #include "task_manager_gen.hpp"
 #include "task_info_gen.hpp"
 #include "uv.h"
@@ -24,12 +26,13 @@ public:
     virtual ~TaskManagerImp();
     TaskManagerImp();
        
-    virtual void addTask(int64_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task);
+    virtual void addTask(int64_t task_id, int64_t delay, int32_t repeated, const std::shared_ptr<TaskExcuserGen> & task);
     virtual void addTaskI(int64_t task_id, const std::shared_ptr<TaskExcuserGen> & task);
     virtual void addTaskInfo(const std::shared_ptr<TaskInfoGen> & task, const std::shared_ptr<TaskExcuserGen> & task_excuser);
     virtual void addTaskExcuser(const std::shared_ptr<TaskExcuserGen> & task);
     virtual void removeTask(int64_t task_id);
     
+    virtual void addMainThreadTask(const std::shared_ptr<TaskExcuserGen> & task, const std::shared_ptr<TaskInfoGen> & param);
     void process();
     
 private:
@@ -40,6 +43,10 @@ private:
     SET_TASKEXCUSER m_set_taskexcuser;
     
     uv_idle_t m_idle_handle;
+    
+    std::mutex m_mt_task;
+    std::queue<std::shared_ptr<TaskExcuserGen>> m_queue_mt_excuser;
+    std::queue<std::shared_ptr<TaskInfoGen>> m_queue_mt_info;
     
     void listTaskExcuser(std::shared_ptr<TaskInfoGen> info);
 };

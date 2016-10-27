@@ -9,8 +9,8 @@
 - (void)onComplete:(BOOL)success
               path:(nonnull NSString *)path;
 
-/** in slo-mo mode memory full */
-- (void)beforeForceStop;
+/** there is frame in buffer, especially in slo-mo mode memory full */
+- (void)beforeComplete;
 
 - (void)onProgress:(float)percent;
 

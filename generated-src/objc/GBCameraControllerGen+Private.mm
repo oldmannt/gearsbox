@@ -224,6 +224,33 @@ public:
             return ::djinni::I32::toCpp(r);
         }
     }
+    float getEV() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getEV];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    void setEV(float c_ev) override
+    {
+        @autoreleasepool {
+            [Handle::get() setEV:(::djinni::F32::fromCpp(c_ev))];
+        }
+    }
+    float getEVMax() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getEVMax];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
+    float getEVMin() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getEVMin];
+            return ::djinni::F32::toCpp(r);
+        }
+    }
     void setFocusMode(::gearsbox::CameraFocusMode c_mode) override
     {
         @autoreleasepool {

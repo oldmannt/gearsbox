@@ -58,6 +58,21 @@ void TaskManagerImp::process(){
             info->setTaskId(-1);
         ++it_task;
     }
+    
+    std::unique_lock<std::mutex> try_lock(m_mt_task, std::try_to_lock);
+    if (try_lock.owns_lock() && m_queue_mt_excuser.size()!=0){
+        auto copy_task = m_queue_mt_excuser;
+        auto copy_info = m_queue_mt_info;
+        
+        auto task = std::move(m_queue_mt_excuser.front());
+        while (task) {
+            auto info = std::move(m_queue_mt_info.front());
+            task->excuse(info);
+            m_queue_mt_excuser.pop();
+            m_queue_mt_info.pop();
+            task = std::move(m_queue_mt_excuser.front());
+        }
+    }
 }
 
 void TaskManagerImp::listTaskExcuser(std::shared_ptr<TaskInfoGen> info){
@@ -73,6 +88,7 @@ void TaskManagerImp::listTaskExcuser(std::shared_ptr<TaskInfoGen> info){
 TaskManagerImp::TaskManagerImp(){
     uv_idle_init(uv_default_loop(), &m_idle_handle);
     uv_idle_start(&m_idle_handle, idle_cb);
+    
 }
 
 TaskManagerImp::~TaskManagerImp(){
@@ -80,7 +96,7 @@ TaskManagerImp::~TaskManagerImp(){
     uv_close((uv_handle_t*) &m_idle_handle,close_idel_cb);
 }
 
-void TaskManagerImp::addTask(int64_t task_id, int64_t delay, int64_t repeated, const std::shared_ptr<TaskExcuserGen> & task){
+void TaskManagerImp::addTask(int64_t task_id, int64_t delay, int32_t repeated, const std::shared_ptr<TaskExcuserGen> & task){
     std::shared_ptr<TaskInfoGen> info = TaskManagerGen::create_info(task_id, delay, repeated);
     this->addTaskInfo(info, task);
 }
@@ -122,4 +138,14 @@ void TaskManagerImp::removeTask(int64_t task_id){
         ++it_task;
     }
 
+}
+
+void TaskManagerImp::addMainThreadTask(const std::shared_ptr<TaskExcuserGen> & task, const std::shared_ptr<TaskInfoGen> & param){
+    CHECK_RT(task!=nullptr, "task null");
+    
+    m_mt_task.lock();
+    m_queue_mt_excuser.push(task);
+    m_queue_mt_info.push(param);
+    
+    m_mt_task.unlock();
 }

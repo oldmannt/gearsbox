@@ -126,7 +126,7 @@ void VideoWriterImp::asynWritting(){
                 uv_rwlock_rdlock(&m_rw_lock);
                 frame = std::static_pointer_cast<VideoFrameGen>(m_frame_buffer->pop());
                 G_LOG_C(LOG_INFO,"count donw:%d", m_frame_buffer->getBufferSize() - m_frame_buffer->getDistence());
-                m_video_encoder->encodeFrame(frame);
+                if (frame)  m_video_encoder->encodeFrame(frame);
             }while (frame);
             break;
         }
@@ -203,8 +203,8 @@ void VideoWriterImp::saveNRlease(){
     m_end_thread = true;
     InstanceGetterGen::getCameraController()->setCaptureHandler(nullptr);
     
-    if (m_frame_buffer->getDistence() != 0 && m_write_result_handler){
-        m_write_result_handler->beforeForceStop();
+    if (m_frame_buffer && m_frame_buffer->getDistence() != 0 && m_write_result_handler){
+        m_write_result_handler->beforeComplete();
     }
 }
 

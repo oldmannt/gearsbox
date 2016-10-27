@@ -11,13 +11,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public abstract class TaskManagerGen {
     /**delay<0 excuse immidiately, delay==0 next frame, repeaed <=0 not reapead */
-    public abstract void addTask(long taskId, long delay, long repeated, TaskExcuserGen task);
+    public abstract void addTask(long taskId, long delay, int repeated, TaskExcuserGen task);
 
     public abstract void addTaskI(long taskId, TaskExcuserGen task);
 
     public abstract void addTaskInfo(TaskInfoGen task, TaskExcuserGen taskExcuser);
 
     public abstract void addTaskExcuser(TaskExcuserGen task);
+
+    public abstract void addMainThreadTask(TaskExcuserGen excuser, TaskInfoGen task);
 
     public abstract void removeTask(long taskId);
 
@@ -49,12 +51,12 @@ public abstract class TaskManagerGen {
         }
 
         @Override
-        public void addTask(long taskId, long delay, long repeated, TaskExcuserGen task)
+        public void addTask(long taskId, long delay, int repeated, TaskExcuserGen task)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
             native_addTask(this.nativeRef, taskId, delay, repeated, task);
         }
-        private native void native_addTask(long _nativeRef, long taskId, long delay, long repeated, TaskExcuserGen task);
+        private native void native_addTask(long _nativeRef, long taskId, long delay, int repeated, TaskExcuserGen task);
 
         @Override
         public void addTaskI(long taskId, TaskExcuserGen task)
@@ -79,6 +81,14 @@ public abstract class TaskManagerGen {
             native_addTaskExcuser(this.nativeRef, task);
         }
         private native void native_addTaskExcuser(long _nativeRef, TaskExcuserGen task);
+
+        @Override
+        public void addMainThreadTask(TaskExcuserGen excuser, TaskInfoGen task)
+        {
+            assert !this.destroyed.get() : "trying to use a destroyed object";
+            native_addMainThreadTask(this.nativeRef, excuser, task);
+        }
+        private native void native_addMainThreadTask(long _nativeRef, TaskExcuserGen excuser, TaskInfoGen task);
 
         @Override
         public void removeTask(long taskId)

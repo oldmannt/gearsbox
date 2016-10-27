@@ -27,7 +27,10 @@ class PopupViewController: UIViewController {
     }
     
     func isShowed() -> Bool{
-        return !view.isHidden
+        if m_popbase == nil || m_overlay_view == nil{
+            return false
+        }
+        return m_popbase!.view.subviews.contains(m_overlay_view!)
     }
 
     override func viewDidLoad() {

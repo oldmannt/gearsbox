@@ -11,7 +11,7 @@
 
 #include <functional>
 #include "task_excuser_gen.hpp"
-
+#include "macro.h"
 
 namespace gearsbox {
     
@@ -22,6 +22,9 @@ namespace gearsbox {
         }
         virtual void excuse(const std::shared_ptr<TaskInfoGen> & info) override{
             m_fn();
+        }
+        ~FnTask(){
+            G_LOG_C(LOG_INFO, "~FnTask %x", this);
         }
     private:
         std::function<void()> m_fn;

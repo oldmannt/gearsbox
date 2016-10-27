@@ -143,6 +143,10 @@ camera_controller_gen = interface +o +j {
 	getISO():i32;
 	getISOMax():i32;
 	getISOMin():i32;
+	getEV():f32;
+	setEV(ev:f32);
+	getEVMax():f32;
+	getEVMin():f32;
 
 	setFocusMode(mode:camera_focus_mode);
 	getFocusMode():camera_focus_mode;

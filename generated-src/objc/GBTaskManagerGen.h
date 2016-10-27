@@ -22,7 +22,7 @@
 /**delay<0 excuse immidiately, delay==0 next frame, repeaed <=0 not reapead */
 - (void)addTask:(int64_t)taskId
           delay:(int64_t)delay
-       repeated:(int64_t)repeated
+       repeated:(int32_t)repeated
            task:(nullable id<GBTaskExcuserGen>)task;
 
 - (void)addTaskI:(int64_t)taskId
@@ -32,6 +32,9 @@
         taskExcuser:(nullable id<GBTaskExcuserGen>)taskExcuser;
 
 - (void)addTaskExcuser:(nullable id<GBTaskExcuserGen>)task;
+
+- (void)addMainThreadTask:(nullable id<GBTaskExcuserGen>)excuser
+                     task:(nullable id<GBTaskInfoGen>)task;
 
 - (void)removeTask:(int64_t)taskId;
 

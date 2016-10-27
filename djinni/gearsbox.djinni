@@ -136,10 +136,12 @@ task_manager_gen = interface +c {
     static instance():task_manager_gen;
     static create_info(task_id:i64, delay:i64, repeated:i32):task_info_gen;
     #delay<0 excuse immidiately, delay==0 next frame, repeaed <=0 not reapead
-    addTask(task_id:i64, delay:i64, repeated:i64, task:task_excuser_gen);
+    addTask(task_id:i64, delay:i64, repeated:i32, task:task_excuser_gen);
     addTaskI(task_id:i64, task:task_excuser_gen);
     addTaskInfo(task:task_info_gen, task_excuser:task_excuser_gen);
     addTaskExcuser(task:task_excuser_gen);
+
+    addMainThreadTask(excuser:task_excuser_gen,task:task_info_gen);
     removeTask(task_id:i64);
 }
 

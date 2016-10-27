@@ -25,7 +25,12 @@ void afterWokdCB(uv_work_t* req, int status){
     work_thread->afterWork();
 }
 
+void asyncWorkCB(uv_async_t *handle){
+    
+}
+
 void WorkThread::start(){
+    
     m_work.data = (void*)this;
     uv_queue_work(uv_default_loop(), &m_work, workThreadCB, afterWokdCB);
 }

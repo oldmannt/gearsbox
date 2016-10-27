@@ -11,6 +11,7 @@
 
 #include "uv.h"
 #include <functional>
+#include <queue>
 
 namespace gearsbox {
 
@@ -19,6 +20,7 @@ public:
     WorkThread(std::function<void()> funnc,
                std::function<void()> after_work)
     :m_fn(std::move(funnc)), m_rt(std::move(after_work)),m_running(false) {
+        
     }
     
     ~WorkThread(){
@@ -36,6 +38,7 @@ private:
     std::function<void()> m_fn;
     std::function<void()> m_rt;
     bool m_running;
+
 };
 
 }

@@ -7,7 +7,7 @@
 //
 
 #include <fstream>
-
+#include <chrono>
 #include "macro.h"
 #include "utils.hpp"
 
@@ -37,6 +37,12 @@ bool gearsbox::readJson(const std::string& param, Json::Value& config){
     
     return true;
 }
+
+long long gearsbox::nowMilli(){
+    using namespace std::chrono;
+    return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
+}
+
 
 #include <mach/mach_time.h>
 uint64_t subtractTimes( uint64_t elapsed )

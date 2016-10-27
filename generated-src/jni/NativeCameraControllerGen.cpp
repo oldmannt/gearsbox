@@ -271,6 +271,38 @@ int32_t NativeCameraControllerGen::JavaProxy::getISOMin() {
     ::djinni::jniExceptionCheck(jniEnv);
     return ::djinni::I32::toCpp(jniEnv, jret);
 }
+float NativeCameraControllerGen::JavaProxy::getEV() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallFloatMethod(Handle::get().get(), data.method_getEV);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::F32::toCpp(jniEnv, jret);
+}
+void NativeCameraControllerGen::JavaProxy::setEV(float c_ev) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setEV,
+                           ::djinni::get(::djinni::F32::fromCpp(jniEnv, c_ev)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
+float NativeCameraControllerGen::JavaProxy::getEVMax() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallFloatMethod(Handle::get().get(), data.method_getEVMax);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::F32::toCpp(jniEnv, jret);
+}
+float NativeCameraControllerGen::JavaProxy::getEVMin() {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    auto jret = jniEnv->CallFloatMethod(Handle::get().get(), data.method_getEVMin);
+    ::djinni::jniExceptionCheck(jniEnv);
+    return ::djinni::F32::toCpp(jniEnv, jret);
+}
 void NativeCameraControllerGen::JavaProxy::setFocusMode(::gearsbox::CameraFocusMode c_mode) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

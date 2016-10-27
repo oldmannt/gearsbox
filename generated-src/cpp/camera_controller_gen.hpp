@@ -85,6 +85,14 @@ public:
 
     virtual int32_t getISOMin() = 0;
 
+    virtual float getEV() = 0;
+
+    virtual void setEV(float ev) = 0;
+
+    virtual float getEVMax() = 0;
+
+    virtual float getEVMin() = 0;
+
     virtual void setFocusMode(CameraFocusMode mode) = 0;
 
     virtual CameraFocusMode getFocusMode() = 0;

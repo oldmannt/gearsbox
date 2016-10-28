@@ -13,8 +13,8 @@
 #include <functional>
 #include <map>
 
-#include "queue_thread.hpp"
 namespace gearsbox {
+class QueueThread;
 class AsyncTaskPool{
 public:
     enum class TaskType{

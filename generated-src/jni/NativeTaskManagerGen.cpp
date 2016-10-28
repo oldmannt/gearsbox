@@ -83,16 +83,6 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_nati
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1addMainThreadTask(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_excuser, jobject j_task)
-{
-    try {
-        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
-        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::TaskManagerGen>(nativeRef);
-        ref->addMainThreadTask(::djinni_generated::NativeTaskExcuserGen::toCpp(jniEnv, j_excuser),
-                               ::djinni_generated::NativeTaskInfoGen::toCpp(jniEnv, j_task));
-    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
-}
-
 CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_TaskManagerGen_00024CppProxy_native_1removeTask(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jlong j_taskId)
 {
     try {

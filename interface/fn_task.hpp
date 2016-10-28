@@ -24,7 +24,7 @@ namespace gearsbox {
             m_fn();
         }
         ~FnTask(){
-            G_LOG_C(LOG_INFO, "~FnTask %x", this);
+            //G_LOG_C(LOG_INFO, "~FnTask %x", this);
         }
     private:
         std::function<void()> m_fn;

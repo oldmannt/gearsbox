@@ -7,7 +7,7 @@
 //
 
 #include "async_task_pool.hpp"
-
+#include "queue_thread.hpp"
 #include "macro.h"
 
 using namespace gearsbox;

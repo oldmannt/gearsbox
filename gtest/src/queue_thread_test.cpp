@@ -32,14 +32,15 @@ public:
         G_LOG_C(LOG_INFO, "work: %x, vaule:%d", this, _value);
         
         auto task = std::static_pointer_cast<FnTask>(func);
-        TaskManagerGen::instance()->addMainThreadTask(task, nullptr);
+        TaskManagerGen::instance()->addTaskI((int64_t)this, task);
+        //TaskManagerGen::instance()->addMainThreadTask((int64_t)this, nullptr);
     }
     void after( std::shared_ptr<void> func){
         ++_value;
         G_LOG_C(LOG_INFO, "after: %x, vaule:%d, %d", this, _value, nowMilli());
         AsyncTaskPool::instance()->stopTask(AsyncTaskPool::TaskType::OTHER);
-        uv_print_active_handles(uv_default_loop(), stdout);
-        uv_stop(uv_default_loop());
+        //uv_print_active_handles(uv_default_loop(), stdout);
+        //uv_stop(uv_default_loop());
         
         if (func!=nullptr){
             auto task = std::static_pointer_cast<FnTask>(func);
@@ -54,7 +55,7 @@ public:
 std::function<void()> getFunc(const std::string& flag){
     return [flag](){
         
-        //G_LOG_C(LOG_INFO, "getFunc:%s now:%d", flag.c_str(), nowMilli());
+        G_LOG_C(LOG_INFO, "getFunc:%s now:%d", flag.c_str(), nowMilli());
     };
 }
 
@@ -67,17 +68,16 @@ std::function<void()> getIncFunc(const std::string& flag, int* value, int inc){
 
 Foo foo;
 TEST(queue_thread, test) {
-
-    uv_print_active_handles(uv_default_loop(), stdout);
+    
     int value = 0;
-    int count = 100;
+    int count = 1;
     for (int i=0; i<count; ++i) {
         std::ostringstream oss;
         oss << "inc_fun" << i;
         auto inc_fun = getIncFunc(oss.str().c_str(), &value, 1);
         oss << "_after";
         auto after_inc = getFunc(oss.str().c_str());
-        AsyncTaskPool::instance()->enqueue(AsyncTaskPool::TaskType::OTHER, inc_fun, after_inc);
+        AsyncTaskPool::instance()->enqueue(AsyncTaskPool::TaskType::OTHER, inc_fun, nullptr);
         //usleep(5000);
         //EXPECT_EQ(value, i+1);
     }
@@ -85,7 +85,7 @@ TEST(queue_thread, test) {
     usleep(5000*count);
     EXPECT_EQ(value, count);
     
-    
+    /*
     int arg = 1;
     
     std::shared_ptr<FnTask> func = std::make_shared<FnTask>(getFunc("work1'arg"));
@@ -100,6 +100,10 @@ TEST(queue_thread, test) {
     G_LOG_C(LOG_INFO, "after sleep: %d size of long long:%d", nowMilli()-u1, sizeof(u1));
     
     EXPECT_EQ(foo._value, arg);
+    */
+    
+    //uv_print_active_handles(uv_default_loop(), stdout);
+
 }
 
 #endif

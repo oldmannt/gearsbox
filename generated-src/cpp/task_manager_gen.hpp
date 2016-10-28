@@ -32,8 +32,6 @@ public:
 
     virtual void addTaskExcuser(const std::shared_ptr<TaskExcuserGen> & task) = 0;
 
-    virtual void addMainThreadTask(const std::shared_ptr<TaskExcuserGen> & excuser, const std::shared_ptr<TaskInfoGen> & task) = 0;
-
     virtual void removeTask(int64_t task_id) = 0;
 };
 

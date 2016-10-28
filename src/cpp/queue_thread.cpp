@@ -25,7 +25,7 @@ void thread(void* data){
 void asyncTaskCB(uv_async_t *handle){
     QueueData* data = (QueueData*)handle->data;
     std::shared_ptr<QueueData> pdata(data);
-    if (pdata)
+    if (pdata && pdata->_after_task!=nullptr)
         pdata->_after_task();
     uv_close((uv_handle_t*)pdata->_async.get(), nullptr);
 }
@@ -93,9 +93,20 @@ void QueueThread::work(){
         }
         QueueData* async_data = new QueueData;
         *async_data = std::move(data);
-        async_data->_task();
+        if (async_data->_task!=nullptr)
+            async_data->_task();
+        
         async_data->_async->data = async_data;
         uv_async_send(async_data->_async.get());
+        /*
+        if (async_data->_after_task!=nullptr){
+         
+        }
+        else{
+            std::shared_ptr<QueueData> pdata(async_data); // auto delete
+            uv_close((uv_handle_t *)async_data->_async.get(), nullptr);
+        }*/
+
     }
 }
 

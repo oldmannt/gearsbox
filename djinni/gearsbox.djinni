@@ -141,7 +141,6 @@ task_manager_gen = interface +c {
     addTaskInfo(task:task_info_gen, task_excuser:task_excuser_gen);
     addTaskExcuser(task:task_excuser_gen);
 
-    addMainThreadTask(excuser:task_excuser_gen,task:task_info_gen);
     removeTask(task_id:i64);
 }
 

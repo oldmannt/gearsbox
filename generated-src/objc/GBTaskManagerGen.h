@@ -33,9 +33,6 @@
 
 - (void)addTaskExcuser:(nullable id<GBTaskExcuserGen>)task;
 
-- (void)addMainThreadTask:(nullable id<GBTaskExcuserGen>)excuser
-                     task:(nullable id<GBTaskInfoGen>)task;
-
 - (void)removeTask:(int64_t)taskId;
 
 @end

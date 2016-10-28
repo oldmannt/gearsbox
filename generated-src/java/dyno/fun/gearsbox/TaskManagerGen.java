@@ -19,8 +19,6 @@ public abstract class TaskManagerGen {
 
     public abstract void addTaskExcuser(TaskExcuserGen task);
 
-    public abstract void addMainThreadTask(TaskExcuserGen excuser, TaskInfoGen task);
-
     public abstract void removeTask(long taskId);
 
     public static native TaskManagerGen instance();
@@ -81,14 +79,6 @@ public abstract class TaskManagerGen {
             native_addTaskExcuser(this.nativeRef, task);
         }
         private native void native_addTaskExcuser(long _nativeRef, TaskExcuserGen task);
-
-        @Override
-        public void addMainThreadTask(TaskExcuserGen excuser, TaskInfoGen task)
-        {
-            assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_addMainThreadTask(this.nativeRef, excuser, task);
-        }
-        private native void native_addMainThreadTask(long _nativeRef, TaskExcuserGen excuser, TaskInfoGen task);
 
         @Override
         public void removeTask(long taskId)

@@ -31,8 +31,11 @@ static void idle_cb(uv_idle_t* handle) {
 }
 
 void TaskManagerImp::process(){
-    uint64_t now = uv_now(uv_default_loop());
+    std::unique_lock<std::mutex> try_lock(m_mt_task, std::try_to_lock);
+    if (!try_lock.owns_lock() && m_map_task.size()==0)
+        return;
     
+    int64_t now = uv_now(uv_default_loop());
     MAP_TASK::iterator it_task = m_map_task.begin();
     for (; it_task!=m_map_task.end(); ) {
         std::shared_ptr<TaskInfoGen> info = it_task->first;
@@ -57,21 +60,6 @@ void TaskManagerImp::process(){
         if (info->getRepeated() < 0)
             info->setTaskId(-1);
         ++it_task;
-    }
-    
-    std::unique_lock<std::mutex> try_lock(m_mt_task, std::try_to_lock);
-    if (try_lock.owns_lock() && m_queue_mt_excuser.size()!=0){
-        auto copy_task = m_queue_mt_excuser;
-        auto copy_info = m_queue_mt_info;
-        
-        auto task = std::move(m_queue_mt_excuser.front());
-        while (task) {
-            auto info = std::move(m_queue_mt_info.front());
-            task->excuse(info);
-            m_queue_mt_excuser.pop();
-            m_queue_mt_info.pop();
-            task = std::move(m_queue_mt_excuser.front());
-        }
     }
 }
 
@@ -108,8 +96,9 @@ void TaskManagerImp::addTaskI(int64_t task_id, const std::shared_ptr<TaskExcuser
 void TaskManagerImp::addTaskInfo(const std::shared_ptr<TaskInfoGen> & task, const std::shared_ptr<TaskExcuserGen> & task_excuser){
     if (task == nullptr)
         return;
+    std::unique_lock<std::mutex> auto_lock(m_mt_task);
     task->setAssignTick(uv_now(uv_default_loop()));
-    if (task->getDelay()<0){
+    if (task->getDelay()<0 && m_thread_checker.isMotherThread()){
         if (task_excuser!=nullptr)
             task_excuser->excuse(task);
         else
@@ -138,14 +127,4 @@ void TaskManagerImp::removeTask(int64_t task_id){
         ++it_task;
     }
 
-}
-
-void TaskManagerImp::addMainThreadTask(const std::shared_ptr<TaskExcuserGen> & task, const std::shared_ptr<TaskInfoGen> & param){
-    CHECK_RT(task!=nullptr, "task null");
-    
-    m_mt_task.lock();
-    m_queue_mt_excuser.push(task);
-    m_queue_mt_info.push(param);
-    
-    m_mt_task.unlock();
 }

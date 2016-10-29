@@ -48,6 +48,7 @@ private:
         int32_t getMaxFrameRate() override;
         int32_t getDefaultFrameRate() override;
         void setFrameDuration(int64_t value, int32_t scale) override;
+        void setFrameDurationRange(const ::gearsbox::Duration & min, const ::gearsbox::Duration & max) override;
         ::gearsbox::Duration getFrameDuration() override;
         void setExposureMode(::gearsbox::CameraExposureMode mode) override;
         ::gearsbox::CameraExposureMode getExposureMode() override;
@@ -110,6 +111,7 @@ private:
     const jmethodID method_getMaxFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getMaxFrameRate", "()I") };
     const jmethodID method_getDefaultFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getDefaultFrameRate", "()I") };
     const jmethodID method_setFrameDuration { ::djinni::jniGetMethodID(clazz.get(), "setFrameDuration", "(JI)V") };
+    const jmethodID method_setFrameDurationRange { ::djinni::jniGetMethodID(clazz.get(), "setFrameDurationRange", "(Ldyno/fun/gearsbox/Duration;Ldyno/fun/gearsbox/Duration;)V") };
     const jmethodID method_getFrameDuration { ::djinni::jniGetMethodID(clazz.get(), "getFrameDuration", "()Ldyno/fun/gearsbox/Duration;") };
     const jmethodID method_setExposureMode { ::djinni::jniGetMethodID(clazz.get(), "setExposureMode", "(Ldyno/fun/gearsbox/CameraExposureMode;)V") };
     const jmethodID method_getExposureMode { ::djinni::jniGetMethodID(clazz.get(), "getExposureMode", "()Ldyno/fun/gearsbox/CameraExposureMode;") };

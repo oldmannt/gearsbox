@@ -126,6 +126,7 @@ camera_controller_gen = interface +o +j {
 	getMaxFrameRate():i32;
 	getDefaultFrameRate():i32;
 	setFrameDuration(value:i64,scale:i32);
+	setFrameDurationRange(min:duration, max:duration);
 	getFrameDuration():duration;
 
 	setExposureMode(mode:camera_exposure_mode);

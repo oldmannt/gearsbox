@@ -116,6 +116,13 @@ public:
                                       scale:(::djinni::I32::fromCpp(c_scale))];
         }
     }
+    void setFrameDurationRange(const ::gearsbox::Duration & c_min, const ::gearsbox::Duration & c_max) override
+    {
+        @autoreleasepool {
+            [Handle::get() setFrameDurationRange:(::djinni_generated::Duration::fromCpp(c_min))
+                                             max:(::djinni_generated::Duration::fromCpp(c_max))];
+        }
+    }
     ::gearsbox::Duration getFrameDuration() override
     {
         @autoreleasepool {

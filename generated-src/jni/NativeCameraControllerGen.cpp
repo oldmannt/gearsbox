@@ -142,6 +142,15 @@ void NativeCameraControllerGen::JavaProxy::setFrameDuration(int64_t c_value, int
                            ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_scale)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
+void NativeCameraControllerGen::JavaProxy::setFrameDurationRange(const ::gearsbox::Duration & c_min, const ::gearsbox::Duration & c_max) {
+    auto jniEnv = ::djinni::jniGetThreadEnv();
+    ::djinni::JniLocalScope jscope(jniEnv, 10);
+    const auto& data = ::djinni::JniClass<::djinni_generated::NativeCameraControllerGen>::get();
+    jniEnv->CallVoidMethod(Handle::get().get(), data.method_setFrameDurationRange,
+                           ::djinni::get(::djinni_generated::NativeDuration::fromCpp(jniEnv, c_min)),
+                           ::djinni::get(::djinni_generated::NativeDuration::fromCpp(jniEnv, c_max)));
+    ::djinni::jniExceptionCheck(jniEnv);
+}
 ::gearsbox::Duration NativeCameraControllerGen::JavaProxy::getFrameDuration() {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);

@@ -70,6 +70,13 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         //print("capture lapsed:%f", CACurrentMediaTime()-m_last_tick)
         m_last_tick = CACurrentMediaTime()
     }
+    
+    override init() {
+        m_format_ffmpeg = [kCVPixelBufferPixelFormatTypeKey as String :
+            NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)]
+        m_format_save_photo = [AVVideoCodecKey : AVVideoCodecJPEG]
+        m_format_capture = m_format_ffmpeg
+    }
 
     open func initializ_swif(_ view:PreviewView, complition:@escaping (Bool, String?) -> Swift.Void ){
         self.m_previewLayer = view.videoPreviewLayer
@@ -112,7 +119,16 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
                 // Fallback on earlier versions
                 defaultVideoDevice = GBCameraControllerImp.deviceWithMediaType(type: AVMediaTypeVideo, position: .back)
             }
-            m_captureDevice = defaultVideoDevice
+            
+            if defaultVideoDevice == nil{
+                let msg = "request camera failed, m_captureDevice nil"
+                GBLogGen.instance()?.logerrf("\(msg) \(#file) \(#function) \(#line)");
+                self.m_captureSession.commitConfiguration()
+                complition(false, msg)
+            }
+            m_captureDevice = defaultVideoDevice!
+            print("duration \(m_captureDevice.activeVideoMaxFrameDuration)")
+            print("duration \(m_captureDevice.activeVideoMinFrameDuration)")
             
             let videoDeviceInput = try AVCaptureDeviceInput(device: defaultVideoDevice)
             
@@ -121,25 +137,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
                 self.m_video_device_input = videoDeviceInput
                 
                 DispatchQueue.main.async {
-                    /*
-                     Why are we dispatching this to the main queue?
-                     Because AVCaptureVideoPreviewLayer is the backing layer for PreviewView and UIView
-                     can only be manipulated on the main thread.
-                     Note: As an exception to the above rule, it is not necessary to serialize video orientation changes
-                     on the AVCaptureVideoPreviewLayer’s connection with other session manipulation.
-                     
-                     Use the status bar orientation as the initial video orientation. Subsequent orientation changes are
-                     handled by CameraViewController.viewWillTransition(to:with:).
-                     */
                     let initialVideoOrientation: AVCaptureVideoOrientation = .landscapeLeft
-                    /*
-                    let statusBarOrientation = UIApplication.shared.statusBarOrientation
-                    if statusBarOrientation != .unknown {
-                        if let videoOrientation = statusBarOrientation.videoOrientation {
-                            initialVideoOrientation = videoOrientation
-                        }
-                    }
-                    */
                     self.m_previewLayer?.connection.videoOrientation = initialVideoOrientation
                 }
             }
@@ -180,11 +178,38 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         }
         
         // for take photo
-        let dctPixelFormatType : Dictionary<NSString, NSNumber> = [kCVPixelBufferPixelFormatTypeKey : NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange as UInt32)]
-        self.m_stillImageOutput.outputSettings = dctPixelFormatType
-        //self.m_stillImageOutput.isHighResolutionStillImageOutputEnabled = true
-        if self.m_captureSession.canAddOutput(self.m_stillImageOutput) {
-            self.m_captureSession.addOutput(self.m_stillImageOutput)
+        if #available(iOS 10.0, *) {
+            let photo_capture = AVCapturePhotoOutput()
+            m_photo_output = photo_capture;
+
+            if self.m_captureSession.canAddOutput(m_photo_output)
+            {
+                self.m_captureSession.addOutput(m_photo_output)
+            }
+            else {
+                let msg = "Could not add photo output to the session"
+                GBLogGen.instance()?.logerrf("\(msg) \(#file) \(#function) \(#line)");
+                return
+            }
+        } else {
+            // Fallback on earlier versions
+            m_stillImageOutput = AVCaptureStillImageOutput()
+            self.m_stillImageOutput?.outputSettings = m_format_ffmpeg
+            //self.m_stillImageOutput.isHighResolutionStillImageOutputEnabled = true
+            if self.m_captureSession.canAddOutput(self.m_stillImageOutput) {
+                self.m_captureSession.addOutput(self.m_stillImageOutput)
+            }
+        }
+        
+        // Acquisition of output data for video record
+        let videoDataOutput:AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
+        // Set of color channel
+        videoDataOutput.videoSettings = m_format_ffmpeg
+        // Specified queue to capture the image
+        videoDataOutput.setSampleBufferDelegate(self, queue: DispatchQueue.main)
+        videoDataOutput.alwaysDiscardsLateVideoFrames = true
+        if self.m_captureSession.canAddOutput(videoDataOutput) {
+            self.m_captureSession.addOutput(videoDataOutput)
         }
         
         DispatchQueue.main.async {[unowned self] in
@@ -194,57 +219,22 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             self.m_previewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
         }
         
-        // Acquisition of output data
-        let videoDataOutput:AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
-        // Set of color channel
-        videoDataOutput.videoSettings = dctPixelFormatType
-        // Specified queue to capture the image
-        videoDataOutput.setSampleBufferDelegate(self, queue: DispatchQueue.main)
-        videoDataOutput.alwaysDiscardsLateVideoFrames = true
-        if self.m_captureSession.canAddOutput(videoDataOutput) {
-            self.m_captureSession.addOutput(videoDataOutput)
-        }
-
-        // Add photo output. todo
-        /*
-        if session.canAddOutput(photoOutput)
-        {
-            session.addOutput(photoOutput)
-            
-            photoOutput.isHighResolutionCaptureEnabled = true
-            photoOutput.isLivePhotoCaptureEnabled = photoOutput.isLivePhotoCaptureSupported
-            livePhotoMode = photoOutput.isLivePhotoCaptureSupported ? .on : .off
-        }
-        else {
-            print("Could not add photo output to the session")
-            setupResult = .configurationFailed
-            session.commitConfiguration()
-            return
-        } */
-        
         self.initializeDeviceFormat()
         self.setFrameDuration(1, scale: 30)
         
         self.m_captureSession.commitConfiguration()
-        
-        if self.m_captureDevice == nil{
-            let msg = "request camera failed, m_captureDevice nil"
-            GBLogGen.instance()?.logerrf("\(msg) \(#file) \(#function) \(#line)");
-            complition(false, msg)
-        }
-        
         complition(true, nil)
     }
     
     fileprivate func initializeDeviceFormat(){
-        m_default_device_format = m_captureDevice?.activeFormat
-        let default_ranges = m_captureDevice?.activeFormat.videoSupportedFrameRateRanges as! [AVFrameRateRange]
+        m_default_device_format = m_captureDevice.activeFormat
+        let default_ranges = m_captureDevice.activeFormat.videoSupportedFrameRateRanges as! [AVFrameRateRange]
         m_default_frame_rate = default_ranges[0]
         
         //print("default max_frame_duration:\(default_ranges)")
-        //print("\(m_captureDevice?.formats.count)")
+        //print("\(m_captureDevice.formats.count)")
         var max_frame_rate:Float64 = 0.0
-        for format in m_captureDevice!.formats {
+        for format in m_captureDevice.formats {
             let ranges = (format as AnyObject).videoSupportedFrameRateRanges as! [AVFrameRateRange]
             let frame_range = ranges[0]
             if frame_range.maxFrameRate > max_frame_rate {
@@ -264,22 +254,46 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         }
         
         if duration < m_default_frame_rate?.minFrameDuration &&
-            m_captureDevice?.activeFormat != m_maxframe_device_format {
+            m_captureDevice.activeFormat != m_maxframe_device_format {
             self.setSloMo(true)
         }
         
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.activeVideoMaxFrameDuration = duration;
-            m_captureDevice?.activeVideoMinFrameDuration = duration;
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.activeVideoMaxFrameDuration = duration;
+            m_captureDevice.activeVideoMinFrameDuration = duration;
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setFrameDuration err:\(error) \(#file) \(#function) \(#line)");
         }        
     }
     
+    public func setFrameDurationRange(_ min: GBDuration, max: GBDuration){
+        let min_duration = CMTimeMake(min.value, min.scale)
+        let max_duration = CMTimeMake(max.value, max.scale)
+        if min_duration < m_max_frame_rate?.minFrameDuration {
+            GBLogGen.instance()?.logerrf("unsuport duraton, vaule:\(max.value) scale:\(max.scale) \(#file) \(#function) \(#line)");
+            return
+        }
+        
+        if min_duration < m_default_frame_rate?.minFrameDuration &&
+            m_captureDevice.activeFormat != m_maxframe_device_format {
+            self.setSloMo(true)
+        }
+        
+        do {
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.activeVideoMaxFrameDuration = max_duration;
+            m_captureDevice.activeVideoMinFrameDuration = min_duration;
+            m_captureDevice.unlockForConfiguration()
+        } catch let error as NSError {
+            GBLogGen.instance()?.logerrf("setFrameDuration err:\(error) \(#file) \(#function) \(#line)");
+        }
+
+    }
+    
     public func getFrameDuration() -> GBDuration{
-        let duration:CMTime = (m_captureDevice?.activeVideoMaxFrameDuration)!
+        let duration:CMTime = (m_captureDevice.activeVideoMaxFrameDuration)
         return GBDuration(value: duration.value, scale: duration.timescale);
     }
     
@@ -378,17 +392,15 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     @objc open func setFlashMode(_ mode: GBCameraFlash){
         
         m_session_queue.async {[unowned self] in
-            if self.m_captureDevice == nil {
-                return
-            }
+
             let camera_flash:AVCaptureFlashMode = self.toFlashMode(mode)
-            if !(self.m_captureDevice?.isFlashModeSupported(camera_flash))! {
+            if !(self.m_captureDevice.isFlashModeSupported(camera_flash)) {
                 return
             }
             do {
-                try self.m_captureDevice?.lockForConfiguration()
-                self.m_captureDevice?.flashMode = camera_flash
-                self.m_captureDevice?.unlockForConfiguration()
+                try self.m_captureDevice.lockForConfiguration()
+                self.m_captureDevice.flashMode = camera_flash
+                self.m_captureDevice.unlockForConfiguration()
             }  catch let error as NSError {
                 GBLogGen.instance()?.logerrf("setFlash failed err:\(error) \(#file) \(#function) \(#line)");
                 return
@@ -399,12 +411,8 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
 
     
     @objc open func getFlashMode() -> GBCameraFlash {
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getFlash m_captureDevice nil \(#file) \(#function) \(#line)");
-            return GBCameraFlash.none
-        }
         
-        return toGBFlashMode((m_captureDevice?.flashMode)!)
+        return toGBFlashMode(m_captureDevice.flashMode)
     }
     
     fileprivate func getQualityConfig() -> GBCameraQuality {
@@ -446,9 +454,9 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     
     public func setSloMo(_ flag: Bool) {
         do {
-            try m_captureDevice?.lockForConfiguration()
-            m_captureDevice?.activeFormat = self.m_maxframe_device_format
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.activeFormat = self.m_maxframe_device_format
+            m_captureDevice.unlockForConfiguration()
         }  catch let error as NSError {
             GBLogGen.instance()?.logerrf("setSloMo failed err:\(error) \(#file) \(#function) \(#line)");
             return
@@ -456,7 +464,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     public func getSloMo() -> Bool{
-        if m_captureDevice?.activeFormat == self.m_maxframe_device_format &&
+        if m_captureDevice.activeFormat == self.m_maxframe_device_format &&
             nil != self.m_maxframe_device_format {
             return true
         }
@@ -506,14 +514,11 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     @objc open func setExposureMode(_ modle: GBCameraExposureMode){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setExposureMode m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
-        }
+
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.exposureMode = self.getExposureMode(modle)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.exposureMode = self.getExposureMode(modle)
+            m_captureDevice.unlockForConfiguration()
             } catch let error as NSError {
                 GBLogGen.instance()?.logerrf("setExposureMode err:\(error) \(#file) \(#function) \(#line)");
         }
@@ -521,194 +526,125 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     open func getExposureMode() -> GBCameraExposureMode {
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getExposureMode m_captureDevice nil \(#file) \(#function) \(#line)");
-            return GBCameraExposureMode.none
-        }
-        return getGBExposureMode((m_captureDevice?.exposureMode)!)
+        return getGBExposureMode(m_captureDevice.exposureMode)
     }
     
     @objc open func setExposurePoint(_ x: Float, y: Float){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setExposurePoint m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
-        }
-        if !(m_captureDevice?.isExposurePointOfInterestSupported)! {
+        if !(m_captureDevice.isExposurePointOfInterestSupported) {
             GBLogGen.instance()?.logerrf("unsupport setExposurePoint \(#file) \(#function) \(#line)");
             return
         }
         
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.exposurePointOfInterest = CGPoint(x: Double(x), y: Double(y))
-            m_captureDevice?.exposureMode = AVCaptureExposureMode.continuousAutoExposure
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.exposurePointOfInterest = CGPoint(x: Double(x), y: Double(y))
+            m_captureDevice.exposureMode = AVCaptureExposureMode.continuousAutoExposure
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setExposurePoint err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     @objc open func setExposureEv(_ ev: Float) {
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setExposureEv m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
-        }
-        if ev > m_captureDevice?.maxExposureTargetBias || ev < m_captureDevice?.minExposureTargetBias{
+
+        if ev > m_captureDevice.maxExposureTargetBias || ev < m_captureDevice.minExposureTargetBias{
             GBLogGen.instance()?.logerrf("setExposureEv ev:\(ev) outof range \(#file) \(#function) \(#line)");
             return
         }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.setExposureTargetBias(ev, completionHandler: nil)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.setExposureTargetBias(ev, completionHandler: nil)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setExposureEv err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     @objc open func getExposureEv() -> Float{
-        return (m_captureDevice?.exposureTargetBias)!
+        return (m_captureDevice.exposureTargetBias)
     }
     
     @objc open func getExposureMaxEv() -> Float {
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getExposureMaxEv m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return (m_captureDevice?.maxExposureTargetBias)!
+        return (m_captureDevice.maxExposureTargetBias)
     }
     
     @objc open func getExposureMinEv() -> Float {
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getExposureMminEv m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return (m_captureDevice?.minExposureTargetBias)!
+        return (m_captureDevice.minExposureTargetBias)
     }
     
     @objc open func setExposureDuration(_ seconds: Float){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getExposureMaxEv m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
+        var t = CMTime(seconds: Double(seconds), preferredTimescale: CMTimeScale(1000000))
+        if t < m_captureDevice.activeFormat.minExposureDuration{
+            t = (m_captureDevice.activeFormat.minExposureDuration)
         }
         
-        var t = CMTime(seconds: Double(seconds), preferredTimescale: CMTimeScale(1000000))
-        if t < m_captureDevice?.activeFormat.minExposureDuration{
-            t = (m_captureDevice?.activeFormat.minExposureDuration)!
-        }
-
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.setExposureModeCustomWithDuration(t, iso: AVCaptureISOCurrent, completionHandler: nil)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.setExposureModeCustomWithDuration(t, iso: AVCaptureISOCurrent, completionHandler: nil)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setExposureEv err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     @objc open func getExposureDuration() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getExposureMaxEv m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return Float((m_captureDevice?.exposureDuration.seconds)!)
+        return Float((m_captureDevice.exposureDuration.seconds))
     }
     
     open func getExposureDurationCMT() -> CMTime?{
-        return m_captureDevice?.exposureDuration
+        return m_captureDevice.exposureDuration
     }
     
     @objc open func getExposureMinDuration() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getExposrueMinDuration m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return Float((m_captureDevice?.activeFormat.minExposureDuration.seconds)!)
+        return Float((m_captureDevice.activeFormat.minExposureDuration.seconds))
     }
     
     @objc open func getExposureMaxDuration() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getExposureMaxDuration m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return Float((m_captureDevice?.activeFormat.maxExposureDuration.seconds)!)
+        return Float((m_captureDevice.activeFormat.maxExposureDuration.seconds))
     }
     
     @objc open func setISO(_ iso: Int32){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setISO m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
-        }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.setExposureModeCustomWithDuration(AVCaptureExposureDurationCurrent, iso: Float(iso), completionHandler: nil)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.setExposureModeCustomWithDuration(AVCaptureExposureDurationCurrent, iso: Float(iso), completionHandler: nil)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setISO err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     @objc open func getISO() -> Int32{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getISO m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0
-        }
-        
-        return Int32((m_captureDevice?.iso)!)
+        return Int32((m_captureDevice.iso))
     }
     
     @objc open func getISOMax() -> Int32{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getISOMax m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0
-        }
-        return Int32((m_captureDevice?.activeFormat.maxISO)!)
+        return Int32((m_captureDevice.activeFormat.maxISO))
     }
     
     @objc open func getISOMin() -> Int32{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getISOMin m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0
-        }
-        return Int32((m_captureDevice?.activeFormat.minISO)!)
+        return Int32((m_captureDevice.activeFormat.minISO))
     }
     
     public func getEV() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return m_captureDevice!.exposureTargetBias
+        return m_captureDevice.exposureTargetBias
     }
     
     public func setEV(_ ev: Float){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
-        }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.setExposureTargetBias(ev, completionHandler: nil)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.setExposureTargetBias(ev, completionHandler: nil)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setISO err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     public func getEVMax() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return m_captureDevice!.maxExposureTargetBias
+        return m_captureDevice.maxExposureTargetBias
     }
     
     public func getEVMin() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0.0
-        }
-        return m_captureDevice!.minExposureTargetBias
+        return m_captureDevice.minExposureTargetBias
     }
     
     func toFocusMode(_ mode:GBCameraFocusMode) -> AVCaptureFocusMode {
@@ -742,40 +678,29 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     @objc open func setFocusMode(_ mode: GBCameraFocusMode){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setFocusModel m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
-        }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.focusMode = toFocusMode(mode)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.focusMode = toFocusMode(mode)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setFocusModel err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     @objc open func getFocusMode() -> GBCameraFocusMode{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getFocusModel m_captureDevice nil \(#file) \(#function) \(#line)");
-            return GBCameraFocusMode.none
-        }
-        return toGBFocusMode((m_captureDevice?.focusMode)!)
+        return toGBFocusMode((m_captureDevice.focusMode))
     }
     
     /** lens form 0.0 to 1.0, shortest to furthest */
     @objc open func setFocusLens(_ lens: Float){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("m_captureDevice nil \(#file) \(#function) \(#line)");
-        }
         if lens > self.getFocusMax() || lens < self.getFocusMin(){
             GBLogGen.instance()?.logerrf("lens:\(lens) out of range \(#file) \(#function) \(#line)");
             return
         }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.setFocusModeLockedWithLensPosition(lens, completionHandler: nil)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.setFocusModeLockedWithLensPosition(lens, completionHandler: nil)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setFocusLens err:\(error) \(#file) \(#function) \(#line)");
         }
@@ -784,11 +709,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     @objc open func getFocusLens() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("m_captureDevice nil \(#file) \(#function) \(#line)");
-            return 0
-        }
-        return m_captureDevice!.lensPosition
+        return m_captureDevice.lensPosition
     }
     
     @objc open func getFocusMax() -> Float {
@@ -800,19 +721,15 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     @objc open func setFocusPoint(_ x: Float, y: Float){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setFocusPoint m_captureDevice nil \(#file) \(#function) \(#line)");
-            return
-        }
-        if !(m_captureDevice?.isFocusPointOfInterestSupported)!{
+        if !(m_captureDevice.isFocusPointOfInterestSupported){
             GBLogGen.instance()?.logerrf("setFocusPoint unsupport \(#file) \(#function) \(#line)");
             return
         }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.focusPointOfInterest = CGPoint(x: Double(x), y: Double(y))
-            m_captureDevice?.focusMode = AVCaptureFocusMode.continuousAutoFocus
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.focusPointOfInterest = CGPoint(x: Double(x), y: Double(y))
+            m_captureDevice.focusMode = AVCaptureFocusMode.continuousAutoFocus
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setFocusPoint err:\(error) \(#file) \(#function) \(#line)");
         }
@@ -847,62 +764,41 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     @objc open func setFocusAutoRange(_ range: GBCameraFocusRange){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setFocusAutoRange m_captureDevice nil \(#file) \(#function) \(#line)")
-            return
-        }
-        if !(m_captureDevice?.isAutoFocusRangeRestrictionSupported)!{
+        if !(m_captureDevice.isAutoFocusRangeRestrictionSupported){
             GBLogGen.instance()?.logerrf("setFocusAutoRange unsupported \(#file) \(#function) \(#line)");
             return
         }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.autoFocusRangeRestriction = toAVCaptureAutoFocusRangeRestriction(range)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.autoFocusRangeRestriction = toAVCaptureAutoFocusRangeRestriction(range)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setFocusAutoRange err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     @objc open func getFocusAutoRange() -> GBCameraFocusRange{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getFocusAutoRange m_captureDevice nil \(#file) \(#function) \(#line)")
-            return toGBFocusRange(AVCaptureAutoFocusRangeRestriction.none)
-        }
-        
-        return toGBFocusRange((m_captureDevice?.autoFocusRangeRestriction)!)
+        return toGBFocusRange((m_captureDevice.autoFocusRangeRestriction))
     }
 
     
     @objc open func setZoom(_ zoom: Float){
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("setZoom m_captureDevice nil \(#file) \(#function) \(#line)")
-            return
-        }
         do {
-            try m_captureDevice!.lockForConfiguration()
-            m_captureDevice?.videoZoomFactor = CGFloat(zoom)
-            m_captureDevice?.unlockForConfiguration()
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.videoZoomFactor = CGFloat(zoom)
+            m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setZoom err:\(error) \(#file) \(#function) \(#line)");
         }
     }
     
     @objc open func getZoom() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getZoom m_captureDevice nil \(#file) \(#function) \(#line)")
-            return 0.0
-        }
-        return Float((m_captureDevice?.videoZoomFactor)!)
+        return Float((m_captureDevice.videoZoomFactor))
     }
     
     /** minimum value is 1.0 */
     @objc open func getZoomMax() -> Float{
-        if m_captureDevice == nil {
-            GBLogGen.instance()?.logerrf("getMaxZoom m_captureDevice nil \(#file) \(#function) \(#line)")
-            return 1.0
-        }
-        return Float((m_captureDevice?.activeFormat.videoMaxZoomFactor)!)
+        return Float((m_captureDevice.activeFormat.videoMaxZoomFactor))
     }
     
     @objc open func getZoomMin() -> Float {
@@ -924,41 +820,85 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             return
         }
         m_taking_photo = true
-        m_session_queue.async {[unowned self] in
-            let capture_connection:AVCaptureConnection = self.m_stillImageOutput.connection(withMediaType: AVMediaTypeVideo)
-            capture_connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
-            
-            self.m_stillImageOutput.captureStillImageAsynchronously(from: capture_connection,
-               completionHandler:{ (sampleBuffer, error) -> Void in
 
-                DispatchQueue.main.async {[unowned self] in
-                    self.m_taking_photo = false
-                    self.m_cmbuffer = sampleBuffer
-                    let err_msg:String = (error != nil) ? error.debugDescription : ""
-                    
-                    if nil == sampleBuffer{
-                        GBLogGen.instance()?.logerrf("sampleBuffer nil, err:\(err_msg) \(#file) \(#function) \(#line)")
-                        return
-                    }
-                    
-                    if self.m_capture_mode == .photo && self.m_capture_handler != nil {
-                        self.m_capture_handler?.captureOutput(GBVideoFrameImp(image: sampleBuffer!), error: err_msg)
-                    }
-                    else if self.m_capture_image_handler != nil {
-                        /*
-                        let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-                        let dataProvider = CGDataProvider(data: imageData as! CFData)
-                        let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
-                        let image = UIImage(cgImage: cgImageRef!)
-                        
-                        self.m_capture_image_handler?.captureOutput(image, error: err_msg)
-                        */
-                    }
-                } // end sync main
+        if #available(iOS 10.0, *) {
+            let photo_capture:AVCapturePhotoOutput = self.m_photo_output as! AVCapturePhotoOutput
+            let setting:AVCapturePhotoSettings = self.getPhotoSetting() as! AVCapturePhotoSettings
+            
+            m_session_queue.async {[unowned self, id=setting.uniqueID] in
+                let completed = { (buffer:CMSampleBuffer?, error:String?) -> () in
+                    self.handleSampleBuffer(buffer: buffer, error: error)
+                    self.inProgressPhotoCaptureDelegates[id] = nil
+                }
+                
+                let animation_callback = { () -> () in}
+                let delegate = PhotoCaptureDelegate(with: setting, completed: completed, willCapturePhotoAnimation: animation_callback)
+                photo_capture.capturePhoto(with: setting, delegate: delegate)
+                self.inProgressPhotoCaptureDelegates[delegate.m_setting.uniqueID] = delegate
+            }
+            
+        } else {
+            // Fallback on earlier versions
+            self.captureStillImage()
+        }
+        
+    }
+    
+    private func getPhotoSetting()-> AnyObject? {
+        if #available(iOS 10.0, *) {
+
+            let format = [kCVPixelBufferPixelFormatTypeKey as String :
+            NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange)]
+            let photoSettings = AVCapturePhotoSettings(format: format)
+            photoSettings.flashMode = .off// m_captureDevice.flashMode
+            photoSettings.isAutoStillImageStabilizationEnabled = false
+            return photoSettings
+        }
+        
+            // Fallback on earlier versions
+        return nil
+    }
+    
+    private func handleSampleBuffer(buffer:CMSampleBuffer?, error: String?){
+        DispatchQueue.main.async {[unowned self] in
+            self.m_taking_photo = false
+            let err_msg:String = (error != nil) ? error.debugDescription : ""
+            if nil == buffer{
+                GBLogGen.instance()?.logerrf("sampleBuffer nil, err:\(err_msg) \(#file) \(#function) \(#line)")
+                return
+            }
+            self.m_cmbuffer = buffer
+            
+            if self.m_capture_mode == .photo && self.m_capture_handler != nil {
+                self.m_capture_handler?.captureOutput(GBVideoFrameImp(image: buffer!), error: err_msg)
+            }
+            else if self.m_capture_image_handler != nil {
+                
+                let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(buffer)
+                let dataProvider = CGDataProvider(data: imageData as! CFData)
+                let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
+                let image = UIImage(cgImage: cgImageRef!)
+                
+                self.m_capture_image_handler?.captureOutput(image, error: err_msg)
+            }
+        } // end sync main
+    }
+    
+    private func captureStillImage(){
+        let format = self.m_format_capture
+        let orientation = m_previewLayer?.connection.videoOrientation
+        
+        m_session_queue.async {[unowned self] in
+            self.m_stillImageOutput?.outputSettings = format
+            let capture_connection:AVCaptureConnection = self.m_stillImageOutput!.connection(withMediaType: AVMediaTypeVideo)
+            capture_connection.videoOrientation = orientation!
+            self.m_stillImageOutput?.captureStillImageAsynchronously(from: capture_connection,
+            completionHandler:{ (sampleBuffer, error) -> Void in
+                
+                
                 
             }) // end capture
         } // end sync session
-        
     }
     
     @objc open func asnyOneFrame() {
@@ -979,6 +919,8 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     
     @objc open func setCaptureHandler(_ handler: GBCameraCaptureHandler?){
         m_capture_handler = handler
+        m_capture_image_handler = nil
+        m_format_capture = m_format_ffmpeg
     }
     
     @objc open  func setImmediaPause(_ flag: Bool){
@@ -987,6 +929,8 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     
     public func setCaptureMode(_ mode: GBCameraCaptureMode) {
         self.m_capture_mode = mode
+        let duration = m_captureDevice.exposureDuration
+        self.setFrameDurationRange(GBDuration(value: 1,scale: 30), max: GBDuration(value: duration.value, scale: duration.timescale))
     }
     
     public func getCaptureMode() -> GBCameraCaptureMode {
@@ -998,6 +942,8 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     func setCapturePictureHandler(_ handler:CapturePictureHandler?) -> Void {
         m_capture_image_handler = handler
+        m_capture_handler = nil
+        m_format_capture = m_format_save_photo
     }
     open func rotate(){
         m_previewLayer?.frame = UIScreen.main.bounds
@@ -1012,33 +958,6 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         else if ori == UIInterfaceOrientation.landscapeLeft {
             m_previewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
         }
-    }
-    
-    fileprivate func outputToView(_ view:UIView){
-        m_session_queue.async {[unowned self] in
-            //previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill; // 设置预览时的视频缩放方式
-            //[[previewLayer connection] setVideoOrientation:AVCaptureVideoOrientationPortrait]; // 设置视频的朝向
-            //m_stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
-            
-            let dctPixelFormatType : Dictionary<NSString, NSNumber> = [kCVPixelBufferPixelFormatTypeKey : NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange as UInt32)]
-            
-            self.m_stillImageOutput.outputSettings = dctPixelFormatType
-            self.m_stillImageOutput.isHighResolutionStillImageOutputEnabled = true
-            
-            if self.m_captureSession.canAddOutput(self.m_stillImageOutput) {
-                self.m_captureSession.addOutput(self.m_stillImageOutput)
-            }
-            
-            DispatchQueue.main.async {[unowned self] in
-                self.m_previewLayer = AVCaptureVideoPreviewLayer(session: self.m_captureSession)
-                self.m_previewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
-                self.m_previewLayer?.frame = UIScreen.main.bounds
-                
-                self.m_previewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.landscapeRight
-                view.layer.addSublayer(self.m_previewLayer!)
-            }
-        }
-        
     }
     
     fileprivate func outputToBuffer(){
@@ -1089,7 +1008,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         return capture_device!
     }
     
-    fileprivate var m_captureDevice : AVCaptureDevice?
+    fileprivate var m_captureDevice : AVCaptureDevice!
     fileprivate var m_video_device_input: AVCaptureDeviceInput!
     fileprivate let m_captureSession = AVCaptureSession()
     fileprivate var m_cameraPosition = AVCaptureDevicePosition.back
@@ -1100,8 +1019,15 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     fileprivate var m_default_frame_rate:AVFrameRateRange?
     
     fileprivate var m_previewLayer : AVCaptureVideoPreviewLayer?
-    fileprivate let m_stillImageOutput = AVCaptureStillImageOutput()
+    fileprivate var m_stillImageOutput:AVCaptureStillImageOutput?
+    fileprivate var m_photo_output:AVCaptureOutput?
+    fileprivate var m_photo_setting:AnyObject?
     fileprivate var m_cmbuffer:CMSampleBuffer?
+    fileprivate var inProgressPhotoCaptureDelegates = [Int64 : AnyObject]()
+    fileprivate var m_format_capture: [String : Any]!
+    fileprivate var m_format_save_photo: [String : Any]!
+    fileprivate var m_format_ffmpeg: [String : Any]!
+    
     fileprivate var m_isfront:Bool = false
     fileprivate var m_quality:GBCameraQuality = GBCameraQuality.none
     
@@ -1121,26 +1047,26 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     open func getDebugInfo() -> String {
         var text:String = ""
         
-        let duration:CMTime = (m_captureDevice?.exposureDuration)!
-        let duration_max:Double = (m_captureDevice?.activeFormat.maxExposureDuration.seconds)!
-        let duration_min:Double = (m_captureDevice?.activeFormat.minExposureDuration.seconds)!
+        let duration:CMTime = (m_captureDevice.exposureDuration)
+        let duration_max:Double = (m_captureDevice.activeFormat.maxExposureDuration.seconds)
+        let duration_min:Double = (m_captureDevice.activeFormat.minExposureDuration.seconds)
 
         let duration_model = GBCameraControllerImp.instance.getExposureMode()
         
-        let iso:Float = (m_captureDevice?.iso)!
-        let iso_max:Float = (m_captureDevice?.activeFormat.maxISO)!
-        let iso_min:Float = (m_captureDevice?.activeFormat.minISO)!
+        let iso:Float = (m_captureDevice.iso)
+        let iso_max:Float = (m_captureDevice.activeFormat.maxISO)
+        let iso_min:Float = (m_captureDevice.activeFormat.minISO)
         
-        let focus:Float = m_captureDevice!.lensPosition
+        let focus:Float = m_captureDevice.lensPosition
         let focus_max:Float = 1.0
         let focus_min:Float = 0
         let focus_model = GBCameraControllerImp.instance.getFocusMode()
         let focus_range = GBCameraControllerImp.instance.getFocusAutoRange()
         
-        let zoom:Float = Float((m_captureDevice?.videoZoomFactor)!)
-        let zoom_max:Float = Float((m_captureDevice?.activeFormat.videoMaxZoomFactor)!)
+        let zoom:Float = Float((m_captureDevice.videoZoomFactor))
+        let zoom_max:Float = Float((m_captureDevice.activeFormat.videoMaxZoomFactor))
         
-        let frame_duration:CMTime = (m_captureDevice?.activeVideoMaxFrameDuration)!
+        let frame_duration:CMTime = (m_captureDevice.activeVideoMaxFrameDuration)
         
         text += String.init(format: "exposure %d:%d second:%.03f max:%.03f min:%.03f mode:%d\n",
                            duration.value/1000,duration.timescale/1000, duration.seconds,

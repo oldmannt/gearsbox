@@ -53,6 +53,8 @@ public:
 
     virtual void setFrameDuration(int64_t value, int32_t scale) = 0;
 
+    virtual void setFrameDurationRange(const Duration & min, const Duration & max) = 0;
+
     virtual Duration getFrameDuration() = 0;
 
     virtual void setExposureMode(CameraExposureMode mode) = 0;

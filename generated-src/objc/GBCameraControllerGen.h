@@ -46,6 +46,9 @@
 - (void)setFrameDuration:(int64_t)value
                    scale:(int32_t)scale;
 
+- (void)setFrameDurationRange:(nonnull GBDuration *)min
+                          max:(nonnull GBDuration *)max;
+
 - (nonnull GBDuration *)getFrameDuration;
 
 - (void)setExposureMode:(GBCameraExposureMode)mode;

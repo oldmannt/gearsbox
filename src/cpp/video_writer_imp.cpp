@@ -64,9 +64,8 @@ void VideoWriterImp::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
 void VideoWriterImp::initializeTheard(){
     CHECK_RT(m_frame_buffer==nullptr, "thread already initialized, should not call again");
     uint32_t size = 1000/m_writting_timer->getInterval()+1;
-    if (size < 33) size = 5;
-    else size*=2;
-    m_frame_buffer = std::make_shared<RingBufferPtr>(size*2);
+    if (size < 100 ) size = 100;
+    m_frame_buffer = std::make_shared<RingBufferPtr>(size);
     m_end_thread = false;
     m_auto_release_lock = nullptr;
     uv_rwlock_init(&m_rw_lock);
@@ -82,9 +81,9 @@ void VideoWriterImp::encodeFrameAsyn(const std::shared_ptr<VideoFrameGen> & fram
     std::shared_ptr<uv_rwlock_t> auto_unlock(&m_rw_lock, uv_rwlock_wrunlock);
     uv_rwlock_wrlock(&m_rw_lock);
     m_frame_buffer->push(frame);
-    if (m_frame_buffer->getDistence() == 0){
-        this->saveNRlease();
-    }
+    //if (m_frame_buffer->getDistence() == 0){
+    //    this->saveNRlease();
+    //}
 }
 
 void VideoWriterImp::destoryThread(){
@@ -112,11 +111,14 @@ void VideoWriterImp::destoryThread(){
 
 void VideoWriterImp::asynWritting(){
     while (true) {
+        long long cost = nowMilli();
+        int buffer = 0;
         std::shared_ptr<VideoFrameGen> frame = nullptr;
         {
             std::shared_ptr<uv_rwlock_t> auto_unlock(&m_rw_lock, uv_rwlock_rdunlock);
             uv_rwlock_rdlock(&m_rw_lock);
             frame = std::static_pointer_cast<VideoFrameGen>(m_frame_buffer->pop());
+            buffer = m_frame_buffer->getDistence();
             //G_LOG_C(LOG_INFO,"buffer distance:%d", m_frame_buffer->getDistence());
         }
         
@@ -132,24 +134,27 @@ void VideoWriterImp::asynWritting(){
         }
         
         if (frame == nullptr){
-            usleep(20000);
+            usleep(10000);
             continue;
         }
         else{
             m_video_encoder->encodeFrame(frame);
         }
+        G_LOG_C(LOG_INFO,"encodeFrame end:%d dis:%d", nowMilli() - cost, buffer);
     }
     
 }
 
 void VideoWriterImp::excuse(const std::shared_ptr<TaskInfoGen> & info){
-    //this->encodeFrame(InstanceGetterGen::getCameraController()->captureOneFrame());
+    //static long long last = nowMilli();
+    //G_LOG_C(LOG_INFO,"timer %d", nowMilli() - last);
     if (!m_end_thread)
         InstanceGetterGen::getCameraController()->asnyOneFrame();
     else if (m_write_result_handler && m_frame_buffer){
         float percent = (float)m_frame_buffer->getDistence()/m_frame_buffer->getBufferSize();
         m_write_result_handler->onProgress(percent);
     }
+    //last = nowMilli();
 }
 
 void VideoWriterImp::start(int64_t interval){

@@ -10,7 +10,6 @@
 namespace gearsbox {
 
 class CameraCaptureHandler;
-class VideoFrameGen;
 enum class CameraCaptureMode;
 enum class CameraExposureMode;
 enum class CameraFlash;
@@ -51,9 +50,9 @@ public:
 
     virtual int32_t getDefaultFrameRate() = 0;
 
-    virtual void setFrameDuration(int64_t value, int32_t scale) = 0;
+    virtual void setFrameDurationMin(const Duration & min) = 0;
 
-    virtual void setFrameDurationRange(const Duration & min, const Duration & max) = 0;
+    virtual void setFrameDurationMax(const Duration & max) = 0;
 
     virtual Duration getFrameDuration() = 0;
 
@@ -122,8 +121,6 @@ public:
 
     /** minimum value is 1.0 */
     virtual float getZoomMin() = 0;
-
-    virtual std::shared_ptr<VideoFrameGen> captureOneFrame() = 0;
 
     virtual void asnyOneFrame() = 0;
 

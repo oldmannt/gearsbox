@@ -7,7 +7,6 @@
 #import "DJIObjcWrapperCache+Private.h"
 #import "GBCameraCaptureHandler+Private.h"
 #import "GBDuration+Private.h"
-#import "GBVideoFrameGen+Private.h"
 
 static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for this file");
 
@@ -109,18 +108,16 @@ public:
             return ::djinni::I32::toCpp(r);
         }
     }
-    void setFrameDuration(int64_t c_value, int32_t c_scale) override
+    void setFrameDurationMin(const ::gearsbox::Duration & c_min) override
     {
         @autoreleasepool {
-            [Handle::get() setFrameDuration:(::djinni::I64::fromCpp(c_value))
-                                      scale:(::djinni::I32::fromCpp(c_scale))];
+            [Handle::get() setFrameDurationMin:(::djinni_generated::Duration::fromCpp(c_min))];
         }
     }
-    void setFrameDurationRange(const ::gearsbox::Duration & c_min, const ::gearsbox::Duration & c_max) override
+    void setFrameDurationMax(const ::gearsbox::Duration & c_max) override
     {
         @autoreleasepool {
-            [Handle::get() setFrameDurationRange:(::djinni_generated::Duration::fromCpp(c_min))
-                                             max:(::djinni_generated::Duration::fromCpp(c_max))];
+            [Handle::get() setFrameDurationMax:(::djinni_generated::Duration::fromCpp(c_max))];
         }
     }
     ::gearsbox::Duration getFrameDuration() override
@@ -343,13 +340,6 @@ public:
         @autoreleasepool {
             auto r = [Handle::get() getZoomMin];
             return ::djinni::F32::toCpp(r);
-        }
-    }
-    std::shared_ptr<::gearsbox::VideoFrameGen> captureOneFrame() override
-    {
-        @autoreleasepool {
-            auto r = [Handle::get() captureOneFrame];
-            return ::djinni_generated::VideoFrameGen::toCpp(r);
         }
     }
     void asnyOneFrame() override

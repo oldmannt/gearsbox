@@ -38,7 +38,7 @@ void RingBufferPtr::push(std::shared_ptr<void> data){
     
     if (m_write_index == m_read_index){
         m_writer_catched = m_reader_catched+1;
-        G_LOG_FC(LOG_WARN,"buffer too small, writer on waitting");
+        //G_LOG_FC(LOG_WARN,"buffer too small, writer on waitting");
     }
 }
 

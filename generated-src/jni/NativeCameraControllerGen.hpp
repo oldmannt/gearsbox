@@ -47,8 +47,8 @@ private:
         bool getSloMo() override;
         int32_t getMaxFrameRate() override;
         int32_t getDefaultFrameRate() override;
-        void setFrameDuration(int64_t value, int32_t scale) override;
-        void setFrameDurationRange(const ::gearsbox::Duration & min, const ::gearsbox::Duration & max) override;
+        void setFrameDurationMin(const ::gearsbox::Duration & min) override;
+        void setFrameDurationMax(const ::gearsbox::Duration & max) override;
         ::gearsbox::Duration getFrameDuration() override;
         void setExposureMode(::gearsbox::CameraExposureMode mode) override;
         ::gearsbox::CameraExposureMode getExposureMode() override;
@@ -82,7 +82,6 @@ private:
         float getZoom() override;
         float getZoomMax() override;
         float getZoomMin() override;
-        std::shared_ptr<::gearsbox::VideoFrameGen> captureOneFrame() override;
         void asnyOneFrame() override;
         void asnyOnePicture() override;
         void setCaptureHandler(const std::shared_ptr<::gearsbox::CameraCaptureHandler> & handler) override;
@@ -110,8 +109,8 @@ private:
     const jmethodID method_getSloMo { ::djinni::jniGetMethodID(clazz.get(), "getSloMo", "()Z") };
     const jmethodID method_getMaxFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getMaxFrameRate", "()I") };
     const jmethodID method_getDefaultFrameRate { ::djinni::jniGetMethodID(clazz.get(), "getDefaultFrameRate", "()I") };
-    const jmethodID method_setFrameDuration { ::djinni::jniGetMethodID(clazz.get(), "setFrameDuration", "(JI)V") };
-    const jmethodID method_setFrameDurationRange { ::djinni::jniGetMethodID(clazz.get(), "setFrameDurationRange", "(Ldyno/fun/gearsbox/Duration;Ldyno/fun/gearsbox/Duration;)V") };
+    const jmethodID method_setFrameDurationMin { ::djinni::jniGetMethodID(clazz.get(), "setFrameDurationMin", "(Ldyno/fun/gearsbox/Duration;)V") };
+    const jmethodID method_setFrameDurationMax { ::djinni::jniGetMethodID(clazz.get(), "setFrameDurationMax", "(Ldyno/fun/gearsbox/Duration;)V") };
     const jmethodID method_getFrameDuration { ::djinni::jniGetMethodID(clazz.get(), "getFrameDuration", "()Ldyno/fun/gearsbox/Duration;") };
     const jmethodID method_setExposureMode { ::djinni::jniGetMethodID(clazz.get(), "setExposureMode", "(Ldyno/fun/gearsbox/CameraExposureMode;)V") };
     const jmethodID method_getExposureMode { ::djinni::jniGetMethodID(clazz.get(), "getExposureMode", "()Ldyno/fun/gearsbox/CameraExposureMode;") };
@@ -145,7 +144,6 @@ private:
     const jmethodID method_getZoom { ::djinni::jniGetMethodID(clazz.get(), "getZoom", "()F") };
     const jmethodID method_getZoomMax { ::djinni::jniGetMethodID(clazz.get(), "getZoomMax", "()F") };
     const jmethodID method_getZoomMin { ::djinni::jniGetMethodID(clazz.get(), "getZoomMin", "()F") };
-    const jmethodID method_captureOneFrame { ::djinni::jniGetMethodID(clazz.get(), "captureOneFrame", "()Ldyno/fun/gearsbox/VideoFrameGen;") };
     const jmethodID method_asnyOneFrame { ::djinni::jniGetMethodID(clazz.get(), "asnyOneFrame", "()V") };
     const jmethodID method_asnyOnePicture { ::djinni::jniGetMethodID(clazz.get(), "asnyOnePicture", "()V") };
     const jmethodID method_setCaptureHandler { ::djinni::jniGetMethodID(clazz.get(), "setCaptureHandler", "(Ldyno/fun/gearsbox/CameraCaptureHandler;)V") };

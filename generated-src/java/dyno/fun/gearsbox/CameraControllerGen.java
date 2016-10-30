@@ -32,9 +32,9 @@ public abstract class CameraControllerGen {
 
     public abstract int getDefaultFrameRate();
 
-    public abstract void setFrameDuration(long value, int scale);
+    public abstract void setFrameDurationMin(Duration min);
 
-    public abstract void setFrameDurationRange(Duration min, Duration max);
+    public abstract void setFrameDurationMax(Duration max);
 
     public abstract Duration getFrameDuration();
 
@@ -103,8 +103,6 @@ public abstract class CameraControllerGen {
 
     /** minimum value is 1.0 */
     public abstract float getZoomMin();
-
-    public abstract VideoFrameGen captureOneFrame();
 
     public abstract void asnyOneFrame();
 

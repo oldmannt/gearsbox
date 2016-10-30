@@ -26,10 +26,11 @@ class PhotoCaptureDelegate: NSObject, AVCapturePhotoCaptureDelegate {
 	}
 	
     func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        m_photoData = photoSampleBuffer!
 		if nil != error {
 			GBLogGen.instance()?.logerrf("capture buffer \(error) \(#file) \(#function) \(#line)");
+            return
 		}
+        m_photoData = photoSampleBuffer!
 	}
 	
     // all the capture were invoked in main thread

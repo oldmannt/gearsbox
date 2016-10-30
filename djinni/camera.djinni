@@ -125,8 +125,8 @@ camera_controller_gen = interface +o +j {
 	getSloMo():bool;
 	getMaxFrameRate():i32;
 	getDefaultFrameRate():i32;
-	setFrameDuration(value:i64,scale:i32);
-	setFrameDurationRange(min:duration, max:duration);
+	setFrameDurationMin(min:duration);
+	setFrameDurationMax(max:duration);
 	getFrameDuration():duration;
 
 	setExposureMode(mode:camera_exposure_mode);
@@ -166,7 +166,6 @@ camera_controller_gen = interface +o +j {
 	# minimum value is 1.0
 	getZoomMin():f32;
 
-	captureOneFrame():video_frame_gen;
 	asnyOneFrame();
 	asnyOnePicture();
 	setCaptureHandler(handler:camera_capture_handler);

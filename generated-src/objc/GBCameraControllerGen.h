@@ -10,7 +10,6 @@
 #import "GBDuration.h"
 #import <Foundation/Foundation.h>
 @protocol GBCameraCaptureHandler;
-@protocol GBVideoFrameGen;
 
 
 @protocol GBCameraControllerGen
@@ -43,11 +42,9 @@
 
 - (int32_t)getDefaultFrameRate;
 
-- (void)setFrameDuration:(int64_t)value
-                   scale:(int32_t)scale;
+- (void)setFrameDurationMin:(nonnull GBDuration *)min;
 
-- (void)setFrameDurationRange:(nonnull GBDuration *)min
-                          max:(nonnull GBDuration *)max;
+- (void)setFrameDurationMax:(nonnull GBDuration *)max;
 
 - (nonnull GBDuration *)getFrameDuration;
 
@@ -118,8 +115,6 @@
 
 /** minimum value is 1.0 */
 - (float)getZoomMin;
-
-- (nullable id<GBVideoFrameGen>)captureOneFrame;
 
 - (void)asnyOneFrame;
 

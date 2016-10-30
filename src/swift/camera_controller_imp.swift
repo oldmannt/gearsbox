@@ -42,22 +42,6 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     static let instance:GBCameraControllerImp = GBCameraControllerImp()
     
     @objc open func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
-        if connection == self.m_audio_connection {
-            m_audio_buffer = sampleBuffer
-            let frame = GBVideoFrameImp(audio: sampleBuffer)
-            if self.m_capture_handler != nil {
-                self.m_capture_handler?.captureOutput(frame, error: "")
-            }
-        }
-        else {
-            //m_cmbuffer = sampleBuffer
-            if self.m_capture_mode == .immediateVideo &&
-                (self.m_capture_handler != nil) &&
-                !m_immediate_pause {
-                
-                self.m_capture_handler?.captureOutput(GBVideoFrameImp(image: sampleBuffer), error: "")
-            }
-        }
         
         let elapse = CACurrentMediaTime()-m_last_tick
         m_second_counter+=elapse
@@ -67,7 +51,25 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             m_frame_counter = 0.0
             m_second_counter = 0.0
         }
-        //print("capture lapsed:%f", CACurrentMediaTime()-m_last_tick)
+        
+        if connection == self.m_audio_connection {
+            m_audio_buffer = sampleBuffer
+            let frame = GBVideoFrameImp(audio: sampleBuffer)
+            if self.m_capture_handler != nil {
+                self.m_capture_handler?.captureOutput(frame, error: "")
+            }
+        }
+        else {
+
+            if self.m_capture_mode == .immediateVideo &&
+                (self.m_capture_handler != nil) &&
+                !m_immediate_pause {
+                //print("capture lapsed:", elapse)
+                self.m_capture_handler?.captureOutput(GBVideoFrameImp(image: sampleBuffer), error: "")
+            }
+        }
+        m_sample_buffer = sampleBuffer
+        //print("capture lapsed:", elapse)
         m_last_tick = CACurrentMediaTime()
     }
     
@@ -220,7 +222,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         }
         
         self.initializeDeviceFormat()
-        self.setFrameDuration(1, scale: 30)
+        //self.setFrameDuration(1, scale: 30)
         
         self.m_captureSession.commitConfiguration()
         complition(true, nil)
@@ -231,8 +233,6 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         let default_ranges = m_captureDevice.activeFormat.videoSupportedFrameRateRanges as! [AVFrameRateRange]
         m_default_frame_rate = default_ranges[0]
         
-        //print("default max_frame_duration:\(default_ranges)")
-        //print("\(m_captureDevice.formats.count)")
         var max_frame_rate:Float64 = 0.0
         for format in m_captureDevice.formats {
             let ranges = (format as AnyObject).videoSupportedFrameRateRanges as! [AVFrameRateRange]
@@ -243,53 +243,45 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
                 m_maxframe_device_format = format as? AVCaptureDeviceFormat
             }
         }// end for
-        //print("default max_frame_duration:\(m_maxframe_device_format?.videoSupportedFrameRateRanges as! [AVFrameRateRange])")
     }
     
-    @objc open func setFrameDuration(_ value: Int64, scale: Int32) {
-        let duration = CMTimeMake(value, Int32(scale))
-        if duration < m_max_frame_rate?.minFrameDuration {
-            GBLogGen.instance()?.logerrf("unsuport duraton, vaule:\(value) scale:\(scale) \(#file) \(#function) \(#line)");
-            return
-        }
-        
-        if duration < m_default_frame_rate?.minFrameDuration &&
-            m_captureDevice.activeFormat != m_maxframe_device_format {
-            self.setSloMo(true)
-        }
-        
-        do {
-            try m_captureDevice.lockForConfiguration()
-            m_captureDevice.activeVideoMaxFrameDuration = duration;
-            m_captureDevice.activeVideoMinFrameDuration = duration;
-            m_captureDevice.unlockForConfiguration()
-        } catch let error as NSError {
-            GBLogGen.instance()?.logerrf("setFrameDuration err:\(error) \(#file) \(#function) \(#line)");
-        }        
-    }
-    
-    public func setFrameDurationRange(_ min: GBDuration, max: GBDuration){
+    public func setFrameDurationMin(_ min: GBDuration){
         let min_duration = CMTimeMake(min.value, min.scale)
-        let max_duration = CMTimeMake(max.value, max.scale)
-        if min_duration < m_max_frame_rate?.minFrameDuration {
-            GBLogGen.instance()?.logerrf("unsuport duraton, vaule:\(max.value) scale:\(max.scale) \(#file) \(#function) \(#line)");
+        
+        if -1 == CMTimeCompare(min_duration, (m_max_frame_rate?.minFrameDuration)!) {
+            GBLogGen.instance()?.logerrf("unsuport duraton, vaule:\(min.value) scale:\(min.scale) \(#file) \(#function) \(#line)");
             return
         }
         
-        if min_duration < m_default_frame_rate?.minFrameDuration &&
+        if -1 == CMTimeCompare(min_duration, (m_default_frame_rate?.minFrameDuration)!) &&
             m_captureDevice.activeFormat != m_maxframe_device_format {
             self.setSloMo(true)
         }
         
         do {
             try m_captureDevice.lockForConfiguration()
-            m_captureDevice.activeVideoMaxFrameDuration = max_duration;
             m_captureDevice.activeVideoMinFrameDuration = min_duration;
             m_captureDevice.unlockForConfiguration()
         } catch let error as NSError {
             GBLogGen.instance()?.logerrf("setFrameDuration err:\(error) \(#file) \(#function) \(#line)");
         }
-
+    }
+    
+    public func setFrameDurationMax(_ max: GBDuration){
+        let max_duration = CMTimeMake(max.value, max.scale)
+        let frame_range = (m_captureDevice.activeFormat.videoSupportedFrameRateRanges as! [AVFrameRateRange])[0]
+        
+        if 1 == CMTimeCompare(max_duration, frame_range.maxFrameDuration) {
+            return
+        }
+        
+        do {
+            try m_captureDevice.lockForConfiguration()
+            m_captureDevice.activeVideoMaxFrameDuration = max_duration;
+            m_captureDevice.unlockForConfiguration()
+        } catch let error as NSError {
+            GBLogGen.instance()?.logerrf("setFrameDuration err:\(error) \(#file) \(#function) \(#line)");
+        }
     }
     
     public func getFrameDuration() -> GBDuration{
@@ -298,8 +290,8 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     @objc open func initialize(_ audio: Bool){
-        setupAudio()
         setAudioEnable(audio)
+        setupAudio()
     }
     
     @objc open func setAudioEnable(_ enable: Bool){
@@ -450,7 +442,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     public func setSloMo(_ flag: Bool) {
         do {
             try m_captureDevice.lockForConfiguration()
-            m_captureDevice.activeFormat = self.m_maxframe_device_format
+            m_captureDevice.activeFormat = flag ? self.m_maxframe_device_format : self.m_default_device_format
             m_captureDevice.unlockForConfiguration()
         }  catch let error as NSError {
             GBLogGen.instance()?.logerrf("setSloMo failed err:\(error) \(#file) \(#function) \(#line)");
@@ -786,14 +778,6 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         return 1.0
     }
     
-    @objc open func captureOneFrame() -> GBVideoFrameGen? {
-        if nil == m_cmbuffer {
-            return nil
-        }
-
-        return GBVideoFrameImp(image: m_cmbuffer!)
-    }
-    
     var m_taking_photo = false
     @objc open func asnyOnePicture(){
 
@@ -852,7 +836,6 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
                 GBLogGen.instance()?.logerrf("sampleBuffer nil, err:\(err_msg) \(#file) \(#function) \(#line)")
                 return
             }
-            self.m_cmbuffer = buffer
             
             if self.m_capture_mode == .photo && self.m_capture_handler != nil {
                 self.m_capture_handler?.captureOutput(GBVideoFrameImp(image: buffer!), error: err_msg)
@@ -891,18 +874,16 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     @objc open func asnyOneFrame() {
+        if m_capture_mode == .immediateVideo {
+            return
+        }
         if m_capture_mode == .photo {
             asnyOnePicture()
             return
         }
-        
-        if m_capture_mode == .immediateVideo {
-            return
-        }
-        let frame = self.captureOneFrame()
-        
-        if self.m_capture_handler != nil && frame != nil{
-            self.m_capture_handler?.captureOutput(frame, error: "")
+
+        if self.m_capture_handler != nil && m_sample_buffer != nil{
+            self.m_capture_handler?.captureOutput(GBVideoFrameImp(image: m_sample_buffer!), error: "")
         }
     }
     
@@ -918,8 +899,17 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     
     public func setCaptureMode(_ mode: GBCameraCaptureMode) {
         self.m_capture_mode = mode
-        //let duration = m_captureDevice.exposureDuration
-        //self.setFrameDurationRange(GBDuration(value: 1,scale: 30), max: GBDuration(value: duration.value, scale: duration.timescale))
+        switch mode {
+        case .photo:
+            self.setSloMo(false)
+            self.setFrameDurationMin(GBDuration(value: 1,scale: 30))
+            break
+        //case .immediateVideo, .video:
+        //    self.setSloMo(true)
+        //    break
+        default:
+            break
+        }
     }
     
     public func getCaptureMode() -> GBCameraCaptureMode {
@@ -1011,11 +1001,12 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     fileprivate var m_stillImageOutput:AVCaptureStillImageOutput?
     fileprivate var m_photo_output:AVCaptureOutput?
     fileprivate var m_photo_setting:AnyObject?
-    fileprivate var m_cmbuffer:CMSampleBuffer?
     fileprivate var inProgressPhotoCaptureDelegates = [Int64 : AnyObject]()
     fileprivate var m_format_capture: [String : Any]!
     fileprivate var m_format_save_photo: [String : Any]!
     fileprivate var m_format_ffmpeg: [String : Any]!
+    
+    fileprivate var m_sample_buffer:CMSampleBuffer?
     
     fileprivate var m_isfront:Bool = false
     fileprivate var m_quality:GBCameraQuality = GBCameraQuality.none

@@ -381,12 +381,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             return GBCameraFlash.off
         case AVCaptureFlashMode.auto:
             return GBCameraFlash.auto
-        default:
-            break
         }
-        
-        GBLogGen.instance()?.logerrf("toGBFlashMode unsorppted mode:\(mode) \(#file) \(#function) \(#line)");
-        return GBCameraFlash.none
     }
     
     @objc open func setFlashMode(_ mode: GBCameraFlash){
@@ -506,11 +501,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             return GBCameraExposureMode.continuousAutoExposure
         case AVCaptureExposureMode.custom:
             return GBCameraExposureMode.modeCustom
-        default:
-            break
         }
-        GBLogGen.instance()?.logerrf("getGBExposureMode unsupport model:\(mode) \(#file) \(#function) \(#line)");
-        return GBCameraExposureMode.none
     }
     
     @objc open func setExposureMode(_ modle: GBCameraExposureMode){
@@ -670,11 +661,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             return GBCameraFocusMode.autoFocus
         case AVCaptureFocusMode.continuousAutoFocus:
             return GBCameraFocusMode.continuousAutoFocus
-        default:
-            break
         }
-        GBLogGen.instance()?.logerrf("toGBFocusMode unsport mode:\(mode) \(#file) \(#function) \(#line)");
-        return GBCameraFocusMode.none
     }
     
     @objc open func setFocusMode(_ mode: GBCameraFocusMode){
@@ -743,10 +730,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             return AVCaptureAutoFocusRangeRestriction.near
         case GBCameraFocusRange.far:
             return AVCaptureAutoFocusRangeRestriction.far
-        default:
-            break
         }
-        return AVCaptureAutoFocusRangeRestriction.none
     }
     
     func toGBFocusRange(_ range:AVCaptureAutoFocusRangeRestriction) -> GBCameraFocusRange {
@@ -757,10 +741,7 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
             return GBCameraFocusRange.near
         case AVCaptureAutoFocusRangeRestriction.far:
             return GBCameraFocusRange.far
-        default:
-            break
         }
-        return GBCameraFocusRange.none
     }
     
     @objc open func setFocusAutoRange(_ range: GBCameraFocusRange){
@@ -815,13 +796,17 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     
     var m_taking_photo = false
     @objc open func asnyOnePicture(){
+
         if m_taking_photo {
-            print("m_taking_photo")
             return
         }
         m_taking_photo = true
 
         if #available(iOS 10.0, *) {
+            if self.m_photo_output == nil{
+                m_taking_photo = false
+                return
+            }
             let photo_capture:AVCapturePhotoOutput = self.m_photo_output as! AVCapturePhotoOutput
             let setting:AVCapturePhotoSettings = self.getPhotoSetting() as! AVCapturePhotoSettings
             
@@ -885,6 +870,10 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     }
     
     private func captureStillImage(){
+        if self.m_stillImageOutput == nil {
+            m_taking_photo = false
+            return
+        }
         let format = self.m_format_capture
         let orientation = m_previewLayer?.connection.videoOrientation
         
@@ -929,8 +918,8 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
     
     public func setCaptureMode(_ mode: GBCameraCaptureMode) {
         self.m_capture_mode = mode
-        let duration = m_captureDevice.exposureDuration
-        self.setFrameDurationRange(GBDuration(value: 1,scale: 30), max: GBDuration(value: duration.value, scale: duration.timescale))
+        //let duration = m_captureDevice.exposureDuration
+        //self.setFrameDurationRange(GBDuration(value: 1,scale: 30), max: GBDuration(value: duration.value, scale: duration.timescale))
     }
     
     public func getCaptureMode() -> GBCameraCaptureMode {

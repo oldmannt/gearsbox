@@ -186,7 +186,9 @@ class GBViewFactoryImp: GBViewFactoryGen {
     
     fileprivate func createSubViews(_ view_imp:GBViewImp, subviews:[GBViewConf]){
         for sub_conf in subviews {
-            view_imp.addSubView(sub_conf);
+            if (nil == view_imp.addSubView(sub_conf)){
+                GBLogGen.instance()?.logerrf("createSubViews nil, \(#file) \(#function) \(#line)")
+            };
         }
     }
     
@@ -196,7 +198,7 @@ class GBViewFactoryImp: GBViewFactoryGen {
         }
     }
 
-    fileprivate func setBaseConf(_ view:GBViewImp, conf:GBViewConf)->Bool{
+    fileprivate func setBaseConf(_ view:GBViewImp, conf:GBViewConf){
         let uiview:UIView = view.getUIView()
         uiview.accessibilityIdentifier = conf.id;
 
@@ -207,8 +209,6 @@ class GBViewFactoryImp: GBViewFactoryGen {
         if (GBUiValueCheckerGen.instance()?.isValidColor(conf.bgcolor) == true){
             uiview.backgroundColor = GBTyperConvertor.convertUIColor(conf.bgcolor);
         }
-        
-        return true
     }
     
 

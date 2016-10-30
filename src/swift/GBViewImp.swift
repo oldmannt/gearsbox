@@ -164,7 +164,10 @@ class GBViewImp: GBViewGen {
             return nil
         }
 
-        addSubView(view_gen!)
+        if !addSubView(view_gen!){
+            GBLogGen.instance()?.logerrf("addSubView failed \(id) \(#file) \(#function) \(#line) ")
+            return nil
+        }
         return view_gen
     }
     
@@ -184,7 +187,11 @@ class GBViewImp: GBViewGen {
             return nil
         }
         
-        addSubView(view_gen!)
+        if !addSubView(view_gen!){
+            GBLogGen.instance()?.logerrf("addSubView failed \(#file) \(#function) \(#line) ")
+            return nil
+        }
+
         return view_gen
     }
     
@@ -206,7 +213,9 @@ class GBViewImp: GBViewGen {
     
     @objc open func removeAllSubView(){
         for (id, _) in m_subView{
-            removeSubViewImp(id)
+            if !removeSubViewImp(id){
+                GBLogGen.instance()?.logerrf("removeAllSubView id:\(id))\(#file) \(#function) \(#line) ")
+            }
         }
         m_subView.removeAll()
     }

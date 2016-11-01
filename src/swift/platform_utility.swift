@@ -13,7 +13,9 @@ import AVKit
 open class GBPlatformUtilityImp: GBPlatformUtilityGen {
     static let sharedInstance = GBPlatformUtilityImp()
     
-    fileprivate init(){}
+    fileprivate init(){
+        
+    }
     
     public func getSystemTickNano() -> Int64{
         return Int64(CACurrentMediaTime()*1000000000)

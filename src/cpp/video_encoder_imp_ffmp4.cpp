@@ -47,7 +47,9 @@ static bool open_video(AVFormatContext *format_context, AVCodec *codec, OutputSt
     //av_dict_copy(&opt, opt_arg, 0);
     
     /* open the codec */
-    ret = avcodec_open2(av_codec_context, codec, NULL);
+    av_dict_set(&opt, "preset", "veryfast", 0);
+    av_dict_set(&opt, "Rotation", "1", 0);
+    ret = avcodec_open2(av_codec_context, codec, &opt);
     //av_dict_free(&opt);
     if (ret < 0) {
         G_LOG_FC(LOG_ERROR, "Could not open video codec: %s", av_err2str(ret));
@@ -79,6 +81,8 @@ static bool open_video(AVFormatContext *format_context, AVCodec *codec, OutputSt
         G_LOG_FC(LOG_ERROR, "Could not copy the stream parameters");
         return false;
     }
+    
+    
 }
 
 static AVFrame *alloc_audio_frame(enum AVSampleFormat sample_fmt,
@@ -276,7 +280,7 @@ static bool add_stream(OutputStream *output_stream, AVFormatContext *format_cont
         av_codec_context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
 }
 
-bool VideoEncoderImp_ffmp4::initialize(const std::string & filepath, int32_t fps, int32_t bitrate, int32_t width, int32_t height, const std::shared_ptr<VideoFrameGen> & frame){
+bool VideoEncoderImp_ffmp4::initialize(const std::string & filepath, int32_t fps, int32_t bitrate, VideoOrientation ori,int32_t width, int32_t height, const std::shared_ptr<VideoFrameGen> & frame){
     m_video_steam = {0}, m_audio_steam = {0};
     AVCodec *audio_codec = 0, *video_codec = 0;
     int have_video = 0, have_audio = 0;
@@ -329,7 +333,29 @@ bool VideoEncoderImp_ffmp4::initialize(const std::string & filepath, int32_t fps
     }
 
     /* Write the stream header, if any. */
-    int ret = avformat_write_header(m_format_ctx, NULL);
+    
+    //av_dict_copy(&opt, opt_arg, 0);
+    
+    /* open the codec */
+    av_dict_set(&m_video_steam.st->metadata, "preset", "veryfast", 0);
+    G_LOG_C(LOG_INFO, "rotate %d", ori);
+    switch (ori) {
+        case VideoOrientation::LANDSPACE_0:
+            av_dict_set(&m_video_steam.st->metadata, "rotate", "0", 0);
+            break;
+        case VideoOrientation::PORTRAIT_90:
+            av_dict_set(&m_video_steam.st->metadata, "rotate", "90", 0);
+            break;
+        case VideoOrientation::PORTRAIT_270:
+            av_dict_set(&m_video_steam.st->metadata, "rotate", "270", 0);
+            break;
+        case VideoOrientation::LANDSPACE_180:
+            av_dict_set(&m_video_steam.st->metadata, "rotate", "180", 0);
+            break;
+        default:
+            break;
+    }
+    int ret = avformat_write_header(m_format_ctx, &av_dictionary);
     if (ret < 0) {
         G_LOG_FC(LOG_ERROR,"Error occurred when opening output file: %s",av_err2str(ret));
         return false;

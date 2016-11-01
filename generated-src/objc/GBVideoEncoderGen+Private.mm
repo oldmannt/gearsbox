@@ -34,6 +34,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 - (BOOL)initialize:(nonnull NSString *)filepath
                fps:(int32_t)fps
            bitrate:(int32_t)bitrate
+               ori:(GBVideoOrientation)ori
              width:(int32_t)width
             height:(int32_t)height
              frame:(nullable id<GBVideoFrameGen>)frame {
@@ -41,6 +42,7 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
         auto r = _cppRefHandle.get()->initialize(::djinni::String::toCpp(filepath),
                                                  ::djinni::I32::toCpp(fps),
                                                  ::djinni::I32::toCpp(bitrate),
+                                                 ::djinni::Enum<::gearsbox::VideoOrientation, GBVideoOrientation>::toCpp(ori),
                                                  ::djinni::I32::toCpp(width),
                                                  ::djinni::I32::toCpp(height),
                                                  ::djinni_generated::VideoFrameGen::toCpp(frame));
@@ -74,12 +76,13 @@ class VideoEncoderGen::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    bool initialize(const std::string & c_filepath, int32_t c_fps, int32_t c_bitrate, int32_t c_width, int32_t c_height, const std::shared_ptr<::gearsbox::VideoFrameGen> & c_frame) override
+    bool initialize(const std::string & c_filepath, int32_t c_fps, int32_t c_bitrate, ::gearsbox::VideoOrientation c_ori, int32_t c_width, int32_t c_height, const std::shared_ptr<::gearsbox::VideoFrameGen> & c_frame) override
     {
         @autoreleasepool {
             auto r = [Handle::get() initialize:(::djinni::String::fromCpp(c_filepath))
                                            fps:(::djinni::I32::fromCpp(c_fps))
                                        bitrate:(::djinni::I32::fromCpp(c_bitrate))
+                                           ori:(::djinni::Enum<::gearsbox::VideoOrientation, GBVideoOrientation>::fromCpp(c_ori))
                                          width:(::djinni::I32::fromCpp(c_width))
                                         height:(::djinni::I32::fromCpp(c_height))
                                          frame:(::djinni_generated::VideoFrameGen::fromCpp(c_frame))];

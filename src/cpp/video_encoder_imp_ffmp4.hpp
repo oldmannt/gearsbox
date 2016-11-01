@@ -10,6 +10,7 @@
 #define VideoEncoderImp_ffmp4_hpp
 
 #include "video_encoder_gen.hpp"
+#include "video_orientation.hpp"
 
 #include <string>
 
@@ -58,7 +59,7 @@ public:
     }
     virtual ~VideoEncoderImp_ffmp4() {}
     
-    virtual bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, int32_t width, int32_t height, const std::shared_ptr<VideoFrameGen> & frame);
+    virtual bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, VideoOrientation ori, int32_t width, int32_t height, const std::shared_ptr<VideoFrameGen> & frame);
     
     virtual void encodeFrame(const std::shared_ptr<VideoFrameGen> & frame);
     

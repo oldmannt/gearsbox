@@ -10,6 +10,9 @@ instance_getter_gen = interface +c {
     static getPlatformUtility():platform_utility_gen;
     static setPlatformUtility(mgr:platform_utility_gen);
 
+    static getDevice():device_gen;
+    static setDevice(device:device_gen);
+
     static getConfig(id:string):config_gen;
 }
 
@@ -94,6 +97,20 @@ platform_utility_gen = interface +o +j {
     showLoadingView(show:bool);
 
     createVideoFrame():video_frame_gen;
+}
+
+device_orientation = enum{
+    unknown;
+    portrait;
+    protrait_down;
+    landscape_left;
+    landscape_right;
+    faceup;
+    facedown;
+}
+
+device_gen = interface +o +j {
+    getOrientation():device_orientation;
 }
 
 lang_type = enum{

@@ -14,6 +14,10 @@ public abstract class InstanceGetterGen {
 
     public static native void setPlatformUtility(PlatformUtilityGen mgr);
 
+    public static native DeviceGen getDevice();
+
+    public static native void setDevice(DeviceGen device);
+
     public static native ConfigGen getConfig(String id);
 
     private static final class CppProxy extends InstanceGetterGen

@@ -5,6 +5,7 @@
 #include "Marshal.hpp"
 #include "NativeVideoEncoderGen.hpp"
 #include "NativeVideoFrameGen.hpp"
+#include "NativeVideoOrientation.hpp"
 #include "NativeVideoWriterGen.hpp"
 #include "NativeVideoWriterResultHandler.hpp"
 
@@ -85,6 +86,15 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_nati
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
         ref->setBitRate(::djinni::I32::toCpp(jniEnv, j_rate));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterGen_00024CppProxy_native_1setOrientation(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jobject j_ori)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
+        const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterGen>(nativeRef);
+        ref->setOrientation(::djinni_generated::NativeVideoOrientation::toCpp(jniEnv, j_ori));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

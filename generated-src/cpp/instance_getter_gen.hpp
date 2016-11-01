@@ -10,6 +10,7 @@ namespace gearsbox {
 
 class CameraControllerGen;
 class ConfigGen;
+class DeviceGen;
 class PlatformUtilityGen;
 
 class InstanceGetterGen {
@@ -23,6 +24,10 @@ public:
     static std::shared_ptr<PlatformUtilityGen> getPlatformUtility();
 
     static void setPlatformUtility(const std::shared_ptr<PlatformUtilityGen> & mgr);
+
+    static std::shared_ptr<DeviceGen> getDevice();
+
+    static void setDevice(const std::shared_ptr<DeviceGen> & device);
 
     static std::shared_ptr<ConfigGen> getConfig(const std::string & id);
 };

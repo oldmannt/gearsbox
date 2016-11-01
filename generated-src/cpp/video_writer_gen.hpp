@@ -12,6 +12,7 @@ namespace gearsbox {
 class VideoEncoderGen;
 class VideoFrameGen;
 class VideoWriterResultHandler;
+enum class VideoOrientation;
 
 class VideoWriterGen {
 public:
@@ -30,6 +31,8 @@ public:
     virtual int32_t getFPS() = 0;
 
     virtual void setBitRate(int32_t rate) = 0;
+
+    virtual void setOrientation(VideoOrientation ori) = 0;
 
     virtual void setVideoEncoder(const std::shared_ptr<VideoEncoderGen> & encoder) = 0;
 

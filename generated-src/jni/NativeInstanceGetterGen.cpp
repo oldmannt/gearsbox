@@ -5,6 +5,7 @@
 #include "Marshal.hpp"
 #include "NativeCameraControllerGen.hpp"
 #include "NativeConfigGen.hpp"
+#include "NativeDeviceGen.hpp"
 #include "NativePlatformUtilityGen.hpp"
 
 namespace djinni_generated {
@@ -53,6 +54,23 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_InstanceGetterGen_setPlatformUtil
     try {
         DJINNI_FUNCTION_PROLOGUE0(jniEnv);
         ::gearsbox::InstanceGetterGen::setPlatformUtility(::djinni_generated::NativePlatformUtilityGen::toCpp(jniEnv, j_mgr));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
+}
+
+CJNIEXPORT jobject JNICALL Java_dyno_fun_gearsbox_InstanceGetterGen_getDevice(JNIEnv* jniEnv, jobject /*this*/)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        auto r = ::gearsbox::InstanceGetterGen::getDevice();
+        return ::djinni::release(::djinni_generated::NativeDeviceGen::fromCpp(jniEnv, r));
+    } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, 0 /* value doesn't matter */)
+}
+
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_InstanceGetterGen_setDevice(JNIEnv* jniEnv, jobject /*this*/, jobject j_device)
+{
+    try {
+        DJINNI_FUNCTION_PROLOGUE0(jniEnv);
+        ::gearsbox::InstanceGetterGen::setDevice(::djinni_generated::NativeDeviceGen::toCpp(jniEnv, j_device));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

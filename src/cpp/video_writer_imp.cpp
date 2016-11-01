@@ -47,6 +47,10 @@ void VideoWriterImp::setBitRate(int32_t rate){
     m_bitrate = rate;
 }
 
+void VideoWriterImp::setOrientation(VideoOrientation ori){
+    m_orientation = ori;
+}
+
 void VideoWriterImp::encodeFrame(const std::shared_ptr<VideoFrameGen> & frame){
     CHECK_RT(frame!=nullptr, "frame null");
     this->initialize(frame);
@@ -111,15 +115,14 @@ void VideoWriterImp::destoryThread(){
 
 void VideoWriterImp::asynWritting(){
     while (true) {
-        long long cost = nowMilli();
-        int buffer = 0;
+        //long long cost = nowMilli();
+        //int buffer = 0;
         std::shared_ptr<VideoFrameGen> frame = nullptr;
         {
             std::shared_ptr<uv_rwlock_t> auto_unlock(&m_rw_lock, uv_rwlock_rdunlock);
             uv_rwlock_rdlock(&m_rw_lock);
             frame = std::static_pointer_cast<VideoFrameGen>(m_frame_buffer->pop());
-            buffer = m_frame_buffer->getDistence();
-            //G_LOG_C(LOG_INFO,"buffer distance:%d", m_frame_buffer->getDistence());
+            //buffer = m_frame_buffer->getDistence();
         }
         
         if (m_end_thread) { // write all the frames in buffer and quick
@@ -140,9 +143,8 @@ void VideoWriterImp::asynWritting(){
         else{
             m_video_encoder->encodeFrame(frame);
         }
-        G_LOG_C(LOG_INFO,"encodeFrame end:%d dis:%d", nowMilli() - cost, buffer);
+        //G_LOG_C(LOG_INFO,"encodeFrame end:%d dis:%d", nowMilli() - cost, buffer);
     }
-    
 }
 
 void VideoWriterImp::excuse(const std::shared_ptr<TaskInfoGen> & info){
@@ -225,13 +227,12 @@ bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){
     }
     
 
-    if (!m_video_encoder->initialize(m_file_path, m_fps, m_bitrate, frame->getWidth(), frame->getHeight(), frame)){
+    if (!m_video_encoder->initialize(m_file_path, m_fps, m_bitrate, m_orientation, frame->getWidth(), frame->getHeight(), frame)){
         G_LOG_FC(LOG_ERROR, "video encoder initialize failed");
         m_video_encoder = nullptr;
         if (m_writting_timer){
             m_writting_timer->stop();
             m_writting_timer = nullptr;
-            
         }
         InstanceGetterGen::getCameraController()->setCaptureHandler(nullptr);
         if (m_write_result_handler){

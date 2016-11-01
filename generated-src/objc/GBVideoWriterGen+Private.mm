@@ -78,6 +78,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
+- (void)setOrientation:(GBVideoOrientation)ori {
+    try {
+        _cppRefHandle.get()->setOrientation(::djinni::Enum<::gearsbox::VideoOrientation, GBVideoOrientation>::toCpp(ori));
+    } DJINNI_TRANSLATE_EXCEPTIONS()
+}
+
 - (void)setVideoEncoder:(nullable id<GBVideoEncoderGen>)encoder {
     try {
         _cppRefHandle.get()->setVideoEncoder(::djinni_generated::VideoEncoderGen::toCpp(encoder));

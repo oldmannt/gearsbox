@@ -20,6 +20,7 @@
 #include "instance_getter_gen.hpp"
 #include "ring_buffer_ptr.hpp"
 #include "work_thread.hpp"
+#include "video_orientation.hpp"
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,7 +44,7 @@ public:
     virtual ~VideoWriterImp() {
     }
     
-    VideoWriterImp():m_video_encoder(nullptr),m_fps(0),m_bitrate(0),m_init(false),m_auto_callback(false),m_rw_lock({0}),m_end_thread(false){
+    VideoWriterImp():m_video_encoder(nullptr),m_fps(0),m_bitrate(0),m_orientation(VideoOrientation::LANDSPACE_0),m_init(false),m_auto_callback(false),m_rw_lock({0}),m_end_thread(false){
         
     }
     
@@ -65,6 +66,8 @@ public:
     virtual int32_t getFPS();
     
     virtual void setBitRate(int32_t rate);
+    
+    virtual void setOrientation(VideoOrientation ori);
     
     virtual void setVideoEncoder(const std::shared_ptr<VideoEncoderGen> & encoder){
         m_video_encoder = encoder;
@@ -93,6 +96,8 @@ private:
     std::string m_file_path;
     int32_t m_fps;
     int32_t m_bitrate;
+    VideoOrientation m_orientation;
+    
     bool m_init;
     bool m_auto_callback;
     uv_rwlock_t m_rw_lock;

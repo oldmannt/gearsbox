@@ -4,6 +4,7 @@
 #import <Foundation/Foundation.h>
 @class GBConfigGen;
 @protocol GBCameraControllerGen;
+@protocol GBDeviceGen;
 @protocol GBPlatformUtilityGen;
 
 
@@ -16,6 +17,10 @@
 + (nullable id<GBPlatformUtilityGen>)getPlatformUtility;
 
 + (void)setPlatformUtility:(nullable id<GBPlatformUtilityGen>)mgr;
+
++ (nullable id<GBDeviceGen>)getDevice;
+
++ (void)setDevice:(nullable id<GBDeviceGen>)device;
 
 + (nullable GBConfigGen *)getConfig:(nonnull NSString *)id;
 

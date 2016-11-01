@@ -33,7 +33,7 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
-        bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, int32_t width, int32_t height, const std::shared_ptr<::gearsbox::VideoFrameGen> & frame) override;
+        bool initialize(const std::string & filepath, int32_t fps, int32_t bitrate, ::gearsbox::VideoOrientation ori, int32_t width, int32_t height, const std::shared_ptr<::gearsbox::VideoFrameGen> & frame) override;
         void encodeFrame(const std::shared_ptr<::gearsbox::VideoFrameGen> & frame) override;
         void setFps(int32_t fps) override;
         void saveNRelease() override;
@@ -43,7 +43,7 @@ private:
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/VideoEncoderGen") };
-    const jmethodID method_initialize { ::djinni::jniGetMethodID(clazz.get(), "initialize", "(Ljava/lang/String;IIIILdyno/fun/gearsbox/VideoFrameGen;)Z") };
+    const jmethodID method_initialize { ::djinni::jniGetMethodID(clazz.get(), "initialize", "(Ljava/lang/String;IILdyno/fun/gearsbox/VideoOrientation;IILdyno/fun/gearsbox/VideoFrameGen;)Z") };
     const jmethodID method_encodeFrame { ::djinni::jniGetMethodID(clazz.get(), "encodeFrame", "(Ldyno/fun/gearsbox/VideoFrameGen;)V") };
     const jmethodID method_setFps { ::djinni::jniGetMethodID(clazz.get(), "setFps", "(I)V") };
     const jmethodID method_saveNRelease { ::djinni::jniGetMethodID(clazz.get(), "saveNRelease", "()V") };

@@ -29,7 +29,6 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-
 protocol CapturePictureHandler {
     func captureOutput(_ image:UIImage?, error:String?) -> Void
 }
@@ -129,8 +128,6 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
                 complition(false, msg)
             }
             m_captureDevice = defaultVideoDevice!
-            print("duration \(m_captureDevice.activeVideoMaxFrameDuration)")
-            print("duration \(m_captureDevice.activeVideoMinFrameDuration)")
             
             let videoDeviceInput = try AVCaptureDeviceInput(device: defaultVideoDevice)
             
@@ -937,27 +934,6 @@ open class GBCameraControllerImp:  NSObject,GBCameraControllerGen,AVCaptureVideo
         else if ori == UIInterfaceOrientation.landscapeLeft {
             m_previewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
         }
-    }
-    
-    fileprivate func outputToBuffer(){
-        
-        m_session_queue.async {[unowned self] in
-            // Acquisition of output data
-            let videoDataOutput:AVCaptureVideoDataOutput = AVCaptureVideoDataOutput()
-            
-            // Set of color channel
-            let dctPixelFormatType : Dictionary<NSString, NSNumber> = [kCVPixelBufferPixelFormatTypeKey : NSNumber(value: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange as UInt32)]
-            videoDataOutput.videoSettings = dctPixelFormatType
-            
-            // Specified queue to capture the image
-            //var videoDataOutputQueue: dispatch_queue_t = dispatch_queue_create("CtrlVideoQueue", DISPATCH_QUEUE_SERIAL)
-            videoDataOutput.setSampleBufferDelegate(self, queue: DispatchQueue.main)
-            videoDataOutput.alwaysDiscardsLateVideoFrames = true
-            
-            if self.m_captureSession.canAddOutput(videoDataOutput) {
-                self.m_captureSession.addOutput(videoDataOutput)
-            }
-        }// end async
     }
     
     fileprivate func orientationDevice2AV(_ device:UIDeviceOrientation) -> AVCaptureVideoOrientation {

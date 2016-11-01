@@ -183,6 +183,13 @@ video_writer_result_handler = interface +c +j +o {
 	onProgress(percent:f32);
 }
 
+video_orientation = enum {
+	landspace_0;
+	landspace_180;
+	portrait_90;
+	portrait_270;
+}
+
 video_writer_gen = interface +c {
 	static create():video_writer_gen;
 
@@ -192,6 +199,7 @@ video_writer_gen = interface +c {
 	setFPS(fps:i32);
 	getFPS():i32;
 	setBitRate(rate:i32);
+	setOrientation(ori:video_orientation);
 	setVideoEncoder(encoder:video_encoder_gen);
 	encodeFrame(frame:video_frame_gen);
 	start(interval:i64);
@@ -203,7 +211,7 @@ video_writer_gen = interface +c {
 }
 
 video_encoder_gen = interface +c +j +o {
-	initialize(filepath:string, fps:i32, bitrate:i32, width:i32, height:i32, frame:video_frame_gen):bool;
+	initialize(filepath:string, fps:i32, bitrate:i32, ori:video_orientation, width:i32, height:i32, frame:video_frame_gen):bool;
 	encodeFrame(frame:video_frame_gen);
 	setFps(fps:i32);
 	saveNRelease();

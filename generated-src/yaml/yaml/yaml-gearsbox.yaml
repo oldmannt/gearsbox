@@ -465,6 +465,64 @@ jni:
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/CrashHandlerGen;'
 ---
+name: gb_device_gen
+typedef: 'interface +o +j'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::DeviceGen'
+  header: '"device_gen.hpp"'
+  byValue: false
+objc:
+  typename: 'GBDeviceGen'
+  pointer: true
+  hash: '%s.hash'
+  boxed: 'GBDeviceGen'
+  header: '"GBDeviceGen.h"'
+objcpp:
+  translator: '::djinni_generated::DeviceGen'
+  header: '"GBDeviceGen+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.DeviceGen'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.DeviceGen'
+jni:
+  translator: '::djinni_generated::NativeDeviceGen'
+  header: '"NativeDeviceGen.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/DeviceGen;'
+---
+name: gb_device_orientation
+typedef: 'enum'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::DeviceOrientation'
+  header: '"device_orientation.hpp"'
+  byValue: true
+objc:
+  typename: 'GBDeviceOrientation'
+  pointer: false
+  hash: '%s.hash'
+  boxed: 'NSNumber'
+  header: '"GBDeviceOrientation.h"'
+objcpp:
+  translator: '::djinni::Enum<::gearsbox::DeviceOrientation, GBDeviceOrientation>'
+  header: '"DJIMarshal+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.DeviceOrientation'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.DeviceOrientation'
+jni:
+  translator: '::djinni_generated::NativeDeviceOrientation'
+  header: '"NativeDeviceOrientation.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/DeviceOrientation;'
+---
 name: gb_duration
 typedef: 'record'
 params: []
@@ -1102,6 +1160,35 @@ jni:
   header: '"NativeVideoInfoGen.hpp"'
   typename: jobject
   typeSignature: 'Ldyno/fun/gearsbox/VideoInfoGen;'
+---
+name: gb_video_orientation
+typedef: 'enum'
+params: []
+prefix: gb_
+cpp:
+  typename: '::gearsbox::VideoOrientation'
+  header: '"video_orientation.hpp"'
+  byValue: true
+objc:
+  typename: 'GBVideoOrientation'
+  pointer: false
+  hash: '%s.hash'
+  boxed: 'NSNumber'
+  header: '"GBVideoOrientation.h"'
+objcpp:
+  translator: '::djinni::Enum<::gearsbox::VideoOrientation, GBVideoOrientation>'
+  header: '"DJIMarshal+Private.h"'
+java:
+  reference: true
+  typename: 'dyno.fun.gearsbox.VideoOrientation'
+  generic: true
+  hash: '%s.hashCode()'
+  boxed: 'dyno.fun.gearsbox.VideoOrientation'
+jni:
+  translator: '::djinni_generated::NativeVideoOrientation'
+  header: '"NativeVideoOrientation.hpp"'
+  typename: jobject
+  typeSignature: 'Ldyno/fun/gearsbox/VideoOrientation;'
 ---
 name: gb_video_writer_gen
 typedef: 'interface +c'

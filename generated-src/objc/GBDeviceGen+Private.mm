@@ -23,6 +23,13 @@ public:
             return ::djinni::Enum<::gearsbox::DeviceOrientation, GBDeviceOrientation>::toCpp(r);
         }
     }
+    std::string getID() override
+    {
+        @autoreleasepool {
+            auto r = [Handle::get() getID];
+            return ::djinni::String::toCpp(r);
+        }
+    }
 };
 
 }  // namespace djinni_generated

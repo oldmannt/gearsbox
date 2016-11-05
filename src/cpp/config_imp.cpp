@@ -140,17 +140,7 @@ void ConfigImp::save(){
     }
     if (m_config_path.empty())
         return;
-    Json::FastWriter writer;
-    std::string str = writer.write((*m_config));
-    std::ofstream ofs;
-    ofs.open(m_config_path);
-    if (!ofs.is_open()){
-        G_LOG_FC(LOG_ERROR, "open conf file failed: %s", m_config_path.c_str());
-        m_config_path = "";
-        return;
-    }
-    ofs << str;
-    ofs.close();
+    gearsbox::writerJson(m_config_path, *m_config, true);
 }
 
 void ConfigImp::setString(const std::string & type, const std::string & value){
@@ -226,7 +216,7 @@ std::shared_ptr<ConfigGen> ConfigImp::getSubConfig(const std::string & key){
     CHECK_RTP(json_node->isObject() || json_node->isArray(),
               nullptr, "not object, key:%s file:%s", key.c_str(), m_config_path.c_str());
     
-    std::shared_ptr<ConfigImp> subconfig = std::make_shared<ConfigImp>();
+    std::shared_ptr<ConfigImp> subconfig = std::make_shared<ConfigImp>(shared_from_this());
     CHECK_RTP(subconfig->initialize(json_node), nullptr, "sub config initialize failed key:%s file:%s", key.c_str(), m_config_path.c_str());
     
     m_subNode[key] = subconfig;

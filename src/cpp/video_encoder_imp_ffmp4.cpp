@@ -338,7 +338,7 @@ bool VideoEncoderImp_ffmp4::initialize(const std::string & filepath, int32_t fps
     
     /* open the codec */
     av_dict_set(&m_video_steam.st->metadata, "preset", "veryfast", 0);
-    G_LOG_C(LOG_INFO, "rotate %d", ori);
+    //G_LOG_C(LOG_INFO, "rotate %d", ori);
     switch (ori) {
         case VideoOrientation::LANDSPACE_0:
             av_dict_set(&m_video_steam.st->metadata, "rotate", "0", 0);

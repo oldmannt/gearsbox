@@ -7,7 +7,8 @@
 @protocol GBVideoWriterResultHandler
 
 - (void)onComplete:(BOOL)success
-              path:(nonnull NSString *)path;
+              path:(nonnull NSString *)path
+          duration:(int32_t)duration;
 
 /** there is frame in buffer, especially in slo-mo mode memory full */
 - (void)beforeComplete;

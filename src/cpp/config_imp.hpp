@@ -14,7 +14,7 @@
 
 namespace gearsbox {
     
-class ConfigImp:public ConfigGen {
+class ConfigImp:public ConfigGen, public std::enable_shared_from_this<ConfigImp> {
 public:
     ConfigImp();
     ConfigImp(std::shared_ptr<ConfigImp> parent);

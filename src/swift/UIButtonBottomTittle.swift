@@ -25,8 +25,9 @@ class UIButtonBottomTittle: UIButton {
         
         self.imageView?.center.x = self.center.x
         self.imageView?.frame.origin.y = btn_h - img_h! - lab_h!
+        
+        self.titleLabel?.sizeToFit()
         self.titleLabel?.center.x = self.center.x
         self.titleLabel?.frame.origin.y = btn_h - lab_h!
-        self.titleLabel?.sizeToFit()
     }
 }

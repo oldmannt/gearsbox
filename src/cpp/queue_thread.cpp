@@ -30,7 +30,7 @@ void asyncTaskCB(uv_async_t *handle){
     uv_close((uv_handle_t*)pdata->_async.get(), nullptr);
 }
 
-QueueThread::QueueThread(){
+QueueThread::QueueThread():m_stop(false){
     m_self_thread = uv_thread_self();
     uv_cond_init(&m_condition);
     uv_mutex_init(&m_mutex);
@@ -85,16 +85,15 @@ void QueueThread::work(){
             
             if (m_queue.empty())
                 uv_cond_wait(&m_condition, &m_mutex);
-            
             if (m_stop) return;
-            
             data = std::move(m_queue.front());
             m_queue.pop();
         }
         QueueData* async_data = new QueueData;
         *async_data = std::move(data);
-        if (async_data->_task!=nullptr)
+        if (async_data->_task!=nullptr){
             async_data->_task();
+        }
         
         async_data->_async->data = async_data;
         uv_async_send(async_data->_async.get());

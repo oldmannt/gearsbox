@@ -33,7 +33,7 @@ private:
         JavaProxy(JniType j);
         ~JavaProxy();
 
-        void onComplete(bool success, const std::string & path) override;
+        void onComplete(bool success, const std::string & path, int32_t duration) override;
         void beforeComplete() override;
         void onProgress(float percent) override;
 
@@ -42,7 +42,7 @@ private:
     };
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/VideoWriterResultHandler") };
-    const jmethodID method_onComplete { ::djinni::jniGetMethodID(clazz.get(), "onComplete", "(ZLjava/lang/String;)V") };
+    const jmethodID method_onComplete { ::djinni::jniGetMethodID(clazz.get(), "onComplete", "(ZLjava/lang/String;I)V") };
     const jmethodID method_beforeComplete { ::djinni::jniGetMethodID(clazz.get(), "beforeComplete", "()V") };
     const jmethodID method_onProgress { ::djinni::jniGetMethodID(clazz.get(), "onProgress", "(F)V") };
 };

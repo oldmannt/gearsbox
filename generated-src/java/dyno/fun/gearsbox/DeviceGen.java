@@ -5,4 +5,6 @@ package dyno.fun.gearsbox;
 
 public abstract class DeviceGen {
     public abstract DeviceOrientation getOrientation();
+
+    public abstract String getID();
 }

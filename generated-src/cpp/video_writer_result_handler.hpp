@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <cstdint>
 #include <string>
 
 namespace gearsbox {
@@ -11,7 +12,7 @@ class VideoWriterResultHandler {
 public:
     virtual ~VideoWriterResultHandler() {}
 
-    virtual void onComplete(bool success, const std::string & path) = 0;
+    virtual void onComplete(bool success, const std::string & path, int32_t duration) = 0;
 
     /** there is frame in buffer, especially in slo-mo mode memory full */
     virtual void beforeComplete() = 0;

@@ -10,6 +10,7 @@
 #include <chrono>
 #include "macro.h"
 #include "utils.hpp"
+#include "async_task_pool.cpp"
 
 using namespace gearsbox;
 
@@ -41,6 +42,31 @@ bool gearsbox::readJson(const std::string& param, Json::Value& config){
 long long gearsbox::nowMilli(){
     using namespace std::chrono;
     return duration_cast<milliseconds>(steady_clock::now().time_since_epoch()).count();
+}
+
+bool gearsbox::writerJson(const std::string& path, Json::Value& config, bool async){
+    Json::FastWriter writer;
+    std::string str = writer.write(config);
+    
+    auto async_save = [str, path](){
+        std::ofstream ofs;
+        ofs.open(path);
+        if (!ofs.is_open()){
+            G_LOG_FC(LOG_ERROR, "fs open file failed: %s", path.c_str());
+            return false;
+        }
+        ofs << str;
+        ofs.close();
+    };
+    
+    if (async){
+        AsyncTaskPool::instance()->enqueue(AsyncTaskPool::TaskType::FILE, async_save, nullptr);
+    }
+    else{
+        async_save();
+    }
+    
+    return true;
 }
 
 

@@ -26,8 +26,8 @@ namespace std {
 
 namespace gearsbox {
     bool readJson(const std::string& param, Json::Value& config);
+    bool writerJson(const std::string& path, Json::Value& config, bool async = false);
     long long nowMilli();
-
 }
 
 #endif

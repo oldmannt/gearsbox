@@ -6,7 +6,7 @@ package dyno.fun.gearsbox;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class VideoWriterResultHandler {
-    public abstract void onComplete(boolean success, String path);
+    public abstract void onComplete(boolean success, String path, int duration);
 
     /** there is frame in buffer, especially in slo-mo mode memory full */
     public abstract void beforeComplete();
@@ -37,12 +37,12 @@ public abstract class VideoWriterResultHandler {
         }
 
         @Override
-        public void onComplete(boolean success, String path)
+        public void onComplete(boolean success, String path, int duration)
         {
             assert !this.destroyed.get() : "trying to use a destroyed object";
-            native_onComplete(this.nativeRef, success, path);
+            native_onComplete(this.nativeRef, success, path, duration);
         }
-        private native void native_onComplete(long _nativeRef, boolean success, String path);
+        private native void native_onComplete(long _nativeRef, boolean success, String path, int duration);
 
         @Override
         public void beforeComplete()

@@ -10,6 +10,10 @@ import Foundation
 import UIKit
 
 open class GBDeviceImp : NSObject, GBDeviceGen {
+    public func getID() -> String {
+        return (UIDevice.current.identifierForVendor?.uuidString)!
+    }
+
     static let sharedInstance = GBDeviceImp()
     private override init() {
         

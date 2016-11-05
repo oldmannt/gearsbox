@@ -111,6 +111,7 @@ device_orientation = enum{
 
 device_gen = interface +o +j {
     getOrientation():device_orientation;
+    getID():string;
 }
 
 lang_type = enum{

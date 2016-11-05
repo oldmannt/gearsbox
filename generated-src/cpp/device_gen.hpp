@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace gearsbox {
 
 enum class DeviceOrientation;
@@ -12,6 +14,8 @@ public:
     virtual ~DeviceGen() {}
 
     virtual DeviceOrientation getOrientation() = 0;
+
+    virtual std::string getID() = 0;
 };
 
 }  // namespace gearsbox

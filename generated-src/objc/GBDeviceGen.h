@@ -9,4 +9,6 @@
 
 - (GBDeviceOrientation)getOrientation;
 
+- (nonnull NSString *)getID;
+
 @end

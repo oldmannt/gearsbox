@@ -177,7 +177,7 @@ camera_controller_gen = interface +o +j {
 }
 
 video_writer_result_handler = interface +c +j +o {
-	onComplete(success:bool, path:string);
+	onComplete(success:bool, path:string, duration:i32);
 	# there is frame in buffer, especially in slo-mo mode memory full
 	beforeComplete();
 	onProgress(percent:f32);

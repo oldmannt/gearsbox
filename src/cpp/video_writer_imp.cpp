@@ -100,15 +100,15 @@ void VideoWriterImp::destoryThread(){
         m_video_encoder = nullptr;
     }
     
+    if (m_write_result_handler){
+        bool success = InstanceGetterGen::getPlatformUtility()->fileExists(m_file_path);
+        int32_t duration = m_writting_timer->getTimePassed();
+        m_write_result_handler->onComplete(success, m_file_path, duration);
+    }
+    
     if (m_writting_timer){
         m_writting_timer->stop();
         m_writting_timer = nullptr;
-        
-    }
-    
-    if (m_write_result_handler){
-        bool success = InstanceGetterGen::getPlatformUtility()->fileExists(m_file_path);
-        m_write_result_handler->onComplete(success, m_file_path);
     }
     m_work_thread = nullptr; // VideoWriterImp will be destory here
 }
@@ -130,7 +130,7 @@ void VideoWriterImp::asynWritting(){
                 std::shared_ptr<uv_rwlock_t> auto_unlock(&m_rw_lock, uv_rwlock_rdunlock);
                 uv_rwlock_rdlock(&m_rw_lock);
                 frame = std::static_pointer_cast<VideoFrameGen>(m_frame_buffer->pop());
-                G_LOG_C(LOG_INFO,"count donw:%d", m_frame_buffer->getBufferSize() - m_frame_buffer->getDistence());
+                //G_LOG_C(LOG_INFO,"count donw:%d", m_frame_buffer->getBufferSize() - m_frame_buffer->getDistence());
                 if (frame)  m_video_encoder->encodeFrame(frame);
             }while (frame);
             break;
@@ -236,7 +236,7 @@ bool VideoWriterImp::initialize(const std::shared_ptr<VideoFrameGen> & frame){
         }
         InstanceGetterGen::getCameraController()->setCaptureHandler(nullptr);
         if (m_write_result_handler){
-            m_write_result_handler->onComplete(false, m_file_path);
+            m_write_result_handler->onComplete(false, m_file_path, 0);
         }
         return false;
     }

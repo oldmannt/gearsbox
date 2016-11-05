@@ -14,13 +14,14 @@ NativeVideoWriterResultHandler::JavaProxy::JavaProxy(JniType j) : Handle(::djinn
 
 NativeVideoWriterResultHandler::JavaProxy::~JavaProxy() = default;
 
-void NativeVideoWriterResultHandler::JavaProxy::onComplete(bool c_success, const std::string & c_path) {
+void NativeVideoWriterResultHandler::JavaProxy::onComplete(bool c_success, const std::string & c_path, int32_t c_duration) {
     auto jniEnv = ::djinni::jniGetThreadEnv();
     ::djinni::JniLocalScope jscope(jniEnv, 10);
     const auto& data = ::djinni::JniClass<::djinni_generated::NativeVideoWriterResultHandler>::get();
     jniEnv->CallVoidMethod(Handle::get().get(), data.method_onComplete,
                            ::djinni::get(::djinni::Bool::fromCpp(jniEnv, c_success)),
-                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c_path)));
+                           ::djinni::get(::djinni::String::fromCpp(jniEnv, c_path)),
+                           ::djinni::get(::djinni::I32::fromCpp(jniEnv, c_duration)));
     ::djinni::jniExceptionCheck(jniEnv);
 }
 void NativeVideoWriterResultHandler::JavaProxy::beforeComplete() {
@@ -47,13 +48,14 @@ CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterResultHandler_00024Cpp
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 
-CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterResultHandler_00024CppProxy_native_1onComplete(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jboolean j_success, jstring j_path)
+CJNIEXPORT void JNICALL Java_dyno_fun_gearsbox_VideoWriterResultHandler_00024CppProxy_native_1onComplete(JNIEnv* jniEnv, jobject /*this*/, jlong nativeRef, jboolean j_success, jstring j_path, jint j_duration)
 {
     try {
         DJINNI_FUNCTION_PROLOGUE1(jniEnv, nativeRef);
         const auto& ref = ::djinni::objectFromHandleAddress<::gearsbox::VideoWriterResultHandler>(nativeRef);
         ref->onComplete(::djinni::Bool::toCpp(jniEnv, j_success),
-                        ::djinni::String::toCpp(jniEnv, j_path));
+                        ::djinni::String::toCpp(jniEnv, j_path),
+                        ::djinni::I32::toCpp(jniEnv, j_duration));
     } JNI_TRANSLATE_EXCEPTIONS_RETURN(jniEnv, )
 }
 

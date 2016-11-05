@@ -34,6 +34,7 @@ private:
         ~JavaProxy();
 
         ::gearsbox::DeviceOrientation getOrientation() override;
+        std::string getID() override;
 
     private:
         friend ::djinni::JniInterface<::gearsbox::DeviceGen, ::djinni_generated::NativeDeviceGen>;
@@ -41,6 +42,7 @@ private:
 
     const ::djinni::GlobalRef<jclass> clazz { ::djinni::jniFindClass("dyno/fun/gearsbox/DeviceGen") };
     const jmethodID method_getOrientation { ::djinni::jniGetMethodID(clazz.get(), "getOrientation", "()Ldyno/fun/gearsbox/DeviceOrientation;") };
+    const jmethodID method_getID { ::djinni::jniGetMethodID(clazz.get(), "getID", "()Ljava/lang/String;") };
 };
 
 }  // namespace djinni_generated

@@ -7,6 +7,8 @@
 //
 
 #include "language_store_imp.hpp"
+#include "instance_getter_gen.hpp"
+#include "platform_utility_gen.hpp"
 #include "json/json.h"
 #include "ilog.h"
 #include "utils.hpp"
@@ -70,8 +72,6 @@ bool LanguageStoreImp::initialize(const std::string & param){
         G_LOG_FC(LOG_ERROR, "read lang err:%s info;%s", ex.what(), err_info.c_str());
         return false;
     }
-    
-    G_LOG_C(LOG_INFO, "read lang %d items", m_lang_data.size());
     return true;
 }
 

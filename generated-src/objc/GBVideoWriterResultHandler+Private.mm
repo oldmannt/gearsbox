@@ -31,10 +31,12 @@ static_assert(__has_feature(objc_arc), "Djinni requires ARC to be enabled for th
 }
 
 - (void)onComplete:(BOOL)success
-              path:(nonnull NSString *)path {
+              path:(nonnull NSString *)path
+          duration:(int32_t)duration {
     try {
         _cppRefHandle.get()->onComplete(::djinni::Bool::toCpp(success),
-                                        ::djinni::String::toCpp(path));
+                                        ::djinni::String::toCpp(path),
+                                        ::djinni::I32::toCpp(duration));
     } DJINNI_TRANSLATE_EXCEPTIONS()
 }
 
@@ -58,11 +60,12 @@ class VideoWriterResultHandler::ObjcProxy final
 {
 public:
     using Handle::Handle;
-    void onComplete(bool c_success, const std::string & c_path) override
+    void onComplete(bool c_success, const std::string & c_path, int32_t c_duration) override
     {
         @autoreleasepool {
             [Handle::get() onComplete:(::djinni::Bool::fromCpp(c_success))
-                                 path:(::djinni::String::fromCpp(c_path))];
+                                 path:(::djinni::String::fromCpp(c_path))
+                             duration:(::djinni::I32::fromCpp(c_duration))];
         }
     }
     void beforeComplete() override
